@@ -706,9 +706,9 @@ class Battlescene extends Phaser.Scene
 
       reward3.on('pointerdown', () => {characterparams.LStrike = (characterparams.LStrike+0.4); this.scene.stop().start('Main'), 3000});
 
-      let reward4 = this.add.text(100, 220, `Click me to Buff your Defense by 10%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
+      let reward4 = this.add.text(100, 220, `Click me to Buff your Defense by 15%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
 
-      reward4.on('pointerdown', () => {characterparams.Defense = (characterparams.Defense*1.1); this.scene.stop().start('Main'), 3000});
+      reward4.on('pointerdown', () => {characterparams.Defense = (characterparams.Defense*1.15); this.scene.stop().start('Main'), 3000});
 
       // let reward5 = this.add.text(100, 260, `Click me to Buff your evasion rate by 10%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
 

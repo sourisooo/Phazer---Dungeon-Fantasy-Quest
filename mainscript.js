@@ -8,6 +8,7 @@ class CharacterMenu extends Phaser.Scene
     MDefense=0.2;
     Evasion=0.1;
     PhysicalP=1;
+    MagicalP=1;
     fire = 1;
     ice = 1;
     thunder = 1;
@@ -58,23 +59,23 @@ class CharacterMenu extends Phaser.Scene
       let sprite = this.sprites.create(1600, 500, 'charactersheet');
 
 
-      let title = this.add.text(100, 60, `Character stat`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
+      let title = this.add.text(100, 60, `Character stat`, { font: '25px Arial', fill: '#ffffff' }).setInteractive();
         
       title.on('pointerdown', () => (console.log('hello')));
         
       let stat1 = this.add.text(100, 100, `BaseDamageMultiplier: ${characterparams.DefaultBDM}`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
       let stat2 = this.add.text(100, 140, `CritDamage: ${characterparams.CritD} (10% fixed rate occurence)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
       let stat3 = this.add.text(100, 180, `Luckystrike: ${characterparams.LStrike} (50% extra damage fixed damage)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
-      let stat4 = this.add.text(100, 220, `Defense: ${characterparams.Defense} (Small damage mitigation but garanteed)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
-      let stat5 = this.add.text(100, 260, `Magical Defense: ${characterparams.MDefense} (Small magical damage mitigation but garanteed)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
-      let stat6 = this.add.text(100, 300, `Evade: ${characterparams.Evasion} (Full damage mitigation but weak occurence)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
-      let stat7 = this.add.text(100, 340, `Physical potencie: ${characterparams.PhysicalP} (Physical extra damage also reduce you Magical defense)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
-      let stat8 = this.add.text(100, 380, `Magical potencie: ${characterparams.PhysicalP} (Magical extra damage also reduce you Physical defense)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
-      let stat9 = this.add.text(100, 420, `Fire potencie: ${characterparams.fire} (deal double extra-damage against a vulnerablity but half extra damage otherwise. Also reduce your overall defense against the opposite element)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
-      let stat10 = this.add.text(100, 460, `Ice potencie: ${characterparams.ice} ( deal double extra-damage against a vulnerablity but half extra damage otherwise. Also reduce your overall defense against the opposite element)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
-      let stat11 = this.add.text(100, 500, `Thunder potencie: ${characterparams.thunder} ( deal double extra-damage against a vulnerablity but half extra damage otherwise. Also reduce your overall defense against the opposite element)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
-      let stat12 = this.add.text(100, 540, `Earth potencie: ${characterparams.earth} ( deal double extra-damage against a vulnerablity but half extra damage otherwise. Also reduce your overall defense against the opposite element)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
-      let stat13 = this.add.text(100, 580, `Speed: ${characterparams.Speed} (Determine how many action you can perform per turn based on your opponent speed)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
+      let stat4 = this.add.text(100, 220, `Defense: ${characterparams.Defense} (damage reduction)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
+      
+      let stat6 = this.add.text(100, 260, `Evade: ${characterparams.Evasion} (Full damage mitigation but weak occurence)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
+      let stat7 = this.add.text(100, 340, `Physical potencie: ${characterparams.PhysicalP} (Provide damage and defense against Physical type foes)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
+      let stat8 = this.add.text(100, 380, `Magical potencie: ${characterparams.PhysicalP} (Provide damage and defense against Magical type foes)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
+      let stat9 = this.add.text(100, 420, `Fire potencie: ${characterparams.fire} (deal double extra-damage against a vulnerablity. reduce your elemental defense)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
+      let stat10 = this.add.text(100, 460, `Ice potencie: ${characterparams.ice} ( deal double extra-damage against a vulnerablity. reduce your elemental defense)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
+      let stat11 = this.add.text(100, 500, `Thunder potencie: ${characterparams.thunder} ( deal double extra-damage against a vulnerablity. reduce your elemental defense)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
+      let stat12 = this.add.text(100, 540, `Earth potencie: ${characterparams.earth} ( deal double extra-damage against a vulnerablity. reduce your elemental defense)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
+      let stat13 = this.add.text(100, 580, `Speed: ${characterparams.Speed} (Affect damage received based on your opponent speed)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
       let stat14 = this.add.text(100, 620, `Luck: ${characterparams.Luck} (Kill your adversaire in one blow)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
       
       let inventory = this.add.text(100, 700, `Open Inventory`, { font: '26px Arial', fill: '#ffffff' }).setInteractive();
@@ -85,9 +86,9 @@ class CharacterMenu extends Phaser.Scene
 
       battlestart.on('pointerdown', () => this.scene.stop().start('Battle'));
 
-      let randomweapon = new Weapon(`old sword lvl ${battleparams.levelstacker}`, 10 * battleparams.levelstacker, 0.1, 0.1, 1, characterparams.potentie[this.random(1)], characterparams.element[this.random(3)]);
+      let randomweapon = new Weapon(`old sword lvl ${battleparams.levelstacker}`, 10 * battleparams.levelstacker, 5*battleparams.levelstacker, 1.25*battleparams.levelstacker, 1, characterparams.potentie[this.random(1)], characterparams.element[this.random(3)]);
 
-      inventoryparams.weaponset.push(randomweapon);
+      inventoryparams.weaponset.length<15? inventoryparams.weaponset.push(randomweapon) : (inventoryparams.weaponset=[],inventoryparams.weaponset.push(randomweapon));
 
       console.log(inventoryparams.weaponset);
 
@@ -126,7 +127,7 @@ class Battlescene extends Phaser.Scene
   doitonce = true;
   eventslog = [];
   levelstacker = 1;
-  rollitonce = [true,true,true,true];
+  rollitonce = [true,true,true,true, true];
   potentie = ['physical', 'magical'];
   element = ['fire', 'ice', 'thunder', 'earth'];
 
@@ -150,7 +151,7 @@ class Battlescene extends Phaser.Scene
 
     random(num){
 
-        return Math.floor(Math.random() * num);
+        return Math.round(Math.random() * num);
 
     }
 
@@ -165,13 +166,13 @@ class Battlescene extends Phaser.Scene
 
       let title = this.add.text(100, 60, `Battle lvl ${battleparams.levelstacker}`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
   
-      const enemy = new Enemy(300*battleparams.levelstacker,10*battleparams.levelstacker, battleparams.element[this.random(3)], battleparams.element[this.random(3)], 50*battleparams.levelstacker*10, 1,[],battleparams.levelstacker);
+      const enemy = new Enemy(300*battleparams.levelstacker,10*battleparams.levelstacker, battleparams.element[this.random(3)], battleparams.element[this.random(3)], 50*battleparams.levelstacker*10, 1,[],battleparams.levelstacker,75, battleparams.potentie[this.random(1)],10*battleparams.levelstacker);
 
       battleparams.enemy.push(enemy);
 
       console.log(battleparams.enemy[battleparams.enemy.length-1]);
 
-      let enemyannouce = this.add.text(100, 100, `An ennemie is coming: Weakness: ${battleparams.enemy[battleparams.enemy.length-1].element} & strenght: ${battleparams.enemy[battleparams.enemy.length-1].element2}`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
+      let enemyannouce = this.add.text(100, 100, `An ennemie is coming: Weakness: ${battleparams.enemy[battleparams.enemy.length-1].element} & Strenght: ${battleparams.enemy[battleparams.enemy.length-1].element2} & Type: ${battleparams.enemy[battleparams.enemy.length-1].potencie}`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
 
       let attackbutton = this.add.text(100, 140, `Click me to attack`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
 
@@ -190,12 +191,22 @@ class Battlescene extends Phaser.Scene
 
           if (battleparams.rollitonce[0] ==true) {
 
-          let random = this.random(100);
+          if((inventoryparams.equippedweapon[0] == undefined)||(inventoryparams.equippedweapon[0].length == 0)) {
 
-          console.log(random);
+            let random = this.random(100);
 
-          random<10? characterparams.BDM = characterparams.BDM*characterparams.CritD : characterparams.BDM = characterparams.BDM ;
+            random<10? characterparams.BDM = characterparams.BDM*characterparams.CritD : characterparams.BDM = characterparams.BDM ;
+          
+          
+          } else {
+            
+            let random = this.random(100);
 
+            random<(10+inventoryparams.equippedweapon[0].crit)? characterparams.BDM = characterparams.BDM*characterparams.CritD*inventoryparams.equippedweapon[0].critDamage : characterparams.BDM = characterparams.BDM ;
+          
+          }
+
+    
           battleparams.rollitonce[0]=false;
 
           }
@@ -220,9 +231,9 @@ class Battlescene extends Phaser.Scene
 
           // console.log(inventoryparams.equippedweapon[0]);
 
-          if(inventoryparams.equippedweapon[0] == undefined) {
+          if((inventoryparams.equippedweapon[0] == undefined)||(inventoryparams.equippedweapon[0].length == 0)) {
 
-            characterparams.BDM=characterparams.BDM/2;
+            characterparams.BDM=characterparams.BDM;
 
           }
           
@@ -231,11 +242,42 @@ class Battlescene extends Phaser.Scene
 
           let El = inventoryparams.equippedweapon[0].element;
 
-        inventoryparams.equippedweapon[0].element == battleparams.enemy[battleparams.enemy.length-1].element ? characterparams.BDM=characterparams.BDM*(characterparams[El]+1):characterparams.BDM=characterparams.BDM/2;
+        inventoryparams.equippedweapon[0].element == battleparams.enemy[battleparams.enemy.length-1].element ? characterparams.BDM=characterparams.BDM*(characterparams[El]+1):characterparams.BDM=characterparams.BDM;
 
           } ;
 
         })
+
+
+        this.events.on('TypeChecker', () => {
+
+          if((inventoryparams.equippedweapon[0] == undefined)||(inventoryparams.equippedweapon[0].length == 0)) {
+
+            characterparams.BDM=characterparams.BDM;
+
+          }
+          
+          
+          else {
+
+          let enemyType = battleparams.enemy[battleparams.enemy.length-1].potencie;
+
+          let El = inventoryparams.equippedweapon[0].potentie;
+
+              if(enemyType == El){
+
+                characterparams.BDM = characterparams.BDM*1.5;
+
+                battleparams.enemy[battleparams.enemy.length-1].BDM = battleparams.enemy[battleparams.enemy.length-1].BDM*0.5;
+
+              } else {};
+   
+          } ;
+
+
+        })
+
+
 
         this.events.on('EvadeChecker', () => {
 
@@ -294,6 +336,24 @@ class Battlescene extends Phaser.Scene
 
         })
 
+
+        this.events.on('SpeedChecker', () => {
+
+          if (battleparams.rollitonce[4] ==true) {
+
+            let delta = characterparams.Speed - battleparams.enemy[battleparams.enemy.length-1].speed;
+
+            let random = this.random(100)/100;
+  
+            if (random<delta/100)  {battleparams.enemy[battleparams.enemy.length-1].BDM = 0.0001};
+  
+            battleparams.rollitonce[4] = false;
+  
+          } 
+
+
+        })
+
       
 
         this.events.on('BattleStatus', () =>  {
@@ -326,6 +386,15 @@ class Battlescene extends Phaser.Scene
 
         this.events.emit('LuckChecker');
 
+        this.events.emit('DamageMitigation');
+
+        this.events.emit('ElementalExposure');
+
+        this.events.emit('TypeChecker');
+
+        this.events.emit('EvadeChecker');
+
+        this.events.emit('SpeedChecker');
 
           console.log(inventoryparams.weaponset[0]);
 
@@ -333,12 +402,6 @@ class Battlescene extends Phaser.Scene
 
         else { characterparams.outputdamage.push(characterparams.BDM*inventoryparams.equippedweapon[0].attack);}
 
-
-        this.events.emit('DamageMitigation');
-
-        this.events.emit('ElementalExposure');
-
-        this.events.emit('EvadeChecker');
 
         battleparams.enemy[battleparams.enemy.length-1].outputdamage.push(battleparams.enemy[battleparams.enemy.length-1].BDM*battleparams.enemy[battleparams.enemy.length-1].attack);
     
@@ -352,7 +415,7 @@ class Battlescene extends Phaser.Scene
 
           battleparams.enemy[battleparams.enemy.length-1].HP = battleparams.enemy[battleparams.enemy.length-1].HP  - characterparams.BDM*inventoryparams.weaponset[0].attack;
 
-          battleparams.eventslog.push(`Turn ${battleparams.turn}: You deal ${characterparams.BDM*inventoryparams.weaponset[0].attack} damages. You received ${battleparams.enemy[battleparams.enemy.length-1].BDM*battleparams.enemy[battleparams.enemy.length-1].attack} damages.`)
+          battleparams.eventslog.push(`Turn ${battleparams.turn}: You deal ${Math.round(characterparams.BDM*inventoryparams.weaponset[0].attack)} damages. You received ${Math.round(battleparams.enemy[battleparams.enemy.length-1].BDM*battleparams.enemy[battleparams.enemy.length-1].attack)} damages.`)
 
           console.log(battleparams.eventslog);
 
@@ -360,7 +423,7 @@ class Battlescene extends Phaser.Scene
 
           battleparams.enemy[battleparams.enemy.length-1].HP = battleparams.enemy[battleparams.enemy.length-1].HP  - characterparams.BDM*inventoryparams.equippedweapon[0].attack;
 
-        battleparams.eventslog.push(`Turn ${battleparams.turn}: You deal ${characterparams.BDM*inventoryparams.equippedweapon[0].attack} damages. You received ${battleparams.enemy[battleparams.enemy.length-1].BDM*battleparams.enemy[battleparams.enemy.length-1].attack} damages.`)
+        battleparams.eventslog.push(`Turn ${battleparams.turn}: You deal ${Math.round(characterparams.BDM*inventoryparams.equippedweapon[0].attack)} damages. You received ${Math.round(battleparams.enemy[battleparams.enemy.length-1].BDM*battleparams.enemy[battleparams.enemy.length-1].attack)} damages.`)
 
         console.log(battleparams.eventslog);
 
@@ -370,7 +433,11 @@ class Battlescene extends Phaser.Scene
 
         characterparams.BDM = characterparams.DefaultBDM;
 
-        battleparams.enemy[battleparams.enemy.length-1].BDM = 1;
+        // console.log(battleparams.enemy[battleparams.enemy.length-1].defaultBDM);
+
+        battleparams.enemy[battleparams.enemy.length-1].BDM = battleparams.enemy[battleparams.enemy.length-1].defaultBDM;
+
+        // battleparams.enemy[battleparams.enemy.length-1].BDM = 1;
 
         // console.log(this.scene.manager.scenes);
 
@@ -408,7 +475,7 @@ class Battlescene extends Phaser.Scene
 
       battleparams.doitonce = true;
 
-      battleparams.rollitonce = [true, true, true , true];
+      battleparams.rollitonce = [true, true, true , true, true];
 
  
     });
@@ -434,7 +501,9 @@ class Battlescene extends Phaser.Scene
 
        if (ind<12 ) {this.add.text(100, 340+(40*(ind+1)), `${element}`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();}
 
-       else {this.add.text(800, 100+(40*(ind+1-12)), `${element}`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();}
+       else if (ind<30 ) {this.add.text(700, 100+(40*(ind+1-12)), `${element}`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();}
+
+       else {this.add.text(1300, 100+(40*(ind+1-30)), `${element}`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();}
 
   
       })
@@ -449,7 +518,7 @@ class Battlescene extends Phaser.Scene
 
       battleparams.turnTxt.setText(`Actual turn: ${battleparams.turn}`);
 
-      battleparams.damagereceivedTxt.setText(`Damage received: ${battleparams.enemy[battleparams.enemy.length-1].outputdamage[battleparams.turn-1] }`);
+      battleparams.damagereceivedTxt.setText(`Damage received: ${Math.round(battleparams.enemy[battleparams.enemy.length-1].outputdamage[battleparams.turn-1] )}`);
 
       battleparams.HHPTxt.setText(`Your HP: ${characterparams.HP}`);
 
@@ -616,27 +685,27 @@ class Battlescene extends Phaser.Scene
 
       let title = this.add.text(100, 60, `Reward`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
 
-      let reward1 = this.add.text(100, 100, `Click me to Buff your BDM by 20%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
+      let reward1 = this.add.text(100, 100, `Click me to Buff your Base Damage Multiplier by 33%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
 
-      reward1.on('pointerdown', () => {characterparams.DefaultBDM = characterparams.BDM*1.2; this.scene.stop().start('Main'), 3000});
+      reward1.on('pointerdown', () => {characterparams.DefaultBDM = characterparams.BDM*1.33; this.scene.stop().start('Main'), 3000});
 
-      let reward2 = this.add.text(100, 140, `Click me to Buff your CritDamage by 75%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
+      let reward2 = this.add.text(100, 140, `Click me to Buff your CritDamage by 200%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
 
-      reward2.on('pointerdown', () => {characterparams.CritD = (characterparams.CritD+0.75); this.scene.stop().start('Main'), 3000});
+      reward2.on('pointerdown', () => {characterparams.CritD = (characterparams.CritD+3); this.scene.stop().start('Main'), 3000});
 
-      let reward3 = this.add.text(100, 180, `Click me to Buff your Luckystrike chance by 20%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
+      let reward3 = this.add.text(100, 180, `Click me to Buff your Luckystrike chance by 40%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
 
-      reward3.on('pointerdown', () => {characterparams.LStrike = (characterparams.LStrike+0.2); this.scene.stop().start('Main'), 3000});
+      reward3.on('pointerdown', () => {characterparams.LStrike = (characterparams.LStrike+0.4); this.scene.stop().start('Main'), 3000});
 
-      let reward4 = this.add.text(100, 220, `Click me to Buff your Defense by 50%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
+      let reward4 = this.add.text(100, 220, `Click me to Buff your Defense by 70%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
 
-      reward4.on('pointerdown', () => {characterparams.Defense = (characterparams.Defense+0.5); this.scene.stop().start('Main'), 3000});
+      reward4.on('pointerdown', () => {characterparams.Defense = (characterparams.Defense*1.7); this.scene.stop().start('Main'), 3000});
 
-      let reward5 = this.add.text(100, 260, `Click me to Buff your evasion by 10%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
+      let reward5 = this.add.text(100, 260, `Click me to Buff your evasion rate by 10%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
 
       reward5.on('pointerdown', () => {characterparams.Evasion = (characterparams.Evasion+0.1); this.scene.stop().start('Main'), 3000});
 
-      let reward6 = this.add.text(100, 300, `Click me to Buff your luck by 10%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
+      let reward6 = this.add.text(100, 300, `Click me to Buff your luck rate by 10%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
 
       reward6.on('pointerdown', () => {characterparams.Luck = (characterparams.Luck+0.1); this.scene.stop().start('Main'), 3000 });
 
@@ -679,7 +748,7 @@ class Battlescene extends Phaser.Scene
 
 
     class Enemy {
-      constructor(health, attack, element, element2, HP, BDM, outputdamage, level) {
+      constructor(health, attack, element, element2, HP, BDM, outputdamage, level, speed, potencie, defaultBDM) {
         this.health = health;
         this.attack = attack;
         this.element = element;
@@ -688,6 +757,9 @@ class Battlescene extends Phaser.Scene
         this.BDM = BDM;
         this.outputdamage = [...outputdamage];
         this.level = level;
+        this.speed = speed;
+        this.potencie = potencie;
+        this.defaultBDM = defaultBDM;
       }
     
       // Enemy methods

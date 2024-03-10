@@ -246,7 +246,12 @@ class Battlescene extends Phaser.Scene
 
           let El = inventoryparams.equippedweapon[0].element;
 
-        inventoryparams.equippedweapon[0].element == battleparams.enemy[battleparams.enemy.length-1].element ? characterparams.BDM=characterparams.BDM*(characterparams[El]+1):characterparams.BDM=characterparams.BDM;
+            if (inventoryparams.equippedweapon[0].element == battleparams.enemy[battleparams.enemy.length-1].element) {
+              
+              
+              characterparams.BDM=characterparams.BDM*(characterparams[El]+1);
+            
+            } else {}
 
           } ;
 
@@ -382,10 +387,6 @@ class Battlescene extends Phaser.Scene
         console.log(battleparams.rollitonce);
 
         if (battleparams.battleover == false) {
-
-        // let random = this.random(100);
-
-        // let multiplier = characterparams.BDM;
 
         this.events.emit('CritChecker');
 
@@ -645,7 +646,7 @@ class Battlescene extends Phaser.Scene
 
       battleparams.battleover = false;
 
-      battleparams.levelstacker = battleparams.levelstacker+0.5;
+      battleparams.levelstacker = battleparams.levelstacker+0.1;
 
       characterparams.HP = characterparams.DefaultHP*battleparams.levelstacker;
 

@@ -6,7 +6,7 @@ class CharacterMenu extends Phaser.Scene
     LStrike=0.1;
     Defense=0.2;
     MDefense=0.2;
-    Evasion=0.1;
+    Evasion=0.08;
     PhysicalP=1;
     MagicalP=1;
     fire = 1;
@@ -18,7 +18,7 @@ class CharacterMenu extends Phaser.Scene
     thunderResistance = 1;
     earthResistance = 1;
     Speed = 100;
-    Luck = 0.05;
+    Luck = 0.04;
     outputdamage = [];
     Crittrigger = false;
     HP = 500;
@@ -126,12 +126,14 @@ class Battlescene extends Phaser.Scene
   doitonce = true;
   eventslog = [];
   levelstacker = 1;
-  rollitonce = [true,true,true,true, true];
+  rollitonce = [true,true,true,true, true, true, true, true];
   potentie = ['physical', 'magical'];
   element = ['fire', 'ice', 'thunder', 'earth'];
   nbwin = 0;
   nblose = 0;
   countitonce = true;
+  powerstacker = 1;
+  playitonce = true;
 
 
   constructor() {
@@ -161,6 +163,9 @@ class Battlescene extends Phaser.Scene
     create ()
     {
 
+      console.log(battleparams.enemy[battleparams.enemy.length-1]);
+
+
       this.sprites = this.physics.add.group({ immovable: false });
 
       let sprite = this.sprites.create(900, 400, 'Battletheme').setScale(0.5);
@@ -170,7 +175,7 @@ class Battlescene extends Phaser.Scene
 
       battleparams.ratioTxt = this.add.text(1400, 60, `Wins ${battleparams.nbwin}, Loses ${battleparams.nblose}`, { font: '26px Arial', fill: '#ffffff' }).setInteractive();
   
-      const enemy = new Enemy(undefined,10*battleparams.levelstacker, battleparams.element[this.random(3)], battleparams.element[this.random(3)], 500*battleparams.levelstacker, 1,[],battleparams.levelstacker,75, battleparams.potentie[this.random(1)],10*battleparams.levelstacker);
+      const enemy = new Enemy(undefined,20*battleparams.levelstacker, battleparams.element[this.random(3)], battleparams.element[this.random(3)], 500*battleparams.levelstacker, 1*(battleparams.powerstacker),[],battleparams.levelstacker,75, battleparams.potentie[this.random(1)],1*(battleparams.powerstacker));
 
       battleparams.enemy.push(enemy);
 
@@ -233,7 +238,8 @@ class Battlescene extends Phaser.Scene
 
         this.events.on('ElementChecker', () => {
 
-          // console.log(inventoryparams.equippedweapon[0]);
+          if (battleparams.rollitonce[5] ==true) {
+
 
           if((inventoryparams.equippedweapon[0] == undefined)||(inventoryparams.equippedweapon[0].length == 0)) {
 
@@ -250,15 +256,22 @@ class Battlescene extends Phaser.Scene
               
               
               characterparams.BDM=characterparams.BDM*(characterparams[El]+1);
+
+              console.log(`elem damage:${characterparams.BDM}`);
             
-            } else {}
+            } else {characterparams.BDM=characterparams.BDM}
 
           } ;
+
+          battleparams.rollitonce[5] = false;
+        }
 
         })
 
 
         this.events.on('TypeChecker', () => {
+
+          if (battleparams.rollitonce[6] ==true) {
 
           if((inventoryparams.equippedweapon[0] == undefined)||(inventoryparams.equippedweapon[0].length == 0)) {
 
@@ -283,6 +296,10 @@ class Battlescene extends Phaser.Scene
    
           } ;
 
+          battleparams.rollitonce[6] = false;
+
+        }
+
 
         })
 
@@ -304,6 +321,8 @@ class Battlescene extends Phaser.Scene
 
         this.events.on('DamageMitigation', () => {
 
+          if (battleparams.rollitonce[7] ==true) {
+
           let El = battleparams.enemy[battleparams.enemy.length-1].element;
 
           // console.log(battleparams.enemy[battleparams.enemy.length-1].BDM, characterparams[El]);
@@ -312,19 +331,28 @@ class Battlescene extends Phaser.Scene
 
           // console.log(battleparams.enemy[battleparams.enemy.length-1].BDM);
 
+          battleparams.rollitonce[7] = false;
+
+          }
+
         })
 
 
         this.events.on('ElementalExposure', () => {
 
+          if (battleparams.rollitonce[8] ==true) {
+
             let ennemystrenght = battleparams.enemy[battleparams.enemy.length-1].element2;
 
-            console.log(ennemystrenght);
+            // console.log(ennemystrenght);
 
             let playerexposition = characterparams[`${ennemystrenght}Resistance`]
 
             battleparams.enemy[battleparams.enemy.length-1].BDM = battleparams.enemy[battleparams.enemy.length-1].BDM*playerexposition;
 
+            battleparams.rollitonce[8] = false;
+
+          }
 
         })
 
@@ -334,7 +362,7 @@ class Battlescene extends Phaser.Scene
 
           let random = this.random(100)/100;
 
-          console.log(random, characterparams.Luck , random< characterparams.Luck);
+          // console.log(random, characterparams.Luck , random< characterparams.Luck);
 
           if (random<characterparams.Luck)  {battleparams.enemy[battleparams.enemy.length-1].HP = battleparams.enemy[battleparams.enemy.length-1].HP*0.1; alert("Luck! Your opponent is seriously wounded ")};
 
@@ -382,11 +410,15 @@ class Battlescene extends Phaser.Scene
 
       this.events.on('PlayerAttack', () =>  {
 
-        console.log(battleparams.battleover );
+        // console.log(battleparams.battleover );
 
-        console.log(battleparams.rollitonce);
+        // console.log(battleparams.rollitonce);
+
+        if (battleparams.playitonce == true){
 
         if (battleparams.battleover == false) {
+
+        characterparams.BDM = characterparams.DefaultBDM;
 
         this.events.emit('CritChecker');
 
@@ -406,7 +438,7 @@ class Battlescene extends Phaser.Scene
 
         this.events.emit('SpeedChecker');
 
-          console.log(inventoryparams.weaponset[0]);
+          // console.log(inventoryparams.weaponset[0]);
 
         if(inventoryparams.equippedweapon[0] == undefined) {characterparams.outputdamage.push(characterparams.BDM*inventoryparams.weaponset[0].attack);} 
 
@@ -427,7 +459,7 @@ class Battlescene extends Phaser.Scene
 
           battleparams.eventslog.push(`Turn ${battleparams.turn}: You deal ${Math.round(characterparams.BDM*inventoryparams.weaponset[0].attack)} damages. You received ${Math.round(battleparams.enemy[battleparams.enemy.length-1].BDM*battleparams.enemy[battleparams.enemy.length-1].attack)} damages.`)
 
-          console.log(battleparams.eventslog);
+          // console.log(battleparams.eventslog);
 
         } else {
 
@@ -435,7 +467,7 @@ class Battlescene extends Phaser.Scene
 
         battleparams.eventslog.push(`Turn ${battleparams.turn}: You deal ${Math.round(characterparams.BDM*inventoryparams.equippedweapon[0].attack)} damages. You received ${Math.round(battleparams.enemy[battleparams.enemy.length-1].BDM*battleparams.enemy[battleparams.enemy.length-1].attack)} damages.`)
 
-        console.log(battleparams.eventslog);
+        // console.log(battleparams.eventslog);
 
       };
 
@@ -445,9 +477,15 @@ class Battlescene extends Phaser.Scene
 
         battleparams.enemy[battleparams.enemy.length-1].BDM = battleparams.enemy[battleparams.enemy.length-1].defaultBDM;
 
+        console.log(characterparams.BDM, battleparams.enemy[battleparams.enemy.length-1].BDM)
+
         this.events.emit('BattleStatus');
 
       } else {this.events.emit('GameOver')}
+
+      battleparams.playitonce = false;
+
+    }
        
       
       });
@@ -469,9 +507,11 @@ class Battlescene extends Phaser.Scene
 
       battleparams.doitonce = true;
 
-      battleparams.rollitonce = [true, true, true , true, true];
+      battleparams.rollitonce = [true,true,true,true, true, true, true, true];
 
       battleparams.countitonce = true;
+
+      battleparams.playitonce = true;
 
  
     });
@@ -648,6 +688,8 @@ class Battlescene extends Phaser.Scene
 
       battleparams.levelstacker = battleparams.levelstacker+0.1;
 
+      battleparams.powerstacker = battleparams.powerstacker*1.155;
+
       characterparams.HP = characterparams.DefaultHP*battleparams.levelstacker;
 
       let title = this.add.text(100, 60, `Reward`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
@@ -723,6 +765,7 @@ class Battlescene extends Phaser.Scene
         this.speed = speed;
         this.potencie = potencie;
         this.defaultBDM = defaultBDM;
+  
       }
     
 

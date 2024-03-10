@@ -46,7 +46,7 @@ class CharacterMenu extends Phaser.Scene
 
     random(num){
 
-        return Math.floor(Math.random() * num);
+        return Math.round(Math.random() * num);
 
     }
 
@@ -63,6 +63,9 @@ class CharacterMenu extends Phaser.Scene
       let title = this.add.text(100, 60, `Character stat`, { font: '25px Arial', fill: '#ffffff' }).setInteractive();
         
       title.on('pointerdown', () => (console.log('hello')));
+
+      characterparams.ratioTxt = this.add.text(1400, 60, `Wins ${battleparams.nbwin}, Loses ${battleparams.nblose}`, { font: '26px Arial', fill: '#ffffff' }).setInteractive();
+  
         
       let stat1 = this.add.text(100, 100, `BaseDamageMultiplier: ${characterparams.DefaultBDM}`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
       let stat2 = this.add.text(100, 140, `CritDamage: ${characterparams.CritD} (10% fixed rate occurence)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
@@ -126,6 +129,9 @@ class Battlescene extends Phaser.Scene
   rollitonce = [true,true,true,true, true];
   potentie = ['physical', 'magical'];
   element = ['fire', 'ice', 'thunder', 'earth'];
+  nbwin = 0;
+  nblose = 0;
+  countitonce = true;
 
 
   constructor() {
@@ -161,6 +167,8 @@ class Battlescene extends Phaser.Scene
 
 
       let title = this.add.text(100, 60, `Battle lvl ${battleparams.levelstacker}`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
+
+      battleparams.ratioTxt = this.add.text(1400, 60, `Wins ${battleparams.nbwin}, Loses ${battleparams.nblose}`, { font: '26px Arial', fill: '#ffffff' }).setInteractive();
   
       const enemy = new Enemy(undefined,10*battleparams.levelstacker, battleparams.element[this.random(3)], battleparams.element[this.random(3)], 500*battleparams.levelstacker, 1,[],battleparams.levelstacker,75, battleparams.potentie[this.random(1)],10*battleparams.levelstacker);
 
@@ -354,10 +362,15 @@ class Battlescene extends Phaser.Scene
 
         this.events.on('BattleStatus', () =>  {
 
-          if (characterparams.HP<0)  {battleparams.battleover = true, setTimeout(() => this.scene.pause().start('Reward'),3000)};
+          if(battleparams.countitonce == true) {
 
-          if (battleparams.enemy[battleparams.enemy.length-1].HP<0)  {battleparams.battleover = true, (setTimeout(() => this.scene.pause().start('Reward'),3000))};
+          if (characterparams.HP<0)  {battleparams.battleover = true, battleparams.nblose=battleparams.nblose+1, setTimeout(() => this.scene.pause().start('Reward'),3000)};
 
+          if (battleparams.enemy[battleparams.enemy.length-1].HP<0)  {battleparams.battleover = true, battleparams.nbwin=battleparams.nbwin+1, (setTimeout(() => this.scene.pause().start('Reward'),3000))};
+
+          battleparams.countitonce = false;
+
+        }
 
         })
 
@@ -457,6 +470,8 @@ class Battlescene extends Phaser.Scene
 
       battleparams.rollitonce = [true, true, true , true, true];
 
+      battleparams.countitonce = true;
+
  
     });
 
@@ -475,7 +490,7 @@ class Battlescene extends Phaser.Scene
     {
 
       // console.log(battleparams.eventslog);
-
+      battleparams.ratioTxt.setText(`Wins ${battleparams.nbwin}, Loses ${battleparams.nblose}`);
 
       battleparams.eventslog.forEach((element,ind) => {
 
@@ -532,12 +547,6 @@ class Battlescene extends Phaser.Scene
 
     }
 
-
-    random(num){
-
-        return Math.floor(Math.random() * num);
-
-    }
 
 
     create ()
@@ -615,13 +624,6 @@ class Battlescene extends Phaser.Scene
     }
 
 
-    random(num){
-
-        return Math.floor(Math.random() * num);
-
-    }
-
-
     create ()
     {
 
@@ -649,9 +651,9 @@ class Battlescene extends Phaser.Scene
 
       let title = this.add.text(100, 60, `Reward`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
 
-      let reward1 = this.add.text(100, 100, `Click me to Buff your Base Damage Multiplier by 33%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
+      let reward1 = this.add.text(100, 100, `Click me to Buff your Base Damage Multiplier by 15%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
 
-      reward1.on('pointerdown', () => {characterparams.DefaultBDM = characterparams.BDM*1.33; this.scene.stop().start('Main'), 3000});
+      reward1.on('pointerdown', () => {characterparams.DefaultBDM = characterparams.BDM*1.15; this.scene.stop().start('Main'), 3000});
 
       let reward2 = this.add.text(100, 140, `Click me to Buff your CritDamage by 200%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
 
@@ -661,9 +663,9 @@ class Battlescene extends Phaser.Scene
 
       reward3.on('pointerdown', () => {characterparams.LStrike = (characterparams.LStrike+0.4); this.scene.stop().start('Main'), 3000});
 
-      let reward4 = this.add.text(100, 220, `Click me to Buff your Defense by 50%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
+      let reward4 = this.add.text(100, 220, `Click me to Buff your Defense by 10%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
 
-      reward4.on('pointerdown', () => {characterparams.Defense = (characterparams.Defense*1.5); this.scene.stop().start('Main'), 3000});
+      reward4.on('pointerdown', () => {characterparams.Defense = (characterparams.Defense*1.1); this.scene.stop().start('Main'), 3000});
 
       // let reward5 = this.add.text(100, 260, `Click me to Buff your evasion rate by 10%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
 

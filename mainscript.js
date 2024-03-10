@@ -22,6 +22,7 @@ class CharacterMenu extends Phaser.Scene
     outputdamage = [];
     Crittrigger = false;
     HP = 500;
+    DefaultHP = 500;
     DefaultBDM = 1;
     potentie = ['physical', 'magical'];
     element = ['fire', 'ice', 'thunder', 'earth'];
@@ -101,11 +102,6 @@ class CharacterMenu extends Phaser.Scene
     update () 
     {
       
-      // console.log(this.scene);
-
-      // this.input.on('pointerdown', () => {this.scene.stop().start('Menu')})
-
-
  
     }
 
@@ -166,7 +162,7 @@ class Battlescene extends Phaser.Scene
 
       let title = this.add.text(100, 60, `Battle lvl ${battleparams.levelstacker}`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
   
-      const enemy = new Enemy(300*battleparams.levelstacker,10*battleparams.levelstacker, battleparams.element[this.random(3)], battleparams.element[this.random(3)], 50*battleparams.levelstacker*10, 1,[],battleparams.levelstacker,75, battleparams.potentie[this.random(1)],10*battleparams.levelstacker);
+      const enemy = new Enemy(undefined,10*battleparams.levelstacker, battleparams.element[this.random(3)], battleparams.element[this.random(3)], 500*battleparams.levelstacker, 1,[],battleparams.levelstacker,75, battleparams.potentie[this.random(1)],10*battleparams.levelstacker);
 
       battleparams.enemy.push(enemy);
 
@@ -433,25 +429,9 @@ class Battlescene extends Phaser.Scene
 
         characterparams.BDM = characterparams.DefaultBDM;
 
-        // console.log(battleparams.enemy[battleparams.enemy.length-1].defaultBDM);
-
         battleparams.enemy[battleparams.enemy.length-1].BDM = battleparams.enemy[battleparams.enemy.length-1].defaultBDM;
 
-        // battleparams.enemy[battleparams.enemy.length-1].BDM = 1;
-
-        // console.log(this.scene.manager.scenes);
-
         this.events.emit('BattleStatus');
-
-        // console.log(inventoryparams.weaponset)
-
-        // console.log(characterparams.outputdamage);
-
-        // console.log(battleparams.enemy[battleparams.enemy.length-1].outputdamage);
-
-        // console.log(battleparams.enemy[battleparams.enemy.length-1])
-
-        // return characterparams.outputdamage;  
 
       } else {this.events.emit('GameOver')}
        
@@ -511,10 +491,6 @@ class Battlescene extends Phaser.Scene
 
       battleparams.damagedoneTxt.setText(`Damage done: ${characterparams.outputdamage[battleparams.turn-1]}`);
 
-      // setTimeout(() => {
-      //   // Code to be executed after the delay
-      //   battleparams.damagedoneTxt.visible = false;
-      // }, 2000); // Delay in milliseconds
 
       battleparams.turnTxt.setText(`Actual turn: ${battleparams.turn}`);
 
@@ -524,13 +500,7 @@ class Battlescene extends Phaser.Scene
 
       battleparams.HPTxt.setText(`Enemy HP: ${battleparams.enemy[battleparams.enemy.length-1].HP }`);
 
-      // console.log(this.battleover, battleparams.enemy[battleparams.enemy.length-1].HP);
-
-      // console.log(this.scene);
-
-      // this.input.on('pointerdown', () => {this.scene.stop().start('Main')})
-
-    
+  
 
     }
 
@@ -613,10 +583,6 @@ class Battlescene extends Phaser.Scene
     update () 
     {
 
-      // console.log(this.scene);
-
-      // this.input.on('pointerdown', () => {this.scene.stop().start('Main')})
-
       inventoryparams.equippedtext.setText(`Currently equipped: ${inventoryparams.equippedweapon[0]?.name}, potencie: ${inventoryparams.equippedweapon[0]?.potentie}, element: ${inventoryparams.equippedweapon[0]?.element}`);
     
 
@@ -663,11 +629,7 @@ class Battlescene extends Phaser.Scene
 
       let sprite = this.sprites.create(800, 500, 'treasure');
 
-      characterparams.HP = 5000;
-
       characterparams.outputdamage = [];
-
-      battleparams.enemy[battleparams.enemy.length-1].HP = 3000;
 
       battleparams.enemy[battleparams.enemy.length-1].outputdamage = [];
 
@@ -683,6 +645,8 @@ class Battlescene extends Phaser.Scene
 
       battleparams.levelstacker = battleparams.levelstacker+0.5;
 
+      characterparams.HP = characterparams.DefaultHP*battleparams.levelstacker;
+
       let title = this.add.text(100, 60, `Reward`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
 
       let reward1 = this.add.text(100, 100, `Click me to Buff your Base Damage Multiplier by 33%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
@@ -697,17 +661,17 @@ class Battlescene extends Phaser.Scene
 
       reward3.on('pointerdown', () => {characterparams.LStrike = (characterparams.LStrike+0.4); this.scene.stop().start('Main'), 3000});
 
-      let reward4 = this.add.text(100, 220, `Click me to Buff your Defense by 70%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
+      let reward4 = this.add.text(100, 220, `Click me to Buff your Defense by 50%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
 
-      reward4.on('pointerdown', () => {characterparams.Defense = (characterparams.Defense*1.7); this.scene.stop().start('Main'), 3000});
+      reward4.on('pointerdown', () => {characterparams.Defense = (characterparams.Defense*1.5); this.scene.stop().start('Main'), 3000});
 
-      let reward5 = this.add.text(100, 260, `Click me to Buff your evasion rate by 10%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
+      // let reward5 = this.add.text(100, 260, `Click me to Buff your evasion rate by 10%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
 
-      reward5.on('pointerdown', () => {characterparams.Evasion = (characterparams.Evasion+0.1); this.scene.stop().start('Main'), 3000});
+      // reward5.on('pointerdown', () => {characterparams.Evasion = (characterparams.Evasion+0.1); this.scene.stop().start('Main'), 3000});
 
-      let reward6 = this.add.text(100, 300, `Click me to Buff your luck rate by 10%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
+      // let reward6 = this.add.text(100, 300, `Click me to Buff your luck rate by 10%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
 
-      reward6.on('pointerdown', () => {characterparams.Luck = (characterparams.Luck+0.1); this.scene.stop().start('Main'), 3000 });
+      // reward6.on('pointerdown', () => {characterparams.Luck = (characterparams.Luck+0.1); this.scene.stop().start('Main'), 3000 });
 
       let reward7 = this.add.text(100, 340, `Click me to Buff your fire potencie by 100%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
 
@@ -733,11 +697,7 @@ class Battlescene extends Phaser.Scene
     update () 
     {
 
-      // console.log(this.scene);
 
-      // this.input.on('pointerdown', () => {this.scene.stop().start('Main')})
-
-    
 
     }
 
@@ -762,7 +722,7 @@ class Battlescene extends Phaser.Scene
         this.defaultBDM = defaultBDM;
       }
     
-      // Enemy methods
+
     }
 
     class Weapon {
@@ -776,7 +736,7 @@ class Battlescene extends Phaser.Scene
         this.element = element;
       }
     
-      // Enemy methods
+ 
     }
 
 

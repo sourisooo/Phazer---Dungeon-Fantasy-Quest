@@ -26,6 +26,7 @@ class CharacterMenu extends Phaser.Scene
     DefaultBDM = 1;
     potentie = ['physical', 'magical'];
     element = ['fire', 'ice', 'thunder', 'earth'];
+    Attacktwice = false;
 
   constructor() {
     super('Main'); // Scene key
@@ -134,6 +135,7 @@ class Battlescene extends Phaser.Scene
   countitonce = true;
   powerstacker = 1;
   playitonce = true;
+  handleonce = [true, true];
 
 
   constructor() {
@@ -204,14 +206,14 @@ class Battlescene extends Phaser.Scene
 
             let random = this.random(100);
 
-            random<10? characterparams.BDM = characterparams.BDM*characterparams.CritD : characterparams.BDM = characterparams.BDM ;
+            random<10? (characterparams.BDM = characterparams.BDM*characterparams.CritD, battleparams.eventslog.push(`Turn ${battleparams.turn}: Critical strike!`)) : characterparams.BDM = characterparams.BDM ;
           
           
           } else {
             
             let random = this.random(100);
 
-            random<(10+inventoryparams.equippedweapon[0].crit)? characterparams.BDM = characterparams.BDM*characterparams.CritD*inventoryparams.equippedweapon[0].critDamage : characterparams.BDM = characterparams.BDM ;
+            random<(10+inventoryparams.equippedweapon[0].crit)? (characterparams.BDM = characterparams.BDM*characterparams.CritD*inventoryparams.equippedweapon[0].critDamage, battleparams.eventslog.push(`Turn ${battleparams.turn}: Critical strike!`)) : characterparams.BDM = characterparams.BDM ;
           
           }
 
@@ -311,7 +313,7 @@ class Battlescene extends Phaser.Scene
 
           let random = this.random(100)/100;
 
-          random<characterparams.Evasion ? battleparams.enemy[battleparams.enemy.length-1].BDM = 0.001 : battleparams.enemy[battleparams.enemy.length-1].BDM = battleparams.enemy[battleparams.enemy.length-1].BDM;
+          random<characterparams.Evasion ? (battleparams.enemy[battleparams.enemy.length-1].BDM = 0.001, battleparams.eventslog.push(`Turn ${battleparams.turn}: You evade enemy attack!`)) : battleparams.enemy[battleparams.enemy.length-1].BDM = battleparams.enemy[battleparams.enemy.length-1].BDM;
 
           battleparams.rollitonce[2]=false;
 
@@ -364,7 +366,9 @@ class Battlescene extends Phaser.Scene
 
           // console.log(random, characterparams.Luck , random< characterparams.Luck);
 
-          if (random<characterparams.Luck)  {battleparams.enemy[battleparams.enemy.length-1].HP = battleparams.enemy[battleparams.enemy.length-1].HP*0.1; alert("Luck! Your opponent is seriously wounded ")};
+          if (random<characterparams.Luck)  {let perfectstrike = battleparams.enemy[battleparams.enemy.length-1].HP*0.9 ;battleparams.enemy[battleparams.enemy.length-1].HP = battleparams.enemy[battleparams.enemy.length-1].HP*0.1;
+            
+            battleparams.eventslog.push(`Turn ${battleparams.turn}: Luck! You made a perfect strike dealing ${perfectstrike} damages`)};
 
           battleparams.rollitonce[3] = false;
 
@@ -382,7 +386,13 @@ class Battlescene extends Phaser.Scene
 
             let random = this.random(100)/100;
   
-            if (random<delta/100)  {battleparams.enemy[battleparams.enemy.length-1].BDM = 0.0001};
+            if (random<delta/100)  {battleparams.enemy[battleparams.enemy.length-1].BDM = 0.0001;
+            
+              battleparams.eventslog.push(`Turn ${battleparams.turn}: You attack twice!`)
+
+              characterparams.Attacktwice = true;
+            
+            };
   
             battleparams.rollitonce[4] = false;
   
@@ -407,6 +417,82 @@ class Battlescene extends Phaser.Scene
 
         })
 
+
+      this.events.on('Handleequippedweapon', () =>  {
+
+        if(battleparams.handleonce[0] == true) {
+
+        if(inventoryparams.equippedweapon[0] == undefined) {characterparams.outputdamage.push(characterparams.BDM*inventoryparams.weaponset[0].attack);} 
+
+        else { characterparams.outputdamage.push(characterparams.BDM*inventoryparams.equippedweapon[0].attack);}
+
+        battleparams.enemy[battleparams.enemy.length-1].outputdamage.push(battleparams.enemy[battleparams.enemy.length-1].BDM*battleparams.enemy[battleparams.enemy.length-1].attack);
+    
+        // console.log(characterparams.Crittrigger);
+
+        characterparams.HP = characterparams.HP - battleparams.enemy[battleparams.enemy.length-1].BDM*battleparams.enemy[battleparams.enemy.length-1].attack;
+
+        
+        if(inventoryparams.equippedweapon[0] == undefined) {
+
+          battleparams.enemy[battleparams.enemy.length-1].HP = battleparams.enemy[battleparams.enemy.length-1].HP  - characterparams.BDM*inventoryparams.weaponset[0].attack;
+
+          battleparams.eventslog.push(`Turn ${battleparams.turn}: You deal ${Math.round(characterparams.BDM*inventoryparams.weaponset[0].attack)} damages. You received ${Math.round(battleparams.enemy[battleparams.enemy.length-1].BDM*battleparams.enemy[battleparams.enemy.length-1].attack)} damages.`)
+
+          // console.log(battleparams.eventslog);
+
+        } else {
+
+          battleparams.enemy[battleparams.enemy.length-1].HP = battleparams.enemy[battleparams.enemy.length-1].HP  - characterparams.BDM*inventoryparams.equippedweapon[0].attack;
+
+        battleparams.eventslog.push(`Turn ${battleparams.turn}: You deal ${Math.round(characterparams.BDM*inventoryparams.equippedweapon[0].attack)} damages. You received ${Math.round(battleparams.enemy[battleparams.enemy.length-1].BDM*battleparams.enemy[battleparams.enemy.length-1].attack)} damages.`)
+
+        // console.log(battleparams.eventslog);
+
+      };
+
+      battleparams.handleonce[0] = false;
+
+     }
+
+
+      })
+
+
+      this.events.on('double', () => {
+
+        if(battleparams.handleonce[1] == true) {
+
+        if(inventoryparams.equippedweapon[0] == undefined) {characterparams.outputdamage.push(characterparams.BDM*inventoryparams.weaponset[0].attack);} 
+
+        else { characterparams.outputdamage.push(characterparams.BDM*inventoryparams.equippedweapon[0].attack);}
+  
+  
+        if(inventoryparams.equippedweapon[0] == undefined) {
+  
+          battleparams.enemy[battleparams.enemy.length-1].HP = battleparams.enemy[battleparams.enemy.length-1].HP  - characterparams.BDM*inventoryparams.weaponset[0].attack;
+  
+          battleparams.eventslog.push(`Turn ${battleparams.turn}: You deal ${Math.round(characterparams.BDM*inventoryparams.weaponset[0].attack)} damages from your second attack.`)
+  
+          // console.log(battleparams.eventslog);
+  
+        } else {
+  
+          battleparams.enemy[battleparams.enemy.length-1].HP = battleparams.enemy[battleparams.enemy.length-1].HP  - characterparams.BDM*inventoryparams.equippedweapon[0].attack;
+  
+        battleparams.eventslog.push(`Turn ${battleparams.turn}: You deal ${Math.round(characterparams.BDM*inventoryparams.equippedweapon[0].attack)} damages from your second attack.`)
+  
+        // console.log(battleparams.eventslog);
+  
+      };
+
+    }
+
+      battleparams.handleonce[1] = false;
+
+      })
+
+      
 
       this.events.on('PlayerAttack', () =>  {
 
@@ -440,42 +526,31 @@ class Battlescene extends Phaser.Scene
 
           // console.log(inventoryparams.weaponset[0]);
 
-        if(inventoryparams.equippedweapon[0] == undefined) {characterparams.outputdamage.push(characterparams.BDM*inventoryparams.weaponset[0].attack);} 
-
-        else { characterparams.outputdamage.push(characterparams.BDM*inventoryparams.equippedweapon[0].attack);}
-
-
-        battleparams.enemy[battleparams.enemy.length-1].outputdamage.push(battleparams.enemy[battleparams.enemy.length-1].BDM*battleparams.enemy[battleparams.enemy.length-1].attack);
-    
-        // console.log(characterparams.Crittrigger);
-
-        characterparams.HP = characterparams.HP - battleparams.enemy[battleparams.enemy.length-1].BDM*battleparams.enemy[battleparams.enemy.length-1].attack;
-
-        
-
-        if(inventoryparams.equippedweapon[0] == undefined) {
-
-          battleparams.enemy[battleparams.enemy.length-1].HP = battleparams.enemy[battleparams.enemy.length-1].HP  - characterparams.BDM*inventoryparams.weaponset[0].attack;
-
-          battleparams.eventslog.push(`Turn ${battleparams.turn}: You deal ${Math.round(characterparams.BDM*inventoryparams.weaponset[0].attack)} damages. You received ${Math.round(battleparams.enemy[battleparams.enemy.length-1].BDM*battleparams.enemy[battleparams.enemy.length-1].attack)} damages.`)
-
-          // console.log(battleparams.eventslog);
-
-        } else {
-
-          battleparams.enemy[battleparams.enemy.length-1].HP = battleparams.enemy[battleparams.enemy.length-1].HP  - characterparams.BDM*inventoryparams.equippedweapon[0].attack;
-
-        battleparams.eventslog.push(`Turn ${battleparams.turn}: You deal ${Math.round(characterparams.BDM*inventoryparams.equippedweapon[0].attack)} damages. You received ${Math.round(battleparams.enemy[battleparams.enemy.length-1].BDM*battleparams.enemy[battleparams.enemy.length-1].attack)} damages.`)
-
-        // console.log(battleparams.eventslog);
-
-      };
-
-        battleparams.turn = battleparams.turn+1;
+        this.events.emit('Handleequippedweapon');
 
         characterparams.BDM = characterparams.DefaultBDM;
 
         battleparams.enemy[battleparams.enemy.length-1].BDM = battleparams.enemy[battleparams.enemy.length-1].defaultBDM;
+
+        if(characterparams.Attacktwice == true){
+
+          characterparams.BDM = characterparams.DefaultBDM;
+
+        this.events.emit('CritChecker');
+
+        this.events.emit('LuckystrikeChecker');
+
+        this.events.emit('ElementChecker');
+
+        this.events.emit('LuckChecker');
+
+        this.events.emit('double');
+
+        characterparams.Attacktwice = false;
+
+        }
+
+        battleparams.turn = battleparams.turn+1;
 
         console.log(characterparams.BDM, battleparams.enemy[battleparams.enemy.length-1].BDM)
 
@@ -512,6 +587,8 @@ class Battlescene extends Phaser.Scene
       battleparams.countitonce = true;
 
       battleparams.playitonce = true;
+
+      battleparams.handleonce = [true, true];
 
  
     });
@@ -599,12 +676,12 @@ class Battlescene extends Phaser.Scene
       
       let title = this.add.text(100, 60, `Inventory click the weapon to equip it`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
   
-       inventoryparams.equippedtext = this.add.text(100, 100, `Currently equipped: ${inventoryparams.equippedweapon[0]?.name}, potencie: ${inventoryparams.equippedweapon[0]?.potentie}, element: ${inventoryparams.equippedweapon[0]?.element}`).setInteractive();
+       inventoryparams.equippedtext = this.add.text(100, 100, `Currently equipped: ${inventoryparams.equippedweapon[0]?.name}, potencie: ${inventoryparams.equippedweapon[0]?.potentie}, element: ${inventoryparams.equippedweapon[0]?.element}, %crit: ${inventoryparams.equippedweapon[0]?.crit}, critDamage: ${inventoryparams.equippedweapon[0]?.critDamage}`).setInteractive();
   
 
       inventoryparams.weaponset.forEach((selection,ind) => {
 
-        let weapon = this.add.text(100, 60+(40*(ind+2)), `${selection.name}, power: ${selection.attack}, potencie: ${selection.potentie}, element: ${selection.element}`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
+        let weapon = this.add.text(100, 60+(40*(ind+2)), `${selection.name}, power: ${Math.round(selection.attack)}, potencie: ${selection.potentie}, element: ${selection.element}, %crit: ${Math.round(selection.crit)}, critDamage: ${selection.critDamage}`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
 
         weapon.on('pointerdown', (element) => {
 
@@ -633,7 +710,7 @@ class Battlescene extends Phaser.Scene
     update () 
     {
 
-      inventoryparams.equippedtext.setText(`Currently equipped: ${inventoryparams.equippedweapon[0]?.name}, potencie: ${inventoryparams.equippedweapon[0]?.potentie}, element: ${inventoryparams.equippedweapon[0]?.element}`);
+      inventoryparams.equippedtext.setText(`Currently equipped: ${inventoryparams.equippedweapon[0]?.name}, potencie: ${inventoryparams.equippedweapon[0]?.potentie}, element: ${inventoryparams.equippedweapon[0]?.element}, %crit: ${inventoryparams.equippedweapon[0]?.crit}, critDamage: ${inventoryparams.equippedweapon[0]?.critDamage}`);
     
 
     }

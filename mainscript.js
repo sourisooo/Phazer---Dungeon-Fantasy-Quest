@@ -90,7 +90,7 @@ class CharacterMenu extends Phaser.Scene
 
       battlestart.on('pointerdown', () => this.scene.stop().start('Battle'));
 
-      let randomweapon = new Weapon(`old sword lvl ${battleparams.levelstacker}`, 10 * battleparams.levelstacker, Math.min(5*battleparams.levelstacker,40), 1.25*battleparams.levelstacker, 1, characterparams.potentie[this.random(1)], characterparams.element[this.random(3)]);
+      let randomweapon = new Weapon(`old sword lvl ${battleparams.levelstacker}`, 10 * battleparams.levelstacker, Math.min(5*battleparams.levelstacker,30), 1.25*battleparams.levelstacker, 1, characterparams.potentie[this.random(1)], characterparams.element[this.random(3)]);
 
       inventoryparams.weaponset.length<15? inventoryparams.weaponset.push(randomweapon) : (inventoryparams.weaponset=[],inventoryparams.weaponset.push(randomweapon));
 
@@ -795,9 +795,9 @@ class Battlescene extends Phaser.Scene
       reward3.on('pointerdown', () => {characterparams.LStrike = Math.min((characterparams.LStrike+0.4),1); this.scene.stop().start('Main'), 3000});
 
 
-      let reward4 = this.add.text(100, 220, `Click me to Buff your Defense by 15%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
+      let reward4 = this.add.text(100, 220, `Click me to Buff your Defense by 25%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
 
-      reward4.on('pointerdown', () => {characterparams.Defense = Math.min((characterparams.Defense*1.15), 0.9); this.scene.stop().start('Main'), 3000});
+      reward4.on('pointerdown', () => {characterparams.Defense = Math.min((characterparams.Defense*1.25), 0.9); this.scene.stop().start('Main'), 3000});
     
       let reward5 = this.add.text(100, 260, `Click me to Buff your evasion rate by 5%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
 

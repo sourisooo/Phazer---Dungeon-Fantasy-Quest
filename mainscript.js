@@ -174,9 +174,9 @@ class Battlescene extends Phaser.Scene
       let sprite = this.sprites.create(900, 400, 'Battletheme').setScale(0.5);
 
 
-      let title = this.add.text(100, 60, `Battle lvl ${battleparams.levelstacker}`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
+      let title = this.add.text(100, 60, `Battle lvl ${battleparams.levelstacker}`, { font: '16px Arial', fill: '#ffffff' });
 
-      battleparams.ratioTxt = this.add.text(1400, 60, `Wins ${battleparams.nbwin}, Loses ${battleparams.nblose}`, { font: '26px Arial', fill: '#ffffff' }).setInteractive();
+      battleparams.ratioTxt = this.add.text(1400, 60, `Wins ${battleparams.nbwin}, Loses ${battleparams.nblose}`, { font: '26px Arial', fill: '#ffffff' });
   
       const enemy = new Enemy(undefined,20*battleparams.levelstacker, battleparams.element[this.random(3)], battleparams.element[this.random(3)], 500*battleparams.powerstacker, 1*(battleparams.powerstacker),[],battleparams.levelstacker,90, battleparams.potentie[this.random(1)],1*(battleparams.powerstacker));
 
@@ -184,19 +184,19 @@ class Battlescene extends Phaser.Scene
 
       console.log(battleparams.enemy[battleparams.enemy.length-1]);
 
-      let enemyannouce = this.add.text(100, 100, `An ennemie is coming: Weakness: ${battleparams.enemy[battleparams.enemy.length-1].element} & Strenght: ${battleparams.enemy[battleparams.enemy.length-1].element2} & Type: ${battleparams.enemy[battleparams.enemy.length-1].potencie}`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
+      let enemyannouce = this.add.text(100, 100, `An ennemie is coming: Weakness: ${battleparams.enemy[battleparams.enemy.length-1].element} & Strenght: ${battleparams.enemy[battleparams.enemy.length-1].element2} & Type: ${battleparams.enemy[battleparams.enemy.length-1].potencie}`, { font: '16px Arial', fill: '#ffffff' });
 
       let attackbutton = this.add.text(100, 140, `Click me to attack`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
 
-      battleparams.damagedoneTxt = this.add.text(100, 180, `Damage done: ${characterparams.outputdamage[battleparams.turn-1]}`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
+      battleparams.damagedoneTxt = this.add.text(100, 180, `Damage done: ${characterparams.outputdamage[battleparams.turn-1]}`, { font: '16px Arial', fill: '#ffffff' });
 
-      battleparams.damagereceivedTxt = this.add.text(100, 220, `Damage received: ${battleparams.enemy[battleparams.enemy.length-1].outputdamage[battleparams.turn-1] }`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
+      battleparams.damagereceivedTxt = this.add.text(100, 220, `Damage received: ${battleparams.enemy[battleparams.enemy.length-1].outputdamage[battleparams.turn-1] }`, { font: '16px Arial', fill: '#ffffff' });
 
-      battleparams.turnTxt = this.add.text(100, 260, `Actual Turn : ${battleparams.turn}`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
+      battleparams.turnTxt = this.add.text(100, 260, `Actual Turn : ${battleparams.turn}`, { font: '16px Arial', fill: '#ffffff' });
 
-      battleparams.HHPTxt = this.add.text(100, 300, `You HP : ${characterparams.HP}`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
+      battleparams.HHPTxt = this.add.text(100, 300, `You HP : ${characterparams.HP}`, { font: '16px Arial', fill: '#ffffff' });
       
-      battleparams.HPTxt = this.add.text(100, 340, `Ennemy HP : ${battleparams.enemy[battleparams.enemy.length-1].HP}`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
+      battleparams.HPTxt = this.add.text(100, 340, `Ennemy HP : ${battleparams.enemy[battleparams.enemy.length-1].HP}`, { font: '16px Arial', fill: '#ffffff' });
       
 
 
@@ -625,11 +625,11 @@ class Battlescene extends Phaser.Scene
 
       battleparams.eventslog.forEach((element,ind) => {
 
-       if (ind<12 ) {this.add.text(100, 340+(40*(ind+1)), `${element}`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();}
+       if (ind<12 ) {this.add.text(100, 340+(40*(ind+1)), `${element}`, { font: '16px Arial', fill: '#ffffff' });}
 
-       else if (ind<30 ) {this.add.text(700, 100+(40*(ind+1-12)), `${element}`, { font: '16px Arial', fill: '#00FF00' }).setInteractive();}
+       else if (ind<30 ) {this.add.text(700, 100+(40*(ind+1-12)), `${element}`, { font: '16px Arial', fill: '#00FF00' });}
 
-       else {this.add.text(1300, 100+(40*(ind+1-30)), `${element}`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();}
+       else {this.add.text(1300, 100+(40*(ind+1-30)), `${element}`, { font: '16px Arial', fill: '#ffffff' });}
 
   
       })

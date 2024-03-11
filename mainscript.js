@@ -2,7 +2,7 @@
 class CharacterMenu extends Phaser.Scene
 {
     BDM=1;
-    CritD=2;
+    CritD=1.7;
     LStrike=0.1;
     Defense=0.2;
     Evasion=0.08;
@@ -80,7 +80,7 @@ class CharacterMenu extends Phaser.Scene
       let stat11 = this.add.text(100, 500, `Thunder potencie: ${characterparams.thunder} ( deal double extra-damage against a vulnerablity. reduce your elemental defense)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
       let stat12 = this.add.text(100, 540, `Earth potencie: ${characterparams.earth} ( deal double extra-damage against a vulnerablity. reduce your elemental defense)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
       let stat13 = this.add.text(100, 580, `Speed: ${characterparams.Speed} (Opportunity to strike again)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
-      let stat14 = this.add.text(100, 620, `Luck: ${characterparams.Luck} (Kill your adversaire in one blow)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
+      let stat14 = this.add.text(100, 620, `Luck: ${characterparams.Luck} (Remove 25% of the current enemy HP)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
       
       let inventory = this.add.text(100, 700, `Open Inventory`, { font: '26px Arial', fill: '#ffffff' }).setInteractive();
 
@@ -178,7 +178,7 @@ class Battlescene extends Phaser.Scene
 
       battleparams.ratioTxt = this.add.text(1400, 60, `Wins ${battleparams.nbwin}, Loses ${battleparams.nblose}`, { font: '26px Arial', fill: '#ffffff' }).setInteractive();
   
-      const enemy = new Enemy(undefined,20*battleparams.levelstacker, battleparams.element[this.random(3)], battleparams.element[this.random(3)], 500*battleparams.levelstacker, 1*(battleparams.powerstacker),[],battleparams.levelstacker,75, battleparams.potentie[this.random(1)],1*(battleparams.powerstacker));
+      const enemy = new Enemy(undefined,20*battleparams.levelstacker, battleparams.element[this.random(3)], battleparams.element[this.random(3)], 500*battleparams.levelstacker, 1*(battleparams.powerstacker),[],battleparams.levelstacker,90, battleparams.potentie[this.random(1)],1*(battleparams.powerstacker));
 
       battleparams.enemy.push(enemy);
 
@@ -217,6 +217,8 @@ class Battlescene extends Phaser.Scene
 
             random<(10+inventoryparams.equippedweapon[0].crit)? (characterparams.BDM = characterparams.BDM*characterparams.CritD*inventoryparams.equippedweapon[0].critDamage, battleparams.eventslog.push(`Turn ${battleparams.turn}: Critical strike!`)) : characterparams.BDM = characterparams.BDM ;
           
+            console.log(characterparams.CritD);
+
           }
 
     
@@ -368,7 +370,7 @@ class Battlescene extends Phaser.Scene
 
           // console.log(random, characterparams.Luck , random< characterparams.Luck);
 
-          if (random<characterparams.Luck)  {let perfectstrike = battleparams.enemy[battleparams.enemy.length-1].HP*0.9 ;battleparams.enemy[battleparams.enemy.length-1].HP = battleparams.enemy[battleparams.enemy.length-1].HP*0.1;
+          if (random<characterparams.Luck)  {let perfectstrike = battleparams.enemy[battleparams.enemy.length-1].HP*0.25 ;battleparams.enemy[battleparams.enemy.length-1].HP = battleparams.enemy[battleparams.enemy.length-1].HP*0.75;
             
             battleparams.eventslog.push(`Turn ${battleparams.turn}: Luck! You made a perfect strike dealing ${perfectstrike} damages`)};
 
@@ -395,6 +397,8 @@ class Battlescene extends Phaser.Scene
               characterparams.Attacktwice = true;
             
             };
+
+            console.log(`double: ${random}`);
   
             battleparams.rollitonce[4] = false;
   
@@ -506,6 +510,8 @@ class Battlescene extends Phaser.Scene
 
         if (battleparams.battleover == false) {
 
+        console.log(characterparams.BDM, battleparams.enemy[battleparams.enemy.length-1].BDM)
+
         characterparams.BDM = characterparams.DefaultBDM;
 
         this.events.emit('CritChecker');
@@ -554,7 +560,7 @@ class Battlescene extends Phaser.Scene
 
         battleparams.turn = battleparams.turn+1;
 
-        console.log(characterparams.BDM, battleparams.enemy[battleparams.enemy.length-1].BDM)
+   
 
         this.events.emit('BattleStatus');
 
@@ -619,7 +625,7 @@ class Battlescene extends Phaser.Scene
 
        if (ind<12 ) {this.add.text(100, 340+(40*(ind+1)), `${element}`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();}
 
-       else if (ind<30 ) {this.add.text(700, 100+(40*(ind+1-12)), `${element}`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();}
+       else if (ind<30 ) {this.add.text(700, 100+(40*(ind+1-12)), `${element}`, { font: '16px Arial', fill: '#00FF00' }).setInteractive();}
 
        else {this.add.text(1300, 100+(40*(ind+1-30)), `${element}`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();}
 
@@ -770,7 +776,7 @@ class Battlescene extends Phaser.Scene
 
       battleparams.levelstacker = battleparams.levelstacker+0.1;
 
-      battleparams.powerstacker = battleparams.powerstacker*1.155;
+      battleparams.powerstacker = battleparams.powerstacker*1.2;
 
       characterparams.HP = characterparams.DefaultHP*battleparams.levelstacker;
 
@@ -780,9 +786,9 @@ class Battlescene extends Phaser.Scene
 
       reward1.on('pointerdown', () => {characterparams.DefaultBDM = characterparams.BDM*1.15; this.scene.stop().start('Main'), 3000});
 
-      let reward2 = this.add.text(100, 140, `Click me to Buff your CritDamage by 200%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
+      let reward2 = this.add.text(100, 140, `Click me to Buff your CritDamage by 40%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
 
-      reward2.on('pointerdown', () => {characterparams.CritD = (characterparams.CritD+3); this.scene.stop().start('Main'), 3000});
+      reward2.on('pointerdown', () => {characterparams.CritD = (characterparams.CritD*1.4); this.scene.stop().start('Main'), 3000});
 
       let reward3 = this.add.text(100, 180, `Click me to Buff your Luckystrike chance by 40%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
 

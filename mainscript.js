@@ -544,6 +544,8 @@ class Battlescene extends Phaser.Scene
 
           characterparams.BDM = characterparams.DefaultBDM;
 
+        battleparams.rollitonce = [true,true,false,true, false, true, false, false];
+
         this.events.emit('CritChecker');
 
         this.events.emit('LuckystrikeChecker');

@@ -69,18 +69,18 @@ class CharacterMenu extends Phaser.Scene
         
       let stat1 = this.add.text(100, 100, `BaseDamageMultiplier: ${characterparams.DefaultBDM}`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
       let stat2 = this.add.text(100, 140, `CritDamage: ${characterparams.CritD} (10% fixed rate occurence)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
-      let stat3 = this.add.text(100, 180, `Luckystrike: ${characterparams.LStrike} (50% extra damage fixed %damage)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
-      let stat4 = this.add.text(100, 220, `Defense: ${characterparams.Defense} (damage reduction)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
+      let stat3 = this.add.text(100, 180, `Luckystrike: ${characterparams.LStrike} (50% extra damage fixed %damage, Max value: 100%)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
+      let stat4 = this.add.text(100, 220, `Defense: ${characterparams.Defense} (damage reduction, Max value: 90%)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
 
-      let stat6 = this.add.text(100, 260, `Evade: ${characterparams.Evasion} (Full damage reduction)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
+      let stat6 = this.add.text(100, 260, `Evade: ${characterparams.Evasion} (Full damage reduction, , Max value: 33%)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
       let stat7 = this.add.text(100, 340, `Physical potencie: ${characterparams.PhysicalP} (Provide damage and defense against Physical type foes)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
       let stat8 = this.add.text(100, 380, `Magical potencie: ${characterparams.MagicalP} (Provide damage and defense against Magical type foes)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
       let stat9 = this.add.text(100, 420, `Fire potencie: ${characterparams.fire} (deal double extra-damage against a vulnerablity. reduce your elemental defense)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
       let stat10 = this.add.text(100, 460, `Ice potencie: ${characterparams.ice} ( deal double extra-damage against a vulnerablity. reduce your elemental defense)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
       let stat11 = this.add.text(100, 500, `Thunder potencie: ${characterparams.thunder} ( deal double extra-damage against a vulnerablity. reduce your elemental defense)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
       let stat12 = this.add.text(100, 540, `Earth potencie: ${characterparams.earth} ( deal double extra-damage against a vulnerablity. reduce your elemental defense)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
-      let stat13 = this.add.text(100, 580, `Speed: ${characterparams.Speed} (Opportunity to strike again)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
-      let stat14 = this.add.text(100, 620, `Luck: ${characterparams.Luck} (Remove 25% of the current enemy HP)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
+      let stat13 = this.add.text(100, 580, `Speed: ${characterparams.Speed} (Opportunity to strike again: , Max value: 125)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
+      let stat14 = this.add.text(100, 620, `Luck: ${characterparams.Luck} (Remove 25% of the current enemy HP, Max value: 25%)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
       
       let inventory = this.add.text(100, 700, `Open Inventory`, { font: '26px Arial', fill: '#ffffff' }).setInteractive();
 
@@ -90,7 +90,7 @@ class CharacterMenu extends Phaser.Scene
 
       battlestart.on('pointerdown', () => this.scene.stop().start('Battle'));
 
-      let randomweapon = new Weapon(`old sword lvl ${battleparams.levelstacker}`, 10 * battleparams.levelstacker, 5*battleparams.levelstacker, 1.25*battleparams.levelstacker, 1, characterparams.potentie[this.random(1)], characterparams.element[this.random(3)]);
+      let randomweapon = new Weapon(`old sword lvl ${battleparams.levelstacker}`, 10 * battleparams.levelstacker, Math.min(5*battleparams.levelstacker,40), 1.25*battleparams.levelstacker, 1, characterparams.potentie[this.random(1)], characterparams.element[this.random(3)]);
 
       inventoryparams.weaponset.length<15? inventoryparams.weaponset.push(randomweapon) : (inventoryparams.weaponset=[],inventoryparams.weaponset.push(randomweapon));
 
@@ -215,7 +215,7 @@ class Battlescene extends Phaser.Scene
             
             let random = this.random(100);
 
-            random<(10+inventoryparams.equippedweapon[0].crit)? (characterparams.BDM = characterparams.BDM*characterparams.CritD*inventoryparams.equippedweapon[0].critDamage, battleparams.eventslog.push(`Turn ${battleparams.turn}: Critical strike!`)) : characterparams.BDM = characterparams.BDM ;
+            random<(10+inventoryparams.equippedweapon[0].crit)? (characterparams.BDM = characterparams.BDM*(characterparams.CritD+inventoryparams.equippedweapon[0].critDamage), battleparams.eventslog.push(`Turn ${battleparams.turn}: Critical strike!`)) : characterparams.BDM = characterparams.BDM ;
           
             console.log(characterparams.CritD);
 
@@ -792,27 +792,20 @@ class Battlescene extends Phaser.Scene
 
       let reward3 = this.add.text(100, 180, `Click me to Buff your Luckystrike chance by 40%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
 
-      reward3.on('pointerdown', () => {characterparams.LStrike = (characterparams.LStrike+0.4); this.scene.stop().start('Main'), 3000});
+      reward3.on('pointerdown', () => {characterparams.LStrike = Math.min((characterparams.LStrike+0.4),1); this.scene.stop().start('Main'), 3000});
 
-      if (characterparams.Defense<0.65){
 
       let reward4 = this.add.text(100, 220, `Click me to Buff your Defense by 15%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
 
-      reward4.on('pointerdown', () => {characterparams.Defense = (characterparams.Defense*1.15); this.scene.stop().start('Main'), 3000});
+      reward4.on('pointerdown', () => {characterparams.Defense = Math.min((characterparams.Defense*1.15), 0.9); this.scene.stop().start('Main'), 3000});
     
-          } else {
+      let reward5 = this.add.text(100, 260, `Click me to Buff your evasion rate by 5%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
 
-            let reward4 = this.add.text(100, 220, `You have reached the maximum defense buff `, { font: '16px Arial', fill: '#ffffff' })
+      reward5.on('pointerdown', () => {characterparams.Evasion = Math.min((characterparams.Evasion+0.05),0.33); this.scene.stop().start('Main'), 3000});
 
-          }
+      let reward6 = this.add.text(100, 300, `Click me to Buff your luck rate by 5%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
 
-      // let reward5 = this.add.text(100, 260, `Click me to Buff your evasion rate by 10%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
-
-      // reward5.on('pointerdown', () => {characterparams.Evasion = (characterparams.Evasion+0.1); this.scene.stop().start('Main'), 3000});
-
-      // let reward6 = this.add.text(100, 300, `Click me to Buff your luck rate by 10%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
-
-      // reward6.on('pointerdown', () => {characterparams.Luck = (characterparams.Luck+0.1); this.scene.stop().start('Main'), 3000 });
+      reward6.on('pointerdown', () => {characterparams.Luck = Math.min((characterparams.Luck+0.1),0.25); this.scene.stop().start('Main'), 3000 });
 
       let reward7 = this.add.text(100, 340, `Click me to Buff your fire potencie by 100%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
 
@@ -829,6 +822,10 @@ class Battlescene extends Phaser.Scene
       let reward10 = this.add.text(100, 460, `Click me to Buff your earth potencie by 100%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
 
       reward10.on('pointerdown', () => {characterparams.earth = (characterparams.earth+1); characterparams.thunderResistance = (characterparams.thunderResistance +1);  this.scene.stop().start('Main'), 3000 });
+
+      let reward11 = this.add.text(100, 500, `Click me to Buff your speed by 5!`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
+
+      reward10.on('pointerdown', () => {characterparams.speed = Math.min((characterparams.speed+5),125);  this.scene.stop().start('Main'), 3000 });
 
 
 

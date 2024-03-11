@@ -70,7 +70,7 @@ class CharacterMenu extends Phaser.Scene
       let stat1 = this.add.text(100, 100, `BaseDamageMultiplier: ${characterparams.DefaultBDM}`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
       let stat2 = this.add.text(100, 140, `CritDamage: ${characterparams.CritD} (10% fixed rate occurence)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
       let stat3 = this.add.text(100, 180, `Luckystrike: ${characterparams.LStrike} (50% extra damage fixed %damage, Max value: 100%)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
-      let stat4 = this.add.text(100, 220, `Defense: ${characterparams.Defense} (damage reduction, Max value: 90%)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
+      let stat4 = this.add.text(100, 220, `Defense: ${characterparams.Defense} (damage reduction, Max value: 80%)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
 
       let stat6 = this.add.text(100, 260, `Evade: ${characterparams.Evasion} (Full damage reduction, , Max value: 33%)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
       let stat7 = this.add.text(100, 340, `Physical potencie: ${characterparams.PhysicalP} (Provide damage and defense against Physical type foes)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
@@ -178,7 +178,7 @@ class Battlescene extends Phaser.Scene
 
       battleparams.ratioTxt = this.add.text(1400, 60, `Wins ${battleparams.nbwin}, Loses ${battleparams.nblose}`, { font: '26px Arial', fill: '#ffffff' }).setInteractive();
   
-      const enemy = new Enemy(undefined,20*battleparams.levelstacker, battleparams.element[this.random(3)], battleparams.element[this.random(3)], 500*battleparams.levelstacker, 1*(battleparams.powerstacker),[],battleparams.levelstacker,90, battleparams.potentie[this.random(1)],1*(battleparams.powerstacker));
+      const enemy = new Enemy(undefined,20*battleparams.levelstacker, battleparams.element[this.random(3)], battleparams.element[this.random(3)], 500*battleparams.powerstacker, 1*(battleparams.powerstacker),[],battleparams.levelstacker,90, battleparams.potentie[this.random(1)],1*(battleparams.powerstacker));
 
       battleparams.enemy.push(enemy);
 
@@ -778,9 +778,9 @@ class Battlescene extends Phaser.Scene
 
       battleparams.levelstacker = battleparams.levelstacker+0.1;
 
-      battleparams.powerstacker = battleparams.powerstacker*1.2;
+      battleparams.powerstacker = battleparams.powerstacker*1.25;
 
-      characterparams.HP = characterparams.DefaultHP*battleparams.levelstacker;
+      characterparams.HP = characterparams.DefaultHP*battleparams.powerstacker*0.75;
 
       let title = this.add.text(100, 60, `Reward`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
 
@@ -797,9 +797,9 @@ class Battlescene extends Phaser.Scene
       reward3.on('pointerdown', () => {characterparams.LStrike = Math.min((characterparams.LStrike+0.4),1); this.scene.stop().start('Main'), 3000});
 
 
-      let reward4 = this.add.text(100, 220, `Click me to Buff your Defense by 25%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
+      let reward4 = this.add.text(100, 220, `Click me to Buff your Defense by 20%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
 
-      reward4.on('pointerdown', () => {characterparams.Defense = Math.min((characterparams.Defense*1.25), 0.9); this.scene.stop().start('Main'), 3000});
+      reward4.on('pointerdown', () => {characterparams.Defense = Math.min((characterparams.Defense*1.25), 0.8); this.scene.stop().start('Main'), 3000});
     
       let reward5 = this.add.text(100, 260, `Click me to Buff your evasion rate by 5%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
 

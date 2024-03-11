@@ -5,7 +5,6 @@ class CharacterMenu extends Phaser.Scene
     CritD=2;
     LStrike=0.1;
     Defense=0.2;
-    MDefense=0.2;
     Evasion=0.08;
     PhysicalP=1;
     MagicalP=1;
@@ -70,17 +69,17 @@ class CharacterMenu extends Phaser.Scene
         
       let stat1 = this.add.text(100, 100, `BaseDamageMultiplier: ${characterparams.DefaultBDM}`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
       let stat2 = this.add.text(100, 140, `CritDamage: ${characterparams.CritD} (10% fixed rate occurence)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
-      let stat3 = this.add.text(100, 180, `Luckystrike: ${characterparams.LStrike} (50% extra damage fixed damage)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
+      let stat3 = this.add.text(100, 180, `Luckystrike: ${characterparams.LStrike} (50% extra damage fixed %damage)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
       let stat4 = this.add.text(100, 220, `Defense: ${characterparams.Defense} (damage reduction)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
-      
-      let stat6 = this.add.text(100, 260, `Evade: ${characterparams.Evasion} (Full damage mitigation but weak occurence)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
+
+      let stat6 = this.add.text(100, 260, `Evade: ${characterparams.Evasion} (Full damage reduction)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
       let stat7 = this.add.text(100, 340, `Physical potencie: ${characterparams.PhysicalP} (Provide damage and defense against Physical type foes)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
-      let stat8 = this.add.text(100, 380, `Magical potencie: ${characterparams.PhysicalP} (Provide damage and defense against Magical type foes)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
+      let stat8 = this.add.text(100, 380, `Magical potencie: ${characterparams.MagicalP} (Provide damage and defense against Magical type foes)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
       let stat9 = this.add.text(100, 420, `Fire potencie: ${characterparams.fire} (deal double extra-damage against a vulnerablity. reduce your elemental defense)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
       let stat10 = this.add.text(100, 460, `Ice potencie: ${characterparams.ice} ( deal double extra-damage against a vulnerablity. reduce your elemental defense)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
       let stat11 = this.add.text(100, 500, `Thunder potencie: ${characterparams.thunder} ( deal double extra-damage against a vulnerablity. reduce your elemental defense)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
       let stat12 = this.add.text(100, 540, `Earth potencie: ${characterparams.earth} ( deal double extra-damage against a vulnerablity. reduce your elemental defense)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
-      let stat13 = this.add.text(100, 580, `Speed: ${characterparams.Speed} (Affect damage received based on your opponent speed)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
+      let stat13 = this.add.text(100, 580, `Speed: ${characterparams.Speed} (Opportunity to strike again)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
       let stat14 = this.add.text(100, 620, `Luck: ${characterparams.Luck} (Kill your adversaire in one blow)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
       
       let inventory = this.add.text(100, 700, `Open Inventory`, { font: '26px Arial', fill: '#ffffff' }).setInteractive();
@@ -138,6 +137,7 @@ class Battlescene extends Phaser.Scene
   handleonce = [true, true];
 
 
+
   constructor() {
     super('Battle'); // Scene key
   }
@@ -161,6 +161,7 @@ class Battlescene extends Phaser.Scene
 
     }
 
+ 
 
     create ()
     {
@@ -197,6 +198,7 @@ class Battlescene extends Phaser.Scene
       
       battleparams.HPTxt = this.add.text(100, 340, `Ennemy HP : ${battleparams.enemy[battleparams.enemy.length-1].HP}`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
       
+
 
         this.events.on('CritChecker', () =>  {
 
@@ -499,7 +501,7 @@ class Battlescene extends Phaser.Scene
         // console.log(battleparams.battleover );
 
         // console.log(battleparams.rollitonce);
-
+      
         if (battleparams.playitonce == true){
 
         if (battleparams.battleover == false) {
@@ -600,6 +602,8 @@ class Battlescene extends Phaser.Scene
 
     })
    
+        battleparams.eventslog > 10? battleparams.eventslog = [] : battleparams.eventslog;
+
 
     }
 
@@ -607,8 +611,9 @@ class Battlescene extends Phaser.Scene
     update () 
     {
 
-      // console.log(battleparams.eventslog);
+
       battleparams.ratioTxt.setText(`Wins ${battleparams.nbwin}, Loses ${battleparams.nblose}`);
+
 
       battleparams.eventslog.forEach((element,ind) => {
 

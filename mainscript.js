@@ -825,7 +825,7 @@ class Battlescene extends Phaser.Scene
 
       let reward11 = this.add.text(100, 500, `Click me to Buff your speed by 5!`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
 
-      reward11.on('pointerdown', () => {characterparams.speed = Math.min((characterparams.speed+5),125);  this.scene.stop().start('Main'), 3000 });
+      reward11.on('pointerdown', () => {characterparams.Speed = Math.min((characterparams.Speed+5),125);  this.scene.stop().start('Main'), 3000 });
 
 
 

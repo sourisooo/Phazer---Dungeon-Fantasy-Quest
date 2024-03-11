@@ -60,27 +60,24 @@ class CharacterMenu extends Phaser.Scene
       let sprite = this.sprites.create(1600, 500, 'charactersheet');
 
 
-      let title = this.add.text(100, 60, `Character stat`, { font: '25px Arial', fill: '#ffffff' }).setInteractive();
+      let title = this.add.text(100, 60, `Character stat`, { font: '25px Arial', fill: '#ffffff' });
         
-      title.on('pointerdown', () => (console.log('hello')));
-
-      characterparams.ratioTxt = this.add.text(1400, 60, `Wins ${battleparams.nbwin}, Loses ${battleparams.nblose}`, { font: '26px Arial', fill: '#ffffff' }).setInteractive();
+      characterparams.ratioTxt = this.add.text(1400, 60, `Wins ${battleparams.nbwin}, Loses ${battleparams.nblose}`, { font: '26px Arial', fill: '#ffffff' });
   
         
-      let stat1 = this.add.text(100, 100, `BaseDamageMultiplier: ${characterparams.DefaultBDM}`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
-      let stat2 = this.add.text(100, 140, `CritDamage: ${characterparams.CritD} (10% fixed rate occurence)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
-      let stat3 = this.add.text(100, 180, `Luckystrike: ${characterparams.LStrike} (50% extra damage fixed %damage, Max value: 100%)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
-      let stat4 = this.add.text(100, 220, `Defense: ${characterparams.Defense} (damage reduction, Max value: 80%)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
-
-      let stat6 = this.add.text(100, 260, `Evade: ${characterparams.Evasion} (Full damage reduction, , Max value: 33%)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
-      let stat7 = this.add.text(100, 340, `Physical potencie: ${characterparams.PhysicalP} (Provide damage and defense against Physical type foes)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
-      let stat8 = this.add.text(100, 380, `Magical potencie: ${characterparams.MagicalP} (Provide damage and defense against Magical type foes)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
-      let stat9 = this.add.text(100, 420, `Fire potencie: ${characterparams.fire} (deal double extra-damage against a vulnerablity. reduce your elemental defense)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
-      let stat10 = this.add.text(100, 460, `Ice potencie: ${characterparams.ice} ( deal double extra-damage against a vulnerablity. reduce your elemental defense)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
-      let stat11 = this.add.text(100, 500, `Thunder potencie: ${characterparams.thunder} ( deal double extra-damage against a vulnerablity. reduce your elemental defense)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
-      let stat12 = this.add.text(100, 540, `Earth potencie: ${characterparams.earth} ( deal double extra-damage against a vulnerablity. reduce your elemental defense)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
-      let stat13 = this.add.text(100, 580, `Speed: ${characterparams.Speed} (Opportunity to strike again: , Max value: 125)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
-      let stat14 = this.add.text(100, 620, `Luck: ${characterparams.Luck} (Remove 25% of the current enemy HP, Max value: 25%)`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
+      let stat1 = this.add.text(100, 100, `BaseDamageMultiplier: ${characterparams.DefaultBDM}`, { font: '16px Arial', fill: '#ffffff' });
+      let stat2 = this.add.text(100, 140, `CritDamage: ${characterparams.CritD} (10% fixed rate occurence)`, { font: '16px Arial', fill: '#ffffff' });
+      let stat3 = this.add.text(100, 180, `Luckystrike: ${characterparams.LStrike} (50% extra damage fixed %damage, Max value: 100%)`, { font: '16px Arial', fill: '#ffffff' });
+      let stat4 = this.add.text(100, 220, `Defense: ${characterparams.Defense} (damage reduction, Max value: 80%)`, { font: '16px Arial', fill: '#ffffff' });
+      let stat6 = this.add.text(100, 260, `Evade: ${characterparams.Evasion} (Full damage reduction, , Max value: 33%)`, { font: '16px Arial', fill: '#ffffff' });
+      let stat7 = this.add.text(100, 340, `Physical potencie: ${characterparams.PhysicalP} (Provide damage and defense against Physical type foes)`, { font: '16px Arial', fill: '#ffffff' });
+      let stat8 = this.add.text(100, 380, `Magical potencie: ${characterparams.MagicalP} (Provide damage and defense against Magical type foes)`, { font: '16px Arial', fill: '#ffffff' });
+      let stat9 = this.add.text(100, 420, `Fire potencie: ${characterparams.fire} (deal double extra-damage against a vulnerablity. reduce your elemental defense)`, { font: '16px Arial', fill: '#ffffff' });
+      let stat10 = this.add.text(100, 460, `Ice potencie: ${characterparams.ice} ( deal double extra-damage against a vulnerablity. reduce your elemental defense)`, { font: '16px Arial', fill: '#ffffff' });
+      let stat11 = this.add.text(100, 500, `Thunder potencie: ${characterparams.thunder} ( deal double extra-damage against a vulnerablity. reduce your elemental defense)`, { font: '16px Arial', fill: '#ffffff' });
+      let stat12 = this.add.text(100, 540, `Earth potencie: ${characterparams.earth} ( deal double extra-damage against a vulnerablity. reduce your elemental defense)`, { font: '16px Arial', fill: '#ffffff' });
+      let stat13 = this.add.text(100, 580, `Speed: ${characterparams.Speed} (Opportunity to strike again: , Max value: 125)`, { font: '16px Arial', fill: '#ffffff' });
+      let stat14 = this.add.text(100, 620, `Luck: ${characterparams.Luck} (Remove 25% of the current enemy HP, Max value: 25%)`, { font: '16px Arial', fill: '#ffffff' });
       
       let inventory = this.add.text(100, 700, `Open Inventory`, { font: '26px Arial', fill: '#ffffff' }).setInteractive();
 
@@ -135,6 +132,7 @@ class Battlescene extends Phaser.Scene
   powerstacker = 1;
   playitonce = true;
   handleonce = [true, true];
+  updateitonce = true;
 
 
 
@@ -413,9 +411,9 @@ class Battlescene extends Phaser.Scene
 
           if(battleparams.countitonce == true) {
 
-          if (characterparams.HP<0)  {battleparams.battleover = true, battleparams.nblose=battleparams.nblose+1, setTimeout(() => this.scene.pause().start('Reward'),3000)};
+          if (characterparams.HP<0)  {battleparams.battleover = true, battleparams.nblose=battleparams.nblose+1, setTimeout(() => this.scene.stop().start('Reward'),2000)};
 
-          if (battleparams.enemy[battleparams.enemy.length-1].HP<0)  {battleparams.battleover = true, battleparams.nbwin=battleparams.nbwin+1, (setTimeout(() => this.scene.pause().start('Reward'),3000))};
+          if (battleparams.enemy[battleparams.enemy.length-1].HP<0)  {battleparams.battleover = true, battleparams.nbwin=battleparams.nbwin+1, (setTimeout(() => this.scene.stop().start('Reward'),2000))};
 
           battleparams.countitonce = false;
 
@@ -600,6 +598,8 @@ class Battlescene extends Phaser.Scene
 
       battleparams.handleonce = [true, true];
 
+      battleparams.updateitonce = true;
+
  
     });
 
@@ -610,7 +610,10 @@ class Battlescene extends Phaser.Scene
 
     })
    
-        battleparams.eventslog > 10? battleparams.eventslog = [] : battleparams.eventslog;
+
+
+
+
 
 
     }
@@ -619,21 +622,29 @@ class Battlescene extends Phaser.Scene
     update () 
     {
 
-
-      battleparams.ratioTxt.setText(`Wins ${battleparams.nbwin}, Loses ${battleparams.nblose}`);
-
+      if(battleparams.updateitonce == true) {
 
       battleparams.eventslog.forEach((element,ind) => {
 
-       if (ind<12 ) {this.add.text(100, 340+(40*(ind+1)), `${element}`, { font: '16px Arial', fill: '#ffffff' });}
+      
 
-       else if (ind<30 ) {this.add.text(700, 100+(40*(ind+1-12)), `${element}`, { font: '16px Arial', fill: '#00FF00' });}
+        if (ind<12 ) {this.add.text(100, 340+(40*(ind+1)), `${element}`, { font: '16px Arial', fill: '#ffffff' });}
+ 
+        else if (ind<30 ) {this.add.text(700, 100+(40*(ind+1-12)), `${element}`, { font: '16px Arial', fill: '#00FF00' });}
+ 
+        else {this.add.text(1300, 100+(40*(ind+1-30)), `${element}`, { font: '16px Arial', fill: '#ffffff' });}
 
-       else {this.add.text(1300, 100+(40*(ind+1-30)), `${element}`, { font: '16px Arial', fill: '#ffffff' });}
+        
 
-  
-      })
+       })
 
+       battleparams.updateitonce = false;
+
+      }
+   
+
+
+      battleparams.ratioTxt.setText(`Wins ${battleparams.nbwin}, Loses ${battleparams.nblose}`);
 
       battleparams.damagedoneTxt.setText(`Damage done: ${characterparams.outputdamage[battleparams.turn-1]}`);
 

@@ -133,6 +133,10 @@ class Battlescene extends Phaser.Scene
   playitonce = true;
   handleonce = [true, true];
   updateitonce = true;
+  waituntilidle = true;
+  sequence = [];
+
+
 
 
 
@@ -147,8 +151,26 @@ class Battlescene extends Phaser.Scene
         this.load.setBaseURL('./');
 
         this.load.image('Battletheme', './Default_two_knights_fighting_in_a_style_of_rpg_game_2d_style_3.jpg');
+    
+        this.load.spritesheet('playerattack', './main-attack.png', { frameWidth: 354.5, frameHeight: 288.5 });
 
+        this.load.spritesheet('playeridle', './main-idle.png', { frameWidth: 154, frameHeight: 152 });
 
+        this.load.spritesheet('playergethit', './main-gethit.png', { frameWidth: 184.5, frameHeight: 149.5 });
+
+        this.load.spritesheet('playerdeath', './main-death.png', { frameWidth: 214.5, frameHeight: 164 });
+
+        this.load.spritesheet('playerattack2', './main-attack2.png', { frameWidth: 382.5, frameHeight: 279 });
+
+        this.load.spritesheet('playerdefense', './main-defense.png', { frameWidth: 156, frameHeight: 155 });
+
+        this.load.spritesheet('enemyattack', './enemy-attack.png', { frameWidth: 560, frameHeight: 377 });
+
+        this.load.spritesheet('enemyidle', './enemy-idle.png', { frameWidth: 305, frameHeight: 250 });
+
+        this.load.spritesheet('enemydeath', './enemy-death.png', { frameWidth: 456, frameHeight: 400 });
+
+        this.load.spritesheet('enemygethit', './enemy-gethit.png', { frameWidth: 304, frameHeight: 272 });
 
     }
 
@@ -159,13 +181,7 @@ class Battlescene extends Phaser.Scene
 
     }
 
- 
-
-    create ()
-    {
-
-      console.log(battleparams.enemy[battleparams.enemy.length-1]);
-
+    createUI(){
 
       this.sprites = this.physics.add.group({ immovable: false });
 
@@ -184,7 +200,7 @@ class Battlescene extends Phaser.Scene
 
       let enemyannouce = this.add.text(100, 100, `An ennemie is coming: Weakness: ${battleparams.enemy[battleparams.enemy.length-1].element} & Strenght: ${battleparams.enemy[battleparams.enemy.length-1].element2} & Type: ${battleparams.enemy[battleparams.enemy.length-1].potencie}`, { font: '16px Arial', fill: '#ffffff' });
 
-      let attackbutton = this.add.text(100, 140, `Click me to attack`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
+      battleparams.attackbutton = this.add.text(100, 140, `Click me to attack`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
 
       battleparams.damagedoneTxt = this.add.text(100, 180, `Damage done: ${characterparams.outputdamage[battleparams.turn-1]}`, { font: '16px Arial', fill: '#ffffff' });
 
@@ -197,6 +213,258 @@ class Battlescene extends Phaser.Scene
       battleparams.HPTxt = this.add.text(100, 340, `Ennemy HP : ${battleparams.enemy[battleparams.enemy.length-1].HP}`, { font: '16px Arial', fill: '#ffffff' });
       
 
+    }
+
+    createAnimation(){
+
+      this.anims.create({
+        key: 'player-attack',
+        frames: this.anims.generateFrameNumbers('playerattack'),
+
+        frameRate: 22,
+        // repeat: -1
+         });
+
+
+         battleparams.playerSprite = this.add.sprite(250, 650, 'playeridle').setScale(2);
+
+
+         this.anims.create({
+          key: 'player-idle',
+          frames: this.anims.generateFrameNumbers('playeridle'),
+  
+          frameRate: 10,
+          repeat: -1
+           });
+  
+  
+           this.anims.create({
+            key: 'player-gethit',
+            frames: this.anims.generateFrameNumbers('playergethit'),
+    
+            frameRate: 18,
+            // repeat: -1
+             });
+    
+    
+             this.anims.create({
+              key: 'player-death',
+              frames: this.anims.generateFrameNumbers('playerdeath'),
+      
+              frameRate: 22,
+              // repeat: -1
+               });
+      
+               this.anims.create({
+                key: 'player-attack2',
+                frames: this.anims.generateFrameNumbers('playerattack2'),
+        
+                frameRate: 22,
+                // repeat: -1
+                 });
+        
+        
+                 this.anims.create({
+                  key: 'player-defense',
+                  frames: this.anims.generateFrameNumbers('playerdefense'),
+          
+                  frameRate: 14,
+                  // repeat: -1
+                   });
+
+
+                   this.anims.create({
+                    key: 'enemy-attack',
+                    frames: this.anims.generateFrameNumbers('enemyattack'),
+            
+                    frameRate: 23,
+                    // repeat: -1
+                     });
+            
+            
+                     battleparams.enemySprite = this.add.sprite(1600, 700, 'enemyidle').setScale(1);
+            
+            
+                     this.anims.create({
+                      key: 'enemy-idle',
+                      frames: this.anims.generateFrameNumbers('enemyidle'),
+              
+                      frameRate: 9,
+                      repeat: -1
+                       });
+              
+              
+                       this.anims.create({
+                        key: 'enemy-gethit',
+                        frames: this.anims.generateFrameNumbers('enemygethit'),
+                
+                        frameRate: 14,
+                        // repeat: -1
+                         });
+                
+                
+                         this.anims.create({
+                          key: 'enemy-death',
+                          frames: this.anims.generateFrameNumbers('enemydeath'),
+                  
+                          frameRate: 28,
+                          // repeat: -1
+                           });
+                  
+                     
+
+    }
+
+    playanymovableanimation(sprite, animationname, source){
+
+
+
+               battleparams[sprite].play({ key: animationname, repeat: 1 });
+
+
+                if (source == 'player') {
+
+              this.tweens.add({
+                targets: battleparams[sprite],
+                x: 1500,
+                duration: 700,
+                ease: 'Linear'
+            });
+      
+              setTimeout(() => {
+      
+                this.tweens.add({
+                  targets: battleparams[sprite],
+                  x: 250,
+                  duration: 700,
+                  ease: 'Linear'
+              });
+      
+              },1100)
+
+
+            } else {
+
+              this.tweens.add({
+                targets: battleparams[sprite],
+                x: 500,
+                duration: 700,
+                ease: 'Linear'
+            });
+      
+              setTimeout(() => {
+      
+                this.tweens.add({
+                  targets: battleparams[sprite],
+                  x: 1500,
+                  duration: 700,
+                  ease: 'Linear'
+              });
+      
+              },1100)
+
+
+
+            }
+
+
+
+    }
+
+
+    playanyanimation(sprite, animationname, source){
+
+
+      battleparams[sprite].play({ key: animationname });
+
+
+    }
+
+
+    remaindle(){
+
+        this.playanyanimation('playerSprite','player-idle','player');
+
+        this.playanyanimation('enemySprite','enemy-idle','enemy');
+
+        battleparams.waituntilidle = true;
+
+    }
+
+
+    playoneroundanimation(){
+
+      this.playanymovableanimation('enemySprite','enemy-attack','enemy');    
+
+      setTimeout(() => {this.playanyanimation('playerSprite','player-gethit','player');}, 700)
+
+        }
+
+
+        handlesequenceanimation(){
+
+          battleparams.sequence.forEach((element, index) => {
+
+            const hyphenIndex = element.indexOf('-');
+
+            const formatedelement = element.substring(0, hyphenIndex);
+
+            const afterHyphen = element.substring(hyphenIndex + 1);
+
+            const action = afterHyphen.slice(0, 6);
+
+            setTimeout(() => {
+
+            if(action == 'attack'){
+
+                this.playanymovableanimation(`${formatedelement}Sprite`, element, formatedelement);
+
+            } else {
+
+
+              this.playanyanimation(`${formatedelement}Sprite`, element, formatedelement);
+
+            }
+
+
+          }, 700*(1+index))
+
+          setTimeout(() => {
+
+          this.playoneroundanimation();
+
+           
+          }, 700*(1+battleparams.sequence.length))
+
+          if(characterparams.Attacktwice == false) {
+
+          setTimeout(() => {
+
+             this.remaindle();
+             battleparams.sequence = [];
+             
+            }, 700*(1+battleparams.sequence.length)+1400)
+
+          }
+
+          })
+
+  
+
+        }
+
+
+
+    create ()
+    {
+        this.createAnimation();
+
+        this.createUI();
+
+        this.remaindle();
+
+
+      console.log(battleparams.enemy[battleparams.enemy.length-1]);
 
         this.events.on('CritChecker', () =>  {
 
@@ -206,14 +474,14 @@ class Battlescene extends Phaser.Scene
 
             let random = this.random(100);
 
-            random<10? (characterparams.BDM = characterparams.BDM*characterparams.CritD, battleparams.eventslog.push(`Turn ${battleparams.turn}: Critical strike!`)) : characterparams.BDM = characterparams.BDM ;
+            random<10? (battleparams.sequence.push('player-attack','enemy-gethit'), console.log(battleparams.sequence), characterparams.Crittrigger = true,characterparams.BDM = characterparams.BDM*characterparams.CritD, battleparams.eventslog.push(`Turn ${battleparams.turn}: Critical strike!`)) : characterparams.BDM = characterparams.BDM ;
           
           
           } else {
             
             let random = this.random(100);
 
-            random<(10+inventoryparams.equippedweapon[0].crit)? (characterparams.BDM = characterparams.BDM*(characterparams.CritD*inventoryparams.equippedweapon[0].critDamage), battleparams.eventslog.push(`Turn ${battleparams.turn}: Critical strike!`)) : characterparams.BDM = characterparams.BDM ;
+            random<(10+inventoryparams.equippedweapon[0].crit)? (battleparams.sequence.push('player-attack','enemy-gethit'), console.log(battleparams.sequence), characterparams.Crittrigger = true,characterparams.BDM = characterparams.BDM*(characterparams.CritD*inventoryparams.equippedweapon[0].critDamage), battleparams.eventslog.push(`Turn ${battleparams.turn}: Critical strike!`)) : characterparams.BDM = characterparams.BDM ;
           
             console.log(characterparams.CritD);
 
@@ -323,9 +591,10 @@ class Battlescene extends Phaser.Scene
 
           let random = this.random(100)/100;
 
-          random<characterparams.Evasion ? (battleparams.enemy[battleparams.enemy.length-1].BDM = 0.001, battleparams.eventslog.push(`Turn ${battleparams.turn}: You evade enemy attack!`)) : battleparams.enemy[battleparams.enemy.length-1].BDM = battleparams.enemy[battleparams.enemy.length-1].BDM;
+          random<characterparams.Evasion ? (battleparams.sequence.push('player-defense'), console.log(battleparams.sequence) , battleparams.enemy[battleparams.enemy.length-1].BDM = 0.001, battleparams.eventslog.push(`Turn ${battleparams.turn}: You evade enemy attack!`)) : battleparams.enemy[battleparams.enemy.length-1].BDM = battleparams.enemy[battleparams.enemy.length-1].BDM;
 
           battleparams.rollitonce[2]=false;
+
 
           }
 
@@ -378,7 +647,13 @@ class Battlescene extends Phaser.Scene
 
           if (random<characterparams.Luck)  {let perfectstrike = battleparams.enemy[battleparams.enemy.length-1].HP*0.10 ;battleparams.enemy[battleparams.enemy.length-1].HP = battleparams.enemy[battleparams.enemy.length-1].HP*0.9;
             
-            battleparams.eventslog.push(`Turn ${battleparams.turn}: Luck! You made a perfect strike dealing ${perfectstrike} damages`)};
+            battleparams.eventslog.push(`Turn ${battleparams.turn}: Luck! You made a perfect strike dealing ${perfectstrike} damages`);
+          
+            battleparams.sequence.push('player-attack','enemy-gethit');
+          
+          };
+
+            console.log(battleparams.sequence);
 
           battleparams.rollitonce[3] = false;
 
@@ -401,7 +676,7 @@ class Battlescene extends Phaser.Scene
               battleparams.eventslog.push(`Turn ${battleparams.turn}: You attack twice!`)
 
               characterparams.Attacktwice = true;
-            
+
             };
 
             console.log(`double: ${random}`);
@@ -419,9 +694,9 @@ class Battlescene extends Phaser.Scene
 
           if(battleparams.countitonce == true) {
 
-          if (characterparams.HP<0)  {battleparams.battleover = true, battleparams.nblose=battleparams.nblose+1, setTimeout(() => this.scene.stop().start('Reward'),2000)};
+          if (characterparams.HP<0)  {this.playanyanimation('playerSprite','player-death','player');battleparams.battleover = true, battleparams.nblose=battleparams.nblose+1, setTimeout(() => this.scene.stop().start('Reward'),2000)};
 
-          if (battleparams.enemy[battleparams.enemy.length-1].HP<0)  {battleparams.battleover = true, battleparams.nbwin=battleparams.nbwin+1, (setTimeout(() => this.scene.stop().start('Reward'),2000))};
+          if (battleparams.enemy[battleparams.enemy.length-1].HP<0)  {this.playanyanimation('enemySprite','enemy-death','enemy');battleparams.battleover = true, battleparams.nbwin=battleparams.nbwin+1, (setTimeout(() => this.scene.stop().start('Reward'),2000))};
 
           battleparams.countitonce = false;
 
@@ -511,10 +786,14 @@ class Battlescene extends Phaser.Scene
         // console.log(battleparams.battleover );
 
         // console.log(battleparams.rollitonce);
+
+        if(battleparams.waituntilidle == true){
       
         if (battleparams.playitonce == true){
 
         if (battleparams.battleover == false) {
+
+        characterparams.Crittrigger = false;
 
         console.log(characterparams.BDM, battleparams.enemy[battleparams.enemy.length-1].BDM)
 
@@ -542,11 +821,29 @@ class Battlescene extends Phaser.Scene
 
         this.events.emit('Handleequippedweapon');
 
+          // this.playanyanimation('playerSprite','player-defense','player'),this.playanymovableanimation('enemySprite','enemy-attack','enemy')
+
+          if(characterparams.Crittrigger == false){
+
+            battleparams.sequence.push('player-attack2','enemy-gethit');
+            console.log(battleparams.sequence);
+          };
+
+          characterparams.Crittrigger = false;
+
+          if(characterparams.Attacktwice == false){
+
+            this.handlesequenceanimation();
+
+          } 
+
         characterparams.BDM = characterparams.DefaultBDM;
 
         battleparams.enemy[battleparams.enemy.length-1].BDM = battleparams.enemy[battleparams.enemy.length-1].defaultBDM;
 
         if(characterparams.Attacktwice == true){
+
+          characterparams.Crittrigger = false;
 
           characterparams.BDM = characterparams.DefaultBDM;
 
@@ -564,12 +861,23 @@ class Battlescene extends Phaser.Scene
 
         characterparams.Attacktwice = false;
 
+        if(characterparams.Crittrigger == false){
+
+          battleparams.sequence.push('player-attack2','enemy-gethit');
+          console.log(battleparams.sequence);
+        };
+
+        console.log(battleparams.sequence);
+
+        characterparams.Crittrigger = false;
+
+        this.handlesequenceanimation();
+
+
         }
 
         battleparams.turn = battleparams.turn+1;
-
    
-
         this.events.emit('BattleStatus');
 
       } else {this.events.emit('GameOver')}
@@ -577,20 +885,26 @@ class Battlescene extends Phaser.Scene
       battleparams.playitonce = false;
 
     }
+
+      }
+
+      battleparams.waituntilidle = false;
        
       
       });
 
     
-      
+
 
       if (battleparams.doitonce == true) {
 
-      attackbutton.on('pointerdown', () => {this.events.emit('PlayerAttack')});
+      battleparams.attackbutton.on('pointerdown', () => {this.events.emit('PlayerAttack')});
 
       battleparams.doitonce = false;
 
     };
+
+
 
 
     this.input.on('pointerdown', () => {
@@ -618,11 +932,6 @@ class Battlescene extends Phaser.Scene
 
     })
    
-
-
-
-
-
 
     }
 

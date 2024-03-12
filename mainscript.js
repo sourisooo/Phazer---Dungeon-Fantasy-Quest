@@ -77,7 +77,7 @@ class CharacterMenu extends Phaser.Scene
       let stat11 = this.add.text(100, 500, `Thunder potencie: ${characterparams.thunder} ( deal double extra-damage against a vulnerablity. reduce your elemental defense)`, { font: '16px Arial', fill: '#ffffff' });
       let stat12 = this.add.text(100, 540, `Earth potencie: ${characterparams.earth} ( deal double extra-damage against a vulnerablity. reduce your elemental defense)`, { font: '16px Arial', fill: '#ffffff' });
       let stat13 = this.add.text(100, 580, `Speed: ${characterparams.Speed} (Opportunity to strike again: , Max value: 125)`, { font: '16px Arial', fill: '#ffffff' });
-      let stat14 = this.add.text(100, 620, `Luck: ${characterparams.Luck} (Remove 15% of the current enemy HP, Max value: 25%)`, { font: '16px Arial', fill: '#ffffff' });
+      let stat14 = this.add.text(100, 620, `Luck: ${characterparams.Luck} (Remove 10% of the current enemy HP, Max value: 25%)`, { font: '16px Arial', fill: '#ffffff' });
       
       let inventory = this.add.text(100, 700, `Open Inventory`, { font: '26px Arial', fill: '#ffffff' }).setInteractive();
 
@@ -247,7 +247,9 @@ class Battlescene extends Phaser.Scene
 
           if((inventoryparams.equippedweapon[0] == undefined)||(inventoryparams.equippedweapon[0].length == 0)) {
 
-            characterparams.BDM=characterparams.BDM;
+            let elementmultiplier = characterparams.fire*0.05+characterparams.ice*0.05+characterparams.thunder*0.05+characterparams.earth*0.05;
+
+            characterparams.BDM=characterparams.BDM*(1+elementmultiplier);    
 
           }
           
@@ -263,7 +265,13 @@ class Battlescene extends Phaser.Scene
 
               console.log(`elem damage:${characterparams.BDM}`);
             
-            } else {characterparams.BDM=characterparams.BDM}
+            } else {
+              
+              let elementmultiplier = characterparams.fire*0.05+characterparams.ice*0.05+characterparams.thunder*0.05+characterparams.earth*0.05;
+
+              characterparams.BDM=characterparams.BDM*(1+elementmultiplier);           
+            
+            }
 
           } ;
 
@@ -368,7 +376,7 @@ class Battlescene extends Phaser.Scene
 
           // console.log(random, characterparams.Luck , random< characterparams.Luck);
 
-          if (random<characterparams.Luck)  {let perfectstrike = battleparams.enemy[battleparams.enemy.length-1].HP*0.15 ;battleparams.enemy[battleparams.enemy.length-1].HP = battleparams.enemy[battleparams.enemy.length-1].HP*0.85;
+          if (random<characterparams.Luck)  {let perfectstrike = battleparams.enemy[battleparams.enemy.length-1].HP*0.10 ;battleparams.enemy[battleparams.enemy.length-1].HP = battleparams.enemy[battleparams.enemy.length-1].HP*0.9;
             
             battleparams.eventslog.push(`Turn ${battleparams.turn}: Luck! You made a perfect strike dealing ${perfectstrike} damages`)};
 

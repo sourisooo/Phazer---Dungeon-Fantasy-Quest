@@ -490,8 +490,6 @@ class Battlescene extends Phaser.Scene
         this.playanyanimation('enemySprite','enemy-gethit','enemy');
       
         newfx.fxname.destroy();
-
-        console.log(battleparams.fx[0]);
   
           }, 700*2 )
 
@@ -520,8 +518,7 @@ class Battlescene extends Phaser.Scene
           
             newfx.fxname.destroy();
     
-            console.log(battleparams.fx[0]);
-      
+       
               }, 700*2 )
 
         }
@@ -1095,9 +1092,7 @@ class Battlescene extends Phaser.Scene
 
     update () 
     {
-      // console.log(battleparams.fx[0]);
 
-      // battleparams.fx[0].setPosition(battleparams.enemySprite.x-80, battleparams.enemySprite.y-250);
 
       if(battleparams.updateitonce == true) {
 

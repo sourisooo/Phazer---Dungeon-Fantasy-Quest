@@ -1091,8 +1091,6 @@ class Battlescene extends Phaser.Scene
   
           this.events.emit('Handleequippedweapon');
   
-            this.playanyanimation('playerSprite','player-defense','player'),this.playanymovableanimation('enemySprite','enemy-attack','enemy')
-  
             if(characterparams.Crittrigger == false){
   
               battleparams.sequence.push('player-attack2','enemy-gethit');

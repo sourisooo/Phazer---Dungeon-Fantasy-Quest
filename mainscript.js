@@ -135,11 +135,8 @@ class Battlescene extends Phaser.Scene
   updateitonce = true;
   waituntilidle = true;
   sequence = [];
-  fx=[];
+
  
-
-
-
 
 
 
@@ -506,8 +503,6 @@ class Battlescene extends Phaser.Scene
 
           newfx.spritegen();
     
-          battleparams.fx.push(newfx.fxname);
-
           setTimeout(() => {newfx.fxname.play({ key: key, repeat: 0 }),       
       
           this.tweens.add({

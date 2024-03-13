@@ -135,6 +135,7 @@ class Battlescene extends Phaser.Scene
   updateitonce = true;
   waituntilidle = true;
   sequence = [];
+  damageturnlog = [];
 
  
 
@@ -192,12 +193,12 @@ class Battlescene extends Phaser.Scene
 
     createUI(){
 
-      this.sprites = this.physics.add.group({ immovable: false });
+      // this.sprites = this.physics.add.group({ immovable: false });
 
-      let sprite = this.sprites.create(900, 400, 'Battletheme').setScale(0.5);
+      // let sprite = this.sprites.create(900, 400, 'Battletheme').setScale(0.5);
 
 
-      let title = this.add.text(100, 60, `Battle lvl ${battleparams.levelstacker}`, { font: '16px Arial', fill: '#ffffff' });
+      let title = this.add.text(100, 60, `Battle lvl ${battleparams.levelstacker}`, { font: '60px Arial', fill: '#ffffff' });
 
       battleparams.ratioTxt = this.add.text(1400, 60, `Wins ${battleparams.nbwin}, Loses ${battleparams.nblose}`, { font: '26px Arial', fill: '#ffffff' });
   
@@ -207,19 +208,19 @@ class Battlescene extends Phaser.Scene
 
       console.log(battleparams.enemy[battleparams.enemy.length-1]);
 
-      let enemyannouce = this.add.text(100, 100, `An ennemie is coming: Weakness: ${battleparams.enemy[battleparams.enemy.length-1].element} & Strenght: ${battleparams.enemy[battleparams.enemy.length-1].element2} & Type: ${battleparams.enemy[battleparams.enemy.length-1].potencie}`, { font: '16px Arial', fill: '#ffffff' });
+      let enemyannouce = this.add.text(1100, 100, `An enemy is coming: Weakness: ${battleparams.enemy[battleparams.enemy.length-1].element} & Strenght: ${battleparams.enemy[battleparams.enemy.length-1].element2} & Type: ${battleparams.enemy[battleparams.enemy.length-1].potencie}`, { font: '16px Arial', fill: '#ffffff' });
 
-      battleparams.attackbutton = this.add.text(100, 140, `Click me to attack`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
+      battleparams.attackbutton = this.add.text(100, 300, `Click me to attack`, { font: '32px Arial', fill: '#ffffff' }).setInteractive();
 
-      battleparams.damagedoneTxt = this.add.text(100, 180, `Damage done: ${characterparams.outputdamage[battleparams.turn-1]}`, { font: '16px Arial', fill: '#ffffff' });
+      battleparams.damagedoneTxt = this.add.text(100, 180, `${characterparams.outputdamage[battleparams.turn-1]}`, { font: '32px Arial', fill: 'green' });
 
-      battleparams.damagereceivedTxt = this.add.text(100, 220, `Damage received: ${battleparams.enemy[battleparams.enemy.length-1].outputdamage[battleparams.turn-1] }`, { font: '16px Arial', fill: '#ffffff' });
+      battleparams.damagereceivedTxt = this.add.text(100, 220, ` ${battleparams.enemy[battleparams.enemy.length-1].outputdamage[battleparams.turn-1] }`, { font: '32px Arial', fill: 'red' });
 
-      battleparams.turnTxt = this.add.text(100, 260, `Actual Turn : ${battleparams.turn}`, { font: '16px Arial', fill: '#ffffff' });
+      battleparams.turnTxt = this.add.text(100, 160, `Actual Turn : ${battleparams.turn}`, { font: '40px Arial', fill: '#ffffff' });
 
-      battleparams.HHPTxt = this.add.text(100, 300, `You HP : ${characterparams.HP}`, { font: '16px Arial', fill: '#ffffff' });
+      battleparams.HHPTxt = this.add.text(100, 300, `You HP : ${characterparams.HP}`, { font: '32px Arial', fill: '#ffffff' });
       
-      battleparams.HPTxt = this.add.text(100, 340, `Ennemy HP : ${battleparams.enemy[battleparams.enemy.length-1].HP}`, { font: '16px Arial', fill: '#ffffff' });
+      battleparams.HPTxt = this.add.text(100, 340, `Ennemy HP : ${battleparams.enemy[battleparams.enemy.length-1].HP}`, { font: '32px Arial', fill: '#ffffff' });
       
 
     }
@@ -291,7 +292,7 @@ class Battlescene extends Phaser.Scene
                      });
             
             
-                     battleparams.enemySprite = this.add.sprite(1600, 700, 'enemyidle').setScale(1);
+                     battleparams.enemySprite = this.add.sprite(1400, 650, 'enemyidle').setScale(1);
 
   
                      this.anims.create({
@@ -375,7 +376,7 @@ class Battlescene extends Phaser.Scene
 
               this.tweens.add({
                 targets: battleparams[sprite],
-                x: 1400,
+                x: 1300,
                 duration: 700,
                 ease: 'Linear'
             });
@@ -553,6 +554,15 @@ class Battlescene extends Phaser.Scene
 
                 this.playanymovableanimation(`${formatedelement}Sprite`, element, formatedelement);
 
+                let copie = battleparams.damageturnlog.map(e => {
+                  
+                  if(e>1000000){return `${Math.round(e/1000000)}M`} else {return  Math.round(e)};
+                  
+                });
+
+                battleparams.damagedoneTxt.setText(copie.join('/'));
+
+
             } else if(formatedelement == 'fx'){
 
               let key = `fx-${elementalkeyword}`;
@@ -579,6 +589,8 @@ class Battlescene extends Phaser.Scene
           this.playoneenemyattack();
 
           console.log(battleparams.sequence);
+
+          battleparams.damageturnlog=[];
 
            
           }, 700*(1+battleparams.sequence.length))
@@ -796,6 +808,8 @@ class Battlescene extends Phaser.Scene
             battleparams.eventslog.push(`Turn ${battleparams.turn}: Luck! You made a perfect strike dealing ${perfectstrike} damages`);
           
             battleparams.sequence.push('player-attack','enemy-gethit');
+
+            battleparams.damageturnlog.push(perfectstrike);
           
           };
 
@@ -880,6 +894,8 @@ class Battlescene extends Phaser.Scene
 
           battleparams.eventslog.push(`Turn ${battleparams.turn}: You deal ${Math.round(characterparams.BDM*inventoryparams.weaponset[0].attack)} damages. You received ${Math.round(battleparams.enemy[battleparams.enemy.length-1].BDM*battleparams.enemy[battleparams.enemy.length-1].attack)} damages.`)
 
+          battleparams.damageturnlog.push(Math.round(characterparams.BDM*inventoryparams.weaponset[0].attack));
+
           // console.log(battleparams.eventslog);
 
         } else {
@@ -887,6 +903,8 @@ class Battlescene extends Phaser.Scene
           battleparams.enemy[battleparams.enemy.length-1].HP = battleparams.enemy[battleparams.enemy.length-1].HP  - characterparams.BDM*inventoryparams.equippedweapon[0].attack;
 
         battleparams.eventslog.push(`Turn ${battleparams.turn}: You deal ${Math.round(characterparams.BDM*inventoryparams.equippedweapon[0].attack)} damages. You received ${Math.round(battleparams.enemy[battleparams.enemy.length-1].BDM*battleparams.enemy[battleparams.enemy.length-1].attack)} damages.`)
+
+        battleparams.damageturnlog.push(Math.round(characterparams.BDM*inventoryparams.equippedweapon[0].attack));
 
         // console.log(battleparams.eventslog);
 
@@ -915,6 +933,8 @@ class Battlescene extends Phaser.Scene
   
           battleparams.eventslog.push(`Turn ${battleparams.turn}: You deal ${Math.round(characterparams.BDM*inventoryparams.weaponset[0].attack)} damages from your second attack.`)
   
+          battleparams.damageturnlog.push(Math.round(characterparams.BDM*inventoryparams.weaponset[0].attack));
+
           // console.log(battleparams.eventslog);
   
         } else {
@@ -923,6 +943,8 @@ class Battlescene extends Phaser.Scene
   
         battleparams.eventslog.push(`Turn ${battleparams.turn}: You deal ${Math.round(characterparams.BDM*inventoryparams.equippedweapon[0].attack)} damages from your second attack.`)
   
+        battleparams.damageturnlog.push(Math.round(characterparams.BDM*inventoryparams.equippedweapon[0].attack));
+
         // console.log(battleparams.eventslog);
   
       };
@@ -988,7 +1010,7 @@ class Battlescene extends Phaser.Scene
             if(characterparams.Attacktwice == false){
   
               this.handlesequenceanimation();
-  
+           
             } 
   
           characterparams.BDM = characterparams.DefaultBDM;
@@ -1092,38 +1114,53 @@ class Battlescene extends Phaser.Scene
 
     update () 
     {
+      battleparams.damagedoneTxt.setX(battleparams.enemySprite.x);
+
+      battleparams.damagedoneTxt.setY(battleparams.enemySprite.y);
+
+      battleparams.damagereceivedTxt.setX(battleparams.playerSprite.x);
+
+      battleparams.damagereceivedTxt.setY(battleparams.playerSprite.y);
+
+      battleparams.HHPTxt.setX(battleparams.playerSprite.x-100);
+
+      battleparams.HHPTxt.setY(battleparams.playerSprite.y-100);
+
+      battleparams.HPTxt.setX(battleparams.enemySprite.x-100);
+
+      battleparams.HPTxt.setY(battleparams.enemySprite.y-100);
 
 
-      if(battleparams.updateitonce == true) {
+      // if(battleparams.updateitonce == true) {
 
-      battleparams.eventslog.forEach((element,ind) => {
+      // battleparams.eventslog.forEach((element,ind) => {
 
       
 
-        if (ind<12 ) {this.add.text(100, 340+(40*(ind+1)), `${element}`, { font: '16px Arial', fill: '#ffffff' });}
+      //   if (ind<12 ) {this.add.text(100, 340+(40*(ind+1)), `${element}`, { font: '16px Arial', fill: '#ffffff' });}
  
-        else if (ind<30 ) {this.add.text(700, 100+(40*(ind+1-12)), `${element}`, { font: '16px Arial', fill: '#00FF00' });}
+      //   else if (ind<30 ) {this.add.text(700, 100+(40*(ind+1-12)), `${element}`, { font: '16px Arial', fill: '#00FF00' });}
  
-        else {this.add.text(1300, 100+(40*(ind+1-30)), `${element}`, { font: '16px Arial', fill: '#ffffff' });}
+      //   else {this.add.text(1300, 100+(40*(ind+1-30)), `${element}`, { font: '16px Arial', fill: '#ffffff' });}
 
         
 
-       })
+      //  })
 
-       battleparams.updateitonce = false;
+      //  battleparams.updateitonce = false;
 
-      }
+      // }
    
 
 
       battleparams.ratioTxt.setText(`Wins ${battleparams.nbwin}, Loses ${battleparams.nblose}`);
 
-      battleparams.damagedoneTxt.setText(`Damage done: ${characterparams.outputdamage[battleparams.turn-1]}`);
+      // battleparams.damagedoneTxt.setText(`Damage done: ${characterparams.outputdamage[battleparams.turn-1]}`);
 
 
       battleparams.turnTxt.setText(`Actual turn: ${battleparams.turn}`);
 
-      battleparams.damagereceivedTxt.setText(`Damage received: ${Math.round(battleparams.enemy[battleparams.enemy.length-1].outputdamage[battleparams.turn-1] )}`);
+      battleparams.damagereceivedTxt.setText(`${Math.round(battleparams.enemy[battleparams.enemy.length-1].outputdamage[battleparams.turn-1] )}`);
 
       battleparams.HHPTxt.setText(`Your HP: ${characterparams.HP}`);
 

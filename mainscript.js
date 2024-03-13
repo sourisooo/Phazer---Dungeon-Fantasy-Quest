@@ -1134,8 +1134,6 @@ class Battlescene extends Phaser.Scene
   
          this.events.emit('double');
 
-         characterparams.Attacktwice = false;
-
                if (battleparams.styles[battleparams.choosedstyle].nesteddouble == true) {
 
          battleparams.handleonce[4] = true;
@@ -1145,8 +1143,6 @@ class Battlescene extends Phaser.Scene
          battleparams.handleonce[1] = true;
  
         this.events.emit('double');
-
-        characterparams.Attacktwice = false;
 
         battleparams.handleonce[4] = true;
 

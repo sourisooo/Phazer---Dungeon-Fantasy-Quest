@@ -1008,7 +1008,7 @@ class Battlescene extends Phaser.Scene
 
       this.events.on('double', () => {
 
-        if(battleparams.handleonce[1] == true) {
+        if((battleparams.handleonce[1] == true)&&(battleparams.Attacktwice==true)) {
 
         if(inventoryparams.equippedweapon[0] == undefined) {characterparams.outputdamage.push(characterparams.BDM*inventoryparams.weaponset[0].attack);} 
 
@@ -1044,6 +1044,7 @@ class Battlescene extends Phaser.Scene
     }
 
       battleparams.handleonce[1] = false;
+      battleparams.Attacktwice= false;
 
       })
 
@@ -1090,6 +1091,7 @@ class Battlescene extends Phaser.Scene
             // console.log(inventoryparams.weaponset[0]);
   
           this.events.emit('Handleequippedweapon');
+  
   
             if(characterparams.Crittrigger == false){
   

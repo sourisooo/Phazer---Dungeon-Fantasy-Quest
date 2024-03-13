@@ -93,15 +93,69 @@ class CharacterMenu extends Phaser.Scene
 
       console.log(inventoryparams.weaponset);
 
+      characterparams.actualstyle = this.add.text(950, 50, `Actual style`, { font: '26px Arial', fill: '#000000' }).setInteractive();
+
+      let standardstyle = this.add.text(1100, 200, `Click to switch to standard style`, { font: '26px Arial', fill: '#000000' }).setInteractive();
+
+      standardstyle.on('pointerdown', () => (this.handlestyle(0)));
+
+      let barehandstyle = this.add.text(1100, 400, `Click to switch to barehandstyle style`, { font: '26px Arial', fill: '#000000' }).setInteractive();
+
+      let barehandstyletext = this.add.text(1100, 440, `More speed, more opportunity to perform ability`, { font: '16px Arial', fill: '#000000' });
+
+      barehandstyle.on('pointerdown', () => (this.handlestyle(1)));
+
+      let doublestyle = this.add.text(1100, 700, `Click to switch to doublesword style`, { font: '26px Arial', fill: '#000000' }).setInteractive();
+
+      let doublestyletext = this.add.text(1100, 740, `Bear two elemental potencies to the battle`, { font: '16px Arial', fill: '#000000' });
+
+      doublestyle.on('pointerdown', () => (this.handlestyle(2)));
 
 
+    }
+
+    handlestyle(index){
+
+        console.log(index);
+
+        battleparams.choosedstyle = index;
+
+        switch (index) {
+          case 0: {
+
+            inventoryparams.equippedweapon[1] = undefined;
+
+          }
+            
+            break;
+
+            case 1: {
+
+              inventoryparams.equippedweapon[0] = undefined;
+              inventoryparams.equippedweapon[1] = undefined;
+  
+            }
+              
+              break;
+
+              case 2: {
+
+       
+    
+              }
+                
+                break;
+        
+          default:
+            break;
+        }
 
     }
 
 
     update () 
     {
-      
+      characterparams.actualstyle.setText(`Actual style: ${battleparams.styles[battleparams.choosedstyle].name}`);
  
     }
 
@@ -137,9 +191,16 @@ class Battlescene extends Phaser.Scene
   sequence = [];
   damageturnlog = [];
 
+  styles = [
+  {name:'standard style', speedbonus: 0, equiped1weapon:true, equiped2weapon:false, nesteddouble: false},
+   {name:'barehands style', speedbonus: 25, equiped1weapon:false, equiped2weapon:false, nesteddouble: true},
+    {name:'doublesword style', speedbonus: -100, equiped1weapon:true, equiped2weapon:true, nesteddouble: false},
+
+  ];
+
+  choosedstyle=0;
+    
  
-
-
 
   constructor() {
     super('Battle'); // Scene key
@@ -192,6 +253,9 @@ class Battlescene extends Phaser.Scene
         return Math.round(Math.random() * num);
 
     }
+
+
+
 
     createUI(){
 
@@ -446,17 +510,23 @@ class Battlescene extends Phaser.Scene
 
       this.playanymovableanimation('enemySprite','enemy-attack','enemy'); 
 
-      // battleparams.enemySprite.play({key: 'enemy-attack'});
-
        setTimeout(() => {this.playanyanimation('playerSprite','player-gethit','player');}, 700);
+
+       console.log(characterparams.Attacktwice);
 
        setTimeout(() => {
 
         this.remaindle();
         battleparams.sequence = [];
 
-      }, 700*2);
+       console.log(battleparams.sequence);
+       
+  
 
+
+      }, 700*2);
+      
+    
 
     }
 
@@ -585,6 +655,7 @@ class Battlescene extends Phaser.Scene
 
           }, 700*(1+index))
 
+
           setTimeout(() => {
 
           this.playoneenemyattack();
@@ -597,9 +668,11 @@ class Battlescene extends Phaser.Scene
           }, 700*(1+battleparams.sequence.length))
 
 
+
+
           })
 
-        
+       
 
         }
 
@@ -681,12 +754,18 @@ class Battlescene extends Phaser.Scene
 
           let El = inventoryparams.equippedweapon[0].element;
 
+          let El2 = inventoryparams.equippedweapon[1]?.element;
+          
           battleparams.sequence.push(`fx-${El}!player`);
 
-            if (inventoryparams.equippedweapon[0].element == battleparams.enemy[battleparams.enemy.length-1].element) {
+          if(battleparams.styles[battleparams.choosedstyle].equiped2weapon == true) {battleparams.sequence.push(`fx-${El2}!player`);};
+
+            if ((inventoryparams.equippedweapon[0].element == battleparams.enemy[battleparams.enemy.length-1].element)|| 
+               (inventoryparams.equippedweapon[1]?.element == battleparams.enemy[battleparams.enemy.length-1].element))
+            
+            {
               
-              
-              characterparams.BDM=characterparams.BDM*(characterparams[El]+1);
+              inventoryparams.equippedweapon[1]?.element? characterparams.BDM=characterparams.BDM*(characterparams[El2]+1) : characterparams.BDM=characterparams.BDM*(characterparams[El]+1);
 
               console.log(`elem damage:${characterparams.BDM}`);
             
@@ -838,7 +917,11 @@ class Battlescene extends Phaser.Scene
 
              //enemy strike after every player action
 
-            let delta = characterparams.Speed - battleparams.enemy[battleparams.enemy.length-1].speed;
+            let bonus = battleparams.styles[battleparams.choosedstyle].speedbonus;
+
+            console.log(bonus);
+
+            let delta = characterparams.Speed - battleparams.enemy[battleparams.enemy.length-1].speed+bonus;
 
             let random = this.random(100)/100;
   
@@ -865,7 +948,7 @@ class Battlescene extends Phaser.Scene
 
           if(battleparams.countitonce == true) {
 
-          if (characterparams.HP<0)  {this.playanyanimation('playerSprite','player-death','player'), battleparams.waituntilidle = false,battleparams.battleover = true, console.log(battleparams.sequence.length), battleparams.nblose=battleparams.nblose+1, setTimeout(() => this.scene.stop().start('Reward'),12000)};
+          if (characterparams.HP<0)  {this.playanyanimation('playerSprite','player-death','player'), battleparams.waituntilidle = false, battleparams.battleover = true, console.log(battleparams.sequence.length), battleparams.nblose=battleparams.nblose+1, setTimeout(() => this.scene.stop().start('Reward'),12000)};
 
           if (battleparams.enemy[battleparams.enemy.length-1].HP<0)  {this.playanyanimation('enemySprite','enemy-death','enemy'),battleparams.battleover = true, battleparams.waituntilidle = false,battleparams.battleover = true, battleparams.nbwin=battleparams.nbwin+1, (setTimeout(() => this.scene.stop().start('Reward'),12000))};
 
@@ -938,6 +1021,8 @@ class Battlescene extends Phaser.Scene
   
           battleparams.damageturnlog.push(Math.round(characterparams.BDM*inventoryparams.weaponset[0].attack));
 
+          battleparams.sequence.push('player-attack', 'enemy-gethit');
+
           // console.log(battleparams.eventslog);
   
         } else {
@@ -947,6 +1032,8 @@ class Battlescene extends Phaser.Scene
         battleparams.eventslog.push(`Turn ${battleparams.turn}: You deal ${Math.round(characterparams.BDM*inventoryparams.equippedweapon[0].attack)} damages from your second attack.`)
   
         battleparams.damageturnlog.push(Math.round(characterparams.BDM*inventoryparams.equippedweapon[0].attack));
+
+        battleparams.sequence.push('player-attack', 'enemy-gethit');
 
         // console.log(battleparams.eventslog);
   
@@ -971,6 +1058,8 @@ class Battlescene extends Phaser.Scene
           if (battleparams.playitonce == true){
   
           if (battleparams.battleover == false) {
+
+            battleparams.sequence = [];
   
           characterparams.Crittrigger = false;
   
@@ -1000,7 +1089,7 @@ class Battlescene extends Phaser.Scene
   
           this.events.emit('Handleequippedweapon');
   
-            // this.playanyanimation('playerSprite','player-defense','player'),this.playanymovableanimation('enemySprite','enemy-attack','enemy')
+            this.playanyanimation('playerSprite','player-defense','player'),this.playanymovableanimation('enemySprite','enemy-attack','enemy')
   
             if(characterparams.Crittrigger == false){
   
@@ -1020,13 +1109,16 @@ class Battlescene extends Phaser.Scene
   
           battleparams.enemy[battleparams.enemy.length-1].BDM = battleparams.enemy[battleparams.enemy.length-1].defaultBDM;
   
+
+       
           if(characterparams.Attacktwice == true){
+
   
             characterparams.Crittrigger = false;
   
             characterparams.BDM = characterparams.DefaultBDM;
   
-          battleparams.rollitonce = [true,true,false,true, false, true, false, false];
+            battleparams.rollitonce = [true,true,false,true, false, true, false, false];
   
           this.events.emit('CritChecker');
   
@@ -1035,23 +1127,45 @@ class Battlescene extends Phaser.Scene
           this.events.emit('ElementChecker');
   
           this.events.emit('LuckChecker');
+
+          battleparams.handleonce[1] = true;
   
-          this.events.emit('double');
-  
-          characterparams.Attacktwice = false;
-  
-          if(characterparams.Crittrigger == false){
-  
-            battleparams.sequence.push('player-attack2','enemy-gethit');
-            console.log(battleparams.sequence);
-          };
-  
+         this.events.emit('double');
+
+         characterparams.Attacktwice = false;
+
+               if (battleparams.styles[battleparams.choosedstyle].nesteddouble == true) {
+
+         battleparams.handleonce[4] = true;
+
+         this.events.emit('SpeedChecker');
+ 
+         battleparams.handleonce[1] = true;
+ 
+        this.events.emit('double');
+
+        characterparams.Attacktwice = false;
+
+        battleparams.handleonce[4] = true;
+
+        this.events.emit('SpeedChecker');
+
+        battleparams.handleonce[1] = true;
+
+       this.events.emit('double');
+
+
+                 }
+      
+
           console.log(battleparams.sequence);
   
           characterparams.Crittrigger = false;
   
           this.handlesequenceanimation();
-  
+
+            battleparams.sequence = [];
+
   
           }
   
@@ -1209,27 +1323,58 @@ class Battlescene extends Phaser.Scene
 
       let sprite = this.sprites.create(1300, 450, 'Items').setScale(0.5);
 
-      
-      let title = this.add.text(100, 60, `Inventory click the weapon to equip it`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
+      let title = this.add.text(100, 60, `Left-click the weapon to equip it`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
   
        inventoryparams.equippedtext = this.add.text(100, 100, `Currently equipped: ${inventoryparams.equippedweapon[0]?.name}, potencie: ${inventoryparams.equippedweapon[0]?.potentie}, element: ${inventoryparams.equippedweapon[0]?.element}, %crit: ${inventoryparams.equippedweapon[0]?.crit}, critDamage: ${inventoryparams.equippedweapon[0]?.critDamage}`).setInteractive();
   
+       if (battleparams.styles[battleparams.choosedstyle].equiped2weapon ==true) {
+
+       let title2 = this.add.text(100, 140, `Right-click the weapon to equip it`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
+  
+       inventoryparams.equippedtext2 = this.add.text(100, 180, `Currently equipped: ${inventoryparams.equippedweapon[1]?.name}, potencie: ${inventoryparams.equippedweapon[1]?.potentie}, element: ${inventoryparams.equippedweapon[1]?.element}, %crit: ${inventoryparams.equippedweapon[1]?.crit}, critDamage: ${inventoryparams.equippedweapon[1]?.critDamage}`).setInteractive();
+  
+       };
+
+      if (battleparams.styles[battleparams.choosedstyle].name!='barehands style') {
 
       inventoryparams.weaponset.forEach((selection,ind) => {
 
-        let weapon = this.add.text(100, 60+(40*(ind+2)), `${selection.name}, power: ${Math.round(selection.attack)}, potencie: ${selection.potentie}, element: ${selection.element}, %crit: ${Math.round(selection.crit)}, critDamage: ${selection.critDamage}`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
+        let weapon = this.add.text(100, 180+(40*(ind+2)), `${selection.name}, power: ${Math.round(selection.attack)}, potencie: ${selection.potentie}, element: ${selection.element}, %crit: ${Math.round(selection.crit)}, critDamage: ${selection.critDamage}`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
 
         weapon.on('pointerdown', (element) => {
 
+          console.log(element.button);
+
+          if(element.button == 0) {
+
                 console.log(inventoryparams.equippedweapon);
 
-                inventoryparams.equippedweapon = [];
+                inventoryparams.equippedweapon.splice(0 ,1 , selection);
 
-              inventoryparams.equippedweapon.push(selection);
+            }
 
         })
+
+        if (battleparams.styles[battleparams.choosedstyle].equiped2weapon ==true) {
+
+        weapon.on('pointerdown', (element) => {
+
+          if(element.button == 2) {
+
+          console.log(inventoryparams.equippedweapon);
+
+          inventoryparams.equippedweapon.splice(1 ,1 , selection);
+
+  
+          }
+
+     })
+
+    }
         
       })
+
+    };
 
       console.log(inventoryparams.weaponset);
 
@@ -1247,6 +1392,8 @@ class Battlescene extends Phaser.Scene
     {
 
       inventoryparams.equippedtext.setText(`Currently equipped: ${inventoryparams.equippedweapon[0]?.name}, potencie: ${inventoryparams.equippedweapon[0]?.potentie}, element: ${inventoryparams.equippedweapon[0]?.element}, %crit: ${inventoryparams.equippedweapon[0]?.crit}, critDamage: ${inventoryparams.equippedweapon[0]?.critDamage}`);
+    
+      inventoryparams.equippedtext2?.setText(`Currently equipped: ${inventoryparams.equippedweapon[1]?.name}, potencie: ${inventoryparams.equippedweapon[1]?.potentie}, element: ${inventoryparams.equippedweapon[1]?.element}, %crit: ${inventoryparams.equippedweapon[1]?.crit}, critDamage: ${inventoryparams.equippedweapon[1]?.critDamage}`);
     
 
     }

@@ -607,7 +607,7 @@ class Battlescene extends Phaser.Scene
 
     create ()
     {
-      this.add.sprite(850, 450, 'prisonfont').setScale(0.5);
+      this.add.sprite(900, 450, 'prisonfont').setScale(0.4);
 
         this.createAnimation();
 

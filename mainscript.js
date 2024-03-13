@@ -123,7 +123,7 @@ class Battlescene extends Phaser.Scene
   doitonce = true;
   eventslog = [];
   levelstacker = 1;
-  rollitonce = [true,true,true,true, true, true, true, true];
+  rollitonce = [true,true,true,true, true, true, true, true, true];
   potentie = ['physical', 'magical'];
   element = ['fire', 'ice', 'thunder', 'earth'];
   nbwin = 0;
@@ -135,6 +135,9 @@ class Battlescene extends Phaser.Scene
   updateitonce = true;
   waituntilidle = true;
   sequence = [];
+  fx=[];
+ 
+
 
 
 
@@ -171,6 +174,15 @@ class Battlescene extends Phaser.Scene
         this.load.spritesheet('enemydeath', './enemy-death.png', { frameWidth: 456, frameHeight: 400 });
 
         this.load.spritesheet('enemygethit', './enemy-gethit.png', { frameWidth: 304, frameHeight: 272 });
+
+
+        this.load.spritesheet('fireeffect', './Fire-wall.png', { frameWidth: 72, frameHeight: 72 });
+
+        this.load.spritesheet('thundereffect', './Lightning-bolt.png', { frameWidth: 72, frameHeight: 72 });
+
+        this.load.spritesheet('iceeffect', './Black-hole.png', { frameWidth: 72, frameHeight: 72 });
+
+        this.load.spritesheet('eartheffect', './Spikes.png', { frameWidth: 72, frameHeight: 72 });
 
     }
 
@@ -283,8 +295,8 @@ class Battlescene extends Phaser.Scene
             
             
                      battleparams.enemySprite = this.add.sprite(1600, 700, 'enemyidle').setScale(1);
-            
-            
+
+  
                      this.anims.create({
                       key: 'enemy-idle',
                       frames: this.anims.generateFrameNumbers('enemyidle'),
@@ -292,7 +304,7 @@ class Battlescene extends Phaser.Scene
                       frameRate: 9,
                       repeat: -1
                        });
-              
+
               
                        this.anims.create({
                         key: 'enemy-gethit',
@@ -310,6 +322,46 @@ class Battlescene extends Phaser.Scene
                           frameRate: 28,
                           // repeat: -1
                            });
+
+                           this.anims.create({
+                            key: 'fx-fire',
+                            frames: this.anims.generateFrameNumbers('fireeffect'),
+                    
+                            frameRate: 10,
+                            repeat: -1
+                             });
+
+                            
+
+                             this.anims.create({
+                              key: 'fx-ice',
+                              frames: this.anims.generateFrameNumbers('iceeffect'),
+                      
+                              frameRate: 19,
+                              // repeat: -1
+                               });
+
+                        
+
+                               this.anims.create({
+                                key: 'fx-thunder',
+                                frames: this.anims.generateFrameNumbers('thundereffect'),
+                        
+                                frameRate: 8,
+                                repeat: -1
+                                 });
+
+                       
+
+                                 this.anims.create({
+                                  key: 'fx-earth',
+                                  frames: this.anims.generateFrameNumbers('eartheffect'),
+                          
+                                  frameRate: 10,
+                                  // repeat: -1
+                                   });
+
+                        
                   
                      
 
@@ -319,14 +371,14 @@ class Battlescene extends Phaser.Scene
 
 
 
-               battleparams[sprite].play({ key: animationname, repeat: 1 });
+               battleparams[sprite].play({ key: animationname, repeat: 0 });
 
 
                 if (source == 'player') {
 
               this.tweens.add({
                 targets: battleparams[sprite],
-                x: 1500,
+                x: 1400,
                 duration: 700,
                 ease: 'Linear'
             });
@@ -391,17 +443,101 @@ class Battlescene extends Phaser.Scene
 
     }
 
+    playoneenemyattack(){
 
-    playoneroundanimation(){
+      this.playanymovableanimation('enemySprite','enemy-attack','enemy'); 
 
-      this.playanymovableanimation('enemySprite','enemy-attack','enemy');    
+      // battleparams.enemySprite.play({key: 'enemy-attack'});
 
-      setTimeout(() => {this.playanyanimation('playerSprite','player-gethit','player');}, 700)
+       setTimeout(() => {this.playanyanimation('playerSprite','player-gethit','player');}, 700)
+
+       setTimeout(() => {
+
+        this.remaindle();
+
+      }, 700*2)
+      
+    }
+
+
+    playmagic(magic,key, caster){
+
+      console.log(characterparams.playerSprite);
+
+      console.log(this.scene);
+
+      console.log('magic:eartheffect,key:fx-earth');
+
+
+      if (caster == 'player'){
+
+        let newfx = new Fx(this.scene, magic, 400, 600, magic, 5);
+
+        newfx.spritegen();
+  
+        battleparams.fx.push(newfx.fxname);
+
+      setTimeout(() => {newfx.fxname.play({ key: key, repeat: 0 }),       
+      
+      this.tweens.add({
+        targets: newfx.fxname,
+        x: 1600,
+        y:600,
+        duration: 700,
+        ease: 'Linear'
+          })
+
+        }, 700)
+
+        setTimeout(() => {
+        
+        this.playanyanimation('enemySprite','enemy-gethit','enemy');
+      
+        newfx.fxname.destroy();
+
+        console.log(battleparams.fx[0]);
+  
+          }, 700*2 )
+
+
+        } else {
+
+          let newfx = new Fx(this.scene, magic, 1400, 600, magic, 5);
+
+          newfx.spritegen();
+    
+          battleparams.fx.push(newfx.fxname);
+
+          setTimeout(() => {newfx.fxname.play({ key: key, repeat: 0 }),       
+      
+          this.tweens.add({
+            targets: newfx.fxname,
+            x: 400,
+            y:600,
+            duration: 700,
+            ease: 'Linear'
+              })
+    
+            }, 700)
+    
+            setTimeout(() => {
+            
+            this.playanyanimation('playerSprite','player-gethit','player');
+          
+            newfx.fxname.destroy();
+    
+            console.log(battleparams.fx[0]);
+      
+              }, 700*2 )
+
+        }
+
 
         }
 
 
         handlesequenceanimation(){
+
 
           battleparams.sequence.forEach((element, index) => {
 
@@ -413,11 +549,27 @@ class Battlescene extends Phaser.Scene
 
             const action = afterHyphen.slice(0, 6);
 
+            const fxcaster = element.slice(element.indexOf('!') + 1);
+
+            const elementalkeyword = element.slice(0, element.indexOf('!')).slice(element.indexOf('-') + 1);
+
+       
             setTimeout(() => {
 
             if(action == 'attack'){
 
                 this.playanymovableanimation(`${formatedelement}Sprite`, element, formatedelement);
+
+            } else if(formatedelement == 'fx'){
+
+              let key = `fx-${elementalkeyword}`;
+
+              let magic = `${elementalkeyword}effect`;
+
+              console.log(key,magic);
+
+              this.playmagic(magic,key,fxcaster);
+
 
             } else {
 
@@ -431,7 +583,9 @@ class Battlescene extends Phaser.Scene
 
           setTimeout(() => {
 
-          this.playoneroundanimation();
+          this.playoneenemyattack();
+
+          console.log(battleparams.sequence);
 
            
           }, 700*(1+battleparams.sequence.length))
@@ -449,7 +603,7 @@ class Battlescene extends Phaser.Scene
 
           })
 
-  
+        
 
         }
 
@@ -462,6 +616,8 @@ class Battlescene extends Phaser.Scene
         this.createUI();
 
         this.remaindle();
+
+        // battleparams.firesprite = this.add.sprite(battleparams.playerSprite.x-20, battleparams.playerSprite.y-290, 'fireeffect').setScale(5);
 
 
       console.log(battleparams.enemy[battleparams.enemy.length-1]);
@@ -512,12 +668,13 @@ class Battlescene extends Phaser.Scene
 
           if (battleparams.rollitonce[5] ==true) {
 
-
           if((inventoryparams.equippedweapon[0] == undefined)||(inventoryparams.equippedweapon[0].length == 0)) {
 
             let elementmultiplier = characterparams.fire*0.05+characterparams.ice*0.05+characterparams.thunder*0.05+characterparams.earth*0.05;
 
-            characterparams.BDM=characterparams.BDM*(1+elementmultiplier);    
+            characterparams.BDM=characterparams.BDM*(1+elementmultiplier);
+          
+            console.log(battleparams.sequence);
 
           }
           
@@ -525,6 +682,8 @@ class Battlescene extends Phaser.Scene
           else {
 
           let El = inventoryparams.equippedweapon[0].element;
+
+          battleparams.sequence.push(`fx-${El}!player`);
 
             if (inventoryparams.equippedweapon[0].element == battleparams.enemy[battleparams.enemy.length-1].element) {
               
@@ -623,7 +782,11 @@ class Battlescene extends Phaser.Scene
 
           if (battleparams.rollitonce[8] ==true) {
 
+            console.log(battleparams.sequence);
+
             let ennemystrenght = battleparams.enemy[battleparams.enemy.length-1].element2;
+
+            battleparams.sequence.push(`fx-${ennemystrenght}!enemy`);
 
             // console.log(ennemystrenght);
 
@@ -694,7 +857,7 @@ class Battlescene extends Phaser.Scene
 
           if(battleparams.countitonce == true) {
 
-          if (characterparams.HP<0)  {this.playanyanimation('playerSprite','player-death','player');battleparams.battleover = true, battleparams.nblose=battleparams.nblose+1, setTimeout(() => this.scene.stop().start('Reward'),2000)};
+          if (characterparams.HP<0)  {this.playanyanimation('playerSprite','player-death','player');battleparams.battleover = true, battleparams.nblose=battleparams.nblose+1, setTimeout(() => this.scene.stop().start('Reward'),4000)};
 
           if (battleparams.enemy[battleparams.enemy.length-1].HP<0)  {this.playanyanimation('enemySprite','enemy-death','enemy');battleparams.battleover = true, battleparams.nbwin=battleparams.nbwin+1, (setTimeout(() => this.scene.stop().start('Reward'),2000))};
 
@@ -912,7 +1075,7 @@ class Battlescene extends Phaser.Scene
 
       battleparams.doitonce = true;
 
-      battleparams.rollitonce = [true,true,true,true, true, true, true, true];
+      battleparams.rollitonce = [true,true,true,true, true, true, true, true, true];
 
       battleparams.countitonce = true;
 
@@ -938,6 +1101,9 @@ class Battlescene extends Phaser.Scene
 
     update () 
     {
+      // console.log(battleparams.fx[0]);
+
+      // battleparams.fx[0].setPosition(battleparams.enemySprite.x-80, battleparams.enemySprite.y-250);
 
       if(battleparams.updateitonce == true) {
 
@@ -1207,6 +1373,34 @@ class Battlescene extends Phaser.Scene
     
  
     }
+
+    // battleparams.firesprite = this.add.sprite(battleparams.playerSprite.x-20, battleparams.playerSprite.y-290, 'fireeffect').setScale(5);
+
+class Fx{
+  constructor(scene, fxname, x, y, spritename, scale){
+     this.scene = scene;
+      this.fxname = fxname;
+      this.x = x;
+      this.y = y;
+      this.spritename = spritename;
+      this.scale = scale;
+
+  }
+
+    spritegen = () =>{
+
+
+
+      console.log(this.scene);
+
+      this.fxname = this.scene.scene.add.sprite(this.x, this.y, this.spritename).setScale(this.scale);
+
+    }
+
+
+  }
+
+  const fxparams = new Fx();
 
 
 

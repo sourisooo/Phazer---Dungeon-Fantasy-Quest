@@ -325,7 +325,7 @@ class Battlescene extends Phaser.Scene
                             frames: this.anims.generateFrameNumbers('fireeffect'),
                     
                             frameRate: 10,
-                            repeat: -1
+                            // repeat: -1
                              });
 
                             
@@ -345,7 +345,7 @@ class Battlescene extends Phaser.Scene
                                 frames: this.anims.generateFrameNumbers('thundereffect'),
                         
                                 frameRate: 8,
-                                repeat: -1
+                                // repeat: -1
                                  });
 
                        
@@ -446,14 +446,16 @@ class Battlescene extends Phaser.Scene
 
       // battleparams.enemySprite.play({key: 'enemy-attack'});
 
-       setTimeout(() => {this.playanyanimation('playerSprite','player-gethit','player');}, 700)
+       setTimeout(() => {this.playanyanimation('playerSprite','player-gethit','player');}, 700);
 
        setTimeout(() => {
 
         this.remaindle();
+        battleparams.sequence = [];
 
-      }, 700*2)
-      
+      }, 700*2);
+
+
     }
 
 
@@ -581,16 +583,6 @@ class Battlescene extends Phaser.Scene
            
           }, 700*(1+battleparams.sequence.length))
 
-          if(characterparams.Attacktwice == false) {
-
-          setTimeout(() => {
-
-             this.remaindle();
-             battleparams.sequence = [];
-             
-            }, 700*(1+battleparams.sequence.length)+1400)
-
-          }
 
           })
 
@@ -777,7 +769,7 @@ class Battlescene extends Phaser.Scene
 
             let ennemystrenght = battleparams.enemy[battleparams.enemy.length-1].element2;
 
-            battleparams.sequence.push(`fx-${ennemystrenght}!enemy`);
+            // battleparams.sequence.push(`fx-${ennemystrenght}!enemy`);
 
             // console.log(ennemystrenght);
 
@@ -821,6 +813,14 @@ class Battlescene extends Phaser.Scene
 
           if (battleparams.rollitonce[4] ==true) {
 
+            //enemy strike after every player action
+
+            let ennemystrenght = battleparams.enemy[battleparams.enemy.length-1].element2;
+
+            battleparams.sequence.push(`fx-${ennemystrenght}!enemy`);
+
+             //enemy strike after every player action
+
             let delta = characterparams.Speed - battleparams.enemy[battleparams.enemy.length-1].speed;
 
             let random = this.random(100)/100;
@@ -848,9 +848,9 @@ class Battlescene extends Phaser.Scene
 
           if(battleparams.countitonce == true) {
 
-          if (characterparams.HP<0)  {this.playanyanimation('playerSprite','player-death','player');battleparams.battleover = true, battleparams.nblose=battleparams.nblose+1, setTimeout(() => this.scene.stop().start('Reward'),4000)};
+          if (characterparams.HP<0)  {this.playanyanimation('playerSprite','player-death','player'), battleparams.waituntilidle = false,battleparams.battleover = true, console.log(battleparams.sequence.length), battleparams.nblose=battleparams.nblose+1, setTimeout(() => this.scene.stop().start('Reward'),12000)};
 
-          if (battleparams.enemy[battleparams.enemy.length-1].HP<0)  {this.playanyanimation('enemySprite','enemy-death','enemy');battleparams.battleover = true, battleparams.nbwin=battleparams.nbwin+1, (setTimeout(() => this.scene.stop().start('Reward'),2000))};
+          if (battleparams.enemy[battleparams.enemy.length-1].HP<0)  {this.playanyanimation('enemySprite','enemy-death','enemy'),battleparams.battleover = true, battleparams.waituntilidle = false,battleparams.battleover = true, battleparams.nbwin=battleparams.nbwin+1, (setTimeout(() => this.scene.stop().start('Reward'),12000))};
 
           battleparams.countitonce = false;
 
@@ -937,115 +937,115 @@ class Battlescene extends Phaser.Scene
 
       this.events.on('PlayerAttack', () =>  {
 
-        // console.log(battleparams.battleover );
+       // console.log(battleparams.battleover );
 
         // console.log(battleparams.rollitonce);
 
         if(battleparams.waituntilidle == true){
       
-        if (battleparams.playitonce == true){
-
-        if (battleparams.battleover == false) {
-
-        characterparams.Crittrigger = false;
-
-        console.log(characterparams.BDM, battleparams.enemy[battleparams.enemy.length-1].BDM)
-
-        characterparams.BDM = characterparams.DefaultBDM;
-
-        this.events.emit('CritChecker');
-
-        this.events.emit('LuckystrikeChecker');
-
-        this.events.emit('ElementChecker');
-
-        this.events.emit('LuckChecker');
-
-        this.events.emit('DamageMitigation');
-
-        this.events.emit('ElementalExposure');
-
-        this.events.emit('TypeChecker');
-
-        this.events.emit('EvadeChecker');
-
-        this.events.emit('SpeedChecker');
-
-          // console.log(inventoryparams.weaponset[0]);
-
-        this.events.emit('Handleequippedweapon');
-
-          // this.playanyanimation('playerSprite','player-defense','player'),this.playanymovableanimation('enemySprite','enemy-attack','enemy')
-
+          if (battleparams.playitonce == true){
+  
+          if (battleparams.battleover == false) {
+  
+          characterparams.Crittrigger = false;
+  
+          console.log(characterparams.BDM, battleparams.enemy[battleparams.enemy.length-1].BDM)
+  
+          characterparams.BDM = characterparams.DefaultBDM;
+  
+          this.events.emit('CritChecker');
+  
+          this.events.emit('LuckystrikeChecker');
+  
+          this.events.emit('ElementChecker');
+  
+          this.events.emit('LuckChecker');
+  
+          this.events.emit('DamageMitigation');
+  
+          this.events.emit('ElementalExposure');
+  
+          this.events.emit('TypeChecker');
+  
+          this.events.emit('EvadeChecker');
+  
+          this.events.emit('SpeedChecker');
+  
+            // console.log(inventoryparams.weaponset[0]);
+  
+          this.events.emit('Handleequippedweapon');
+  
+            // this.playanyanimation('playerSprite','player-defense','player'),this.playanymovableanimation('enemySprite','enemy-attack','enemy')
+  
+            if(characterparams.Crittrigger == false){
+  
+              battleparams.sequence.push('player-attack2','enemy-gethit');
+              console.log(battleparams.sequence);
+            };
+  
+            characterparams.Crittrigger = false;
+  
+            if(characterparams.Attacktwice == false){
+  
+              this.handlesequenceanimation();
+  
+            } 
+  
+          characterparams.BDM = characterparams.DefaultBDM;
+  
+          battleparams.enemy[battleparams.enemy.length-1].BDM = battleparams.enemy[battleparams.enemy.length-1].defaultBDM;
+  
+          if(characterparams.Attacktwice == true){
+  
+            characterparams.Crittrigger = false;
+  
+            characterparams.BDM = characterparams.DefaultBDM;
+  
+          battleparams.rollitonce = [true,true,false,true, false, true, false, false];
+  
+          this.events.emit('CritChecker');
+  
+          this.events.emit('LuckystrikeChecker');
+  
+          this.events.emit('ElementChecker');
+  
+          this.events.emit('LuckChecker');
+  
+          this.events.emit('double');
+  
+          characterparams.Attacktwice = false;
+  
           if(characterparams.Crittrigger == false){
-
+  
             battleparams.sequence.push('player-attack2','enemy-gethit');
             console.log(battleparams.sequence);
           };
-
-          characterparams.Crittrigger = false;
-
-          if(characterparams.Attacktwice == false){
-
-            this.handlesequenceanimation();
-
-          } 
-
-        characterparams.BDM = characterparams.DefaultBDM;
-
-        battleparams.enemy[battleparams.enemy.length-1].BDM = battleparams.enemy[battleparams.enemy.length-1].defaultBDM;
-
-        if(characterparams.Attacktwice == true){
-
-          characterparams.Crittrigger = false;
-
-          characterparams.BDM = characterparams.DefaultBDM;
-
-        battleparams.rollitonce = [true,true,false,true, false, true, false, false];
-
-        this.events.emit('CritChecker');
-
-        this.events.emit('LuckystrikeChecker');
-
-        this.events.emit('ElementChecker');
-
-        this.events.emit('LuckChecker');
-
-        this.events.emit('double');
-
-        characterparams.Attacktwice = false;
-
-        if(characterparams.Crittrigger == false){
-
-          battleparams.sequence.push('player-attack2','enemy-gethit');
+  
           console.log(battleparams.sequence);
-        };
-
-        console.log(battleparams.sequence);
-
-        characterparams.Crittrigger = false;
-
-        this.handlesequenceanimation();
-
-
-        }
-
-        battleparams.turn = battleparams.turn+1;
-   
-        this.events.emit('BattleStatus');
-
-      } else {this.events.emit('GameOver')}
-
-      battleparams.playitonce = false;
-
-    }
-
+  
+          characterparams.Crittrigger = false;
+  
+          this.handlesequenceanimation();
+  
+  
+          }
+  
+          battleparams.turn = battleparams.turn+1;
+     
+          this.events.emit('BattleStatus');
+  
+        } else {this.events.emit('GameOver')}
+  
+        battleparams.playitonce = false;
+  
       }
-
-      battleparams.waituntilidle = false;
-       
-      
-      });
+  
+        }
+  
+        battleparams.waituntilidle = false;
+  
+    
+             });
 
     
 

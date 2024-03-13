@@ -802,7 +802,9 @@ class Battlescene extends Phaser.Scene
 
           let El = inventoryparams.equippedweapon[0].potentie;
 
-              if(enemyType == El){
+          let El2 = inventoryparams.equippedweapon[1]?.potentie;
+
+              if((enemyType == El)||(enemyType == El2)){
 
                 characterparams.BDM = characterparams.BDM*1.5;
 

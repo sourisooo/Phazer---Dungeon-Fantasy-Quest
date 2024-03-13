@@ -1153,7 +1153,7 @@ class Battlescene extends Phaser.Scene
        this.events.emit('double');
 
 
-                 }
+                 };
       
 
           console.log(battleparams.sequence);

@@ -152,6 +152,8 @@ class Battlescene extends Phaser.Scene
         this.load.setBaseURL('./');
 
         this.load.image('Battletheme', './Default_two_knights_fighting_in_a_style_of_rpg_game_2d_style_3.jpg');
+
+        this.load.image('prisonfont', './Prison arena.png');
     
         this.load.spritesheet('playerattack', './main-attack.png', { frameWidth: 354.5, frameHeight: 288.5 });
 
@@ -195,8 +197,7 @@ class Battlescene extends Phaser.Scene
 
       // this.sprites = this.physics.add.group({ immovable: false });
 
-      // let sprite = this.sprites.create(900, 400, 'Battletheme').setScale(0.5);
-
+      // let sprite = this.sprites.create(850, 450, 'prisonfont').setScale(0.4);
 
       let title = this.add.text(100, 60, `Battle lvl ${battleparams.levelstacker}`, { font: '60px Arial', fill: '#ffffff' });
 
@@ -606,6 +607,8 @@ class Battlescene extends Phaser.Scene
 
     create ()
     {
+      this.add.sprite(850, 450, 'prisonfont').setScale(0.5);
+
         this.createAnimation();
 
         this.createUI();

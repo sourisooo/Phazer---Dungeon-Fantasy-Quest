@@ -123,7 +123,8 @@ class CharacterMenu extends Phaser.Scene
         switch (index) {
           case 0: {
 
-            inventoryparams.equippedweapon[1] = undefined;
+            inventoryparams.equippedweapon.pop();
+            console.log(inventoryparams.equippedweapon);
 
           }
             
@@ -131,8 +132,9 @@ class CharacterMenu extends Phaser.Scene
 
             case 1: {
 
-              inventoryparams.equippedweapon[0] = undefined;
-              inventoryparams.equippedweapon[1] = undefined;
+              inventoryparams.equippedweapon.pop();
+              inventoryparams.equippedweapon.pop();
+              console.log(inventoryparams.equippedweapon);
   
             }
               
@@ -1389,9 +1391,9 @@ class Battlescene extends Phaser.Scene
     update () 
     {
 
-      inventoryparams.equippedtext.setText(`Currently equipped: ${inventoryparams.equippedweapon[0]?.name}, potencie: ${inventoryparams.equippedweapon[0]?.potentie}, element: ${inventoryparams.equippedweapon[0]?.element}, %crit: ${inventoryparams.equippedweapon[0]?.crit}, critDamage: ${inventoryparams.equippedweapon[0]?.critDamage}`);
+      inventoryparams.equippedtext?.setText(`Currently equipped: ${inventoryparams.equippedweapon[0]?.name}, potencie: ${inventoryparams.equippedweapon[0]?.potentie}, element: ${inventoryparams.equippedweapon[0]?.element}, %crit: ${inventoryparams.equippedweapon[0]?.crit}, critDamage: ${inventoryparams.equippedweapon[0]?.critDamage}`);
     
-      inventoryparams.equippedtext2?.setText(`Currently equipped: ${inventoryparams.equippedweapon[1]?.name}, potencie: ${inventoryparams.equippedweapon[1]?.potentie}, element: ${inventoryparams.equippedweapon[1]?.element}, %crit: ${inventoryparams.equippedweapon[1]?.crit}, critDamage: ${inventoryparams.equippedweapon[1]?.critDamage}`);
+      inventoryparams.equippedweapon[1]? inventoryparams.equippedtext2?.setText(`Currently equipped: ${inventoryparams.equippedweapon[1]?.name}, potencie: ${inventoryparams.equippedweapon[1]?.potentie}, element: ${inventoryparams.equippedweapon[1]?.element}, %crit: ${inventoryparams.equippedweapon[1]?.crit}, critDamage: ${inventoryparams.equippedweapon[1]?.critDamage}`) : '';
     
 
     }

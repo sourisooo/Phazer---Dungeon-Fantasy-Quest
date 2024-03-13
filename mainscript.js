@@ -471,8 +471,7 @@ class Battlescene extends Phaser.Scene
         let newfx = new Fx(this.scene, magic, 400, 600, magic, 5);
 
         newfx.spritegen();
-  
-        battleparams.fx.push(newfx.fxname);
+      
 
       setTimeout(() => {newfx.fxname.play({ key: key, repeat: 0 }),       
       

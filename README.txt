@@ -15,7 +15,7 @@ Dont take any benefit from element damage and type
 Double your chance to exploit enemy elemental weakness (2 elementals on 4 elementals available)
 Elemental boost as reward are the biggest buff available as regard of your output dps
 Can exploit mastery from both physical and magical type providing extra damage and tankiness (50% damage and tankiness from any type of enemy)
-Extra attack are disabled but can still prock perfect strike one time per turn
+Extra attack are disabled but the main attack can still prock perfect strike one time per turn
 Perfect strike occurence are the lowest of all style (only one attack per round)
 
 -Standard:

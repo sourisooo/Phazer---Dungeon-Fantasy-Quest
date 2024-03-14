@@ -3,7 +3,7 @@ class CharacterMenu extends Phaser.Scene
 {
     BDM=1;
     CritD=1.7;
-    LStrike=0.1;
+    LStrike=0.20;
     Defense=0.2;
     Evasion=0.08;
     PhysicalP=1;
@@ -17,9 +17,8 @@ class CharacterMenu extends Phaser.Scene
     thunderResistance = 1;
     earthResistance = 1;
     Speed = 100;
-    Luck = 0.04;
+    Luck = 0.06;
     outputdamage = [];
-    Crittrigger = false;
     HP = 500;
     DefaultHP = 500;
     DefaultBDM = 1;
@@ -91,7 +90,7 @@ class CharacterMenu extends Phaser.Scene
 
       inventoryparams.weaponset.length<15? inventoryparams.weaponset.push(randomweapon) : (inventoryparams.weaponset=[],inventoryparams.weaponset.push(randomweapon));
 
-      console.log(inventoryparams.weaponset);
+      // console.log(inventoryparams.weaponset);
 
       characterparams.actualstyle = this.add.text(950, 50, `Actual style`, { font: '26px Arial', fill: '#000000' }).setInteractive();
 
@@ -116,15 +115,15 @@ class CharacterMenu extends Phaser.Scene
 
     handlestyle(index){
 
-        console.log(index);
-
         battleparams.choosedstyle = index;
 
         switch (index) {
           case 0: {
 
             inventoryparams.equippedweapon.pop();
-            console.log(inventoryparams.equippedweapon);
+            battleparams.styles[battleparams.choosedstyle].equiped2weapon = false;
+            battleparams.styles[battleparams.choosedstyle].nesteddouble = false;
+            // console.log(inventoryparams.equippedweapon);
 
           }
             
@@ -134,7 +133,9 @@ class CharacterMenu extends Phaser.Scene
 
               inventoryparams.equippedweapon.pop();
               inventoryparams.equippedweapon.pop();
-              console.log(inventoryparams.equippedweapon);
+              battleparams.styles[battleparams.choosedstyle].equiped2weapon = false;
+              battleparams.styles[battleparams.choosedstyle].nesteddouble = true;
+              // console.log(inventoryparams.equippedweapon);
   
             }
               
@@ -142,7 +143,8 @@ class CharacterMenu extends Phaser.Scene
 
               case 2: {
 
-       
+                battleparams.styles[battleparams.choosedstyle].equiped2weapon = true;
+                battleparams.styles[battleparams.choosedstyle].nesteddouble = false;
     
               }
                 
@@ -153,6 +155,8 @@ class CharacterMenu extends Phaser.Scene
         }
 
     }
+
+
 
 
     update () 
@@ -273,7 +277,7 @@ class Battlescene extends Phaser.Scene
 
       battleparams.enemy.push(enemy);
 
-      console.log(battleparams.enemy[battleparams.enemy.length-1]);
+      // console.log(battleparams.enemy[battleparams.enemy.length-1]);
 
       let enemyannouce = this.add.text(1100, 100, `An enemy is coming: Weakness: ${battleparams.enemy[battleparams.enemy.length-1].element} & Strenght: ${battleparams.enemy[battleparams.enemy.length-1].element2} & Type: ${battleparams.enemy[battleparams.enemy.length-1].potencie}`, { font: '16px Arial', fill: '#ffffff' });
 
@@ -514,14 +518,14 @@ class Battlescene extends Phaser.Scene
 
        setTimeout(() => {this.playanyanimation('playerSprite','player-gethit','player');}, 700);
 
-       console.log(characterparams.Attacktwice);
+      //  console.log(characterparams.Attacktwice);
 
        setTimeout(() => {
 
         this.remaindle();
         battleparams.sequence = [];
 
-       console.log(battleparams.sequence);
+      //  console.log(battleparams.sequence);
        
   
 
@@ -535,11 +539,11 @@ class Battlescene extends Phaser.Scene
 
     playmagic(magic,key, caster){
 
-      console.log(characterparams.playerSprite);
+      // console.log(characterparams.playerSprite);
 
-      console.log(this.scene);
+      // console.log(this.scene);
 
-      console.log('magic:eartheffect,key:fx-earth');
+      // console.log('magic:eartheffect,key:fx-earth');
 
 
       if (caster == 'player'){
@@ -642,7 +646,7 @@ class Battlescene extends Phaser.Scene
 
               let magic = `${elementalkeyword}effect`;
 
-              console.log(key,magic);
+              // console.log(key,magic);
 
               this.playmagic(magic,key,fxcaster);
 
@@ -662,7 +666,7 @@ class Battlescene extends Phaser.Scene
 
           this.playoneenemyattack();
 
-          console.log(battleparams.sequence);
+          // console.log(battleparams.sequence);
 
           battleparams.damageturnlog=[];
 
@@ -675,6 +679,19 @@ class Battlescene extends Phaser.Scene
           })
 
        
+
+        }
+
+
+        elementcompare(){
+
+            let elementone = inventoryparams.equippedweapon[0].element;
+            let elementtwo = inventoryparams.equippedweapon[1].element;
+
+            let characterstatone = characterparams[elementone];
+            let characterstattwo = characterparams[elementtwo];
+
+            if (characterstatone>characterstattwo) {return characterstatone} else {return characterstattwo};
 
         }
 
@@ -693,7 +710,7 @@ class Battlescene extends Phaser.Scene
         // battleparams.firesprite = this.add.sprite(battleparams.playerSprite.x-20, battleparams.playerSprite.y-290, 'fireeffect').setScale(5);
 
 
-      console.log(battleparams.enemy[battleparams.enemy.length-1]);
+      // console.log(battleparams.enemy[battleparams.enemy.length-1]);
 
         this.events.on('CritChecker', () =>  {
 
@@ -703,16 +720,16 @@ class Battlescene extends Phaser.Scene
 
             let random = this.random(100);
 
-            random<10? (battleparams.sequence.push('player-attack','enemy-gethit'), console.log(battleparams.sequence), characterparams.Crittrigger = true,characterparams.BDM = characterparams.BDM*characterparams.CritD, battleparams.eventslog.push(`Turn ${battleparams.turn}: Critical strike!`)) : characterparams.BDM = characterparams.BDM ;
+            random<10? (battleparams.sequence.push('player-attack','enemy-gethit'), console.log(battleparams.sequence),characterparams.BDM = characterparams.BDM*characterparams.CritD, battleparams.eventslog.push(`Turn ${battleparams.turn}: Critical strike!`)) : (characterparams.BDM = characterparams.BDM,   battleparams.sequence.push('player-attack2','enemy-gethit')) ;
           
           
           } else {
             
             let random = this.random(100);
 
-            random<(10+inventoryparams.equippedweapon[0].crit)? (battleparams.sequence.push('player-attack','enemy-gethit'), console.log(battleparams.sequence), characterparams.Crittrigger = true,characterparams.BDM = characterparams.BDM*(characterparams.CritD*inventoryparams.equippedweapon[0].critDamage), battleparams.eventslog.push(`Turn ${battleparams.turn}: Critical strike!`)) : characterparams.BDM = characterparams.BDM ;
+            random<(10+inventoryparams.equippedweapon[0].crit)? (battleparams.sequence.push('player-attack','enemy-gethit'), console.log(battleparams.sequence),characterparams.BDM = characterparams.BDM*(characterparams.CritD*inventoryparams.equippedweapon[0].critDamage), battleparams.eventslog.push(`Turn ${battleparams.turn}: Critical strike!`)) : (characterparams.BDM = characterparams.BDM, battleparams.sequence.push('player-attack2','enemy-gethit')) ;
           
-            console.log(characterparams.CritD);
+            // console.log(characterparams.CritD);
 
           }
 
@@ -767,15 +784,18 @@ class Battlescene extends Phaser.Scene
             
             {
               
-              inventoryparams.equippedweapon[1]?.element? characterparams.BDM=characterparams.BDM*(characterparams[El2]+1) : characterparams.BDM=characterparams.BDM*(characterparams[El]+1);
+              inventoryparams.equippedweapon[1]?.element? characterparams.BDM=characterparams.BDM*(this.elementcompare()+1) : characterparams.BDM=characterparams.BDM*(characterparams[El]+1);
 
               console.log(`elem damage:${characterparams.BDM}`);
+
             
             } else {
               
               let elementmultiplier = characterparams.fire*0.05+characterparams.ice*0.05+characterparams.thunder*0.05+characterparams.earth*0.05;
 
-              characterparams.BDM=characterparams.BDM*(1+elementmultiplier);           
+              characterparams.BDM=characterparams.BDM*(1+elementmultiplier); 
+              
+              console.log('this case');
             
             }
 
@@ -831,7 +851,7 @@ class Battlescene extends Phaser.Scene
 
           let random = this.random(100)/100;
 
-          random<characterparams.Evasion ? (battleparams.sequence.push('player-defense'), console.log(battleparams.sequence) , battleparams.enemy[battleparams.enemy.length-1].BDM = 0.001, battleparams.eventslog.push(`Turn ${battleparams.turn}: You evade enemy attack!`)) : battleparams.enemy[battleparams.enemy.length-1].BDM = battleparams.enemy[battleparams.enemy.length-1].BDM;
+          random<characterparams.Evasion ? (battleparams.sequence.push('player-defense') , battleparams.enemy[battleparams.enemy.length-1].BDM = 0.001, battleparams.eventslog.push(`Turn ${battleparams.turn}: You evade enemy attack!`)) : battleparams.enemy[battleparams.enemy.length-1].BDM = battleparams.enemy[battleparams.enemy.length-1].BDM;
 
           battleparams.rollitonce[2]=false;
 
@@ -863,7 +883,7 @@ class Battlescene extends Phaser.Scene
 
           if (battleparams.rollitonce[8] ==true) {
 
-            console.log(battleparams.sequence);
+            // console.log(battleparams.sequence);
 
             let ennemystrenght = battleparams.enemy[battleparams.enemy.length-1].element2;
 
@@ -899,7 +919,7 @@ class Battlescene extends Phaser.Scene
           
           };
 
-            console.log(battleparams.sequence);
+            // console.log(battleparams.sequence);
 
           battleparams.rollitonce[3] = false;
 
@@ -923,8 +943,6 @@ class Battlescene extends Phaser.Scene
 
             let bonus = battleparams.styles[battleparams.choosedstyle].speedbonus;
 
-            console.log(bonus);
-
             let delta = characterparams.Speed - battleparams.enemy[battleparams.enemy.length-1].speed+bonus;
 
             let random = this.random(100)/100;
@@ -937,7 +955,7 @@ class Battlescene extends Phaser.Scene
 
             };
 
-            console.log(`double: ${random}`);
+            // console.log(`double: ${random}`);
   
             battleparams.rollitonce[4] = false;
   
@@ -973,7 +991,7 @@ class Battlescene extends Phaser.Scene
 
         battleparams.enemy[battleparams.enemy.length-1].outputdamage.push(battleparams.enemy[battleparams.enemy.length-1].BDM*battleparams.enemy[battleparams.enemy.length-1].attack);
     
-        // console.log(characterparams.Crittrigger);
+  
 
         characterparams.HP = characterparams.HP - battleparams.enemy[battleparams.enemy.length-1].BDM*battleparams.enemy[battleparams.enemy.length-1].attack;
 
@@ -1010,7 +1028,7 @@ class Battlescene extends Phaser.Scene
 
       this.events.on('double', () => {
 
-        if((battleparams.handleonce[1] == true)&&(battleparams.Attacktwice==true)) {
+        if(battleparams.handleonce[1] == true) {
 
         if(inventoryparams.equippedweapon[0] == undefined) {characterparams.outputdamage.push(characterparams.BDM*inventoryparams.weaponset[0].attack);} 
 
@@ -1025,7 +1043,6 @@ class Battlescene extends Phaser.Scene
   
           battleparams.damageturnlog.push(Math.round(characterparams.BDM*inventoryparams.weaponset[0].attack));
 
-          battleparams.sequence.push('player-attack', 'enemy-gethit');
 
           // console.log(battleparams.eventslog);
   
@@ -1037,7 +1054,6 @@ class Battlescene extends Phaser.Scene
   
         battleparams.damageturnlog.push(Math.round(characterparams.BDM*inventoryparams.equippedweapon[0].attack));
 
-        battleparams.sequence.push('player-attack', 'enemy-gethit');
 
         // console.log(battleparams.eventslog);
   
@@ -1047,6 +1063,36 @@ class Battlescene extends Phaser.Scene
 
       battleparams.handleonce[1] = false;
       battleparams.Attacktwice= false;
+
+      })
+
+
+      this.events.on('oneturn', () => {
+
+        characterparams.BDM = characterparams.DefaultBDM;
+  
+        battleparams.rollitonce = [true,true,false,true, false, true, false, false];
+
+      this.events.emit('CritChecker');
+
+      this.events.emit('LuckystrikeChecker');
+
+      this.events.emit('ElementChecker');
+
+      this.events.emit('LuckChecker');
+
+  
+      })
+
+      this.events.on('Speedcheckereffect', () => {
+
+        if(  characterparams.Attacktwice == true){
+
+          battleparams.handleonce[1] = true;
+
+          this.events.emit('double');
+
+         }
 
       })
 
@@ -1066,9 +1112,6 @@ class Battlescene extends Phaser.Scene
 
             battleparams.sequence = [];
   
-          characterparams.Crittrigger = false;
-  
-          console.log(characterparams.BDM, battleparams.enemy[battleparams.enemy.length-1].BDM)
   
           characterparams.BDM = characterparams.DefaultBDM;
   
@@ -1094,14 +1137,8 @@ class Battlescene extends Phaser.Scene
   
           this.events.emit('Handleequippedweapon');
   
-  
-            if(characterparams.Crittrigger == false){
-  
-              battleparams.sequence.push('player-attack2','enemy-gethit');
-              console.log(battleparams.sequence);
-            };
-  
-            characterparams.Crittrigger = false;
+
+
   
             if(characterparams.Attacktwice == false){
   
@@ -1117,50 +1154,39 @@ class Battlescene extends Phaser.Scene
        
           if(characterparams.Attacktwice == true){
 
-  
-            characterparams.Crittrigger = false;
-  
-            characterparams.BDM = characterparams.DefaultBDM;
-  
-            battleparams.rollitonce = [true,true,false,true, false, true, false, false];
-  
-          this.events.emit('CritChecker');
-  
-          this.events.emit('LuckystrikeChecker');
-  
-          this.events.emit('ElementChecker');
-  
-          this.events.emit('LuckChecker');
+              this.events.emit('oneturn');
 
-          battleparams.handleonce[1] = true;
-  
-         this.events.emit('double');
+              battleparams.handleonce[1] = true;
+
+              this.events.emit('double');
 
                if (battleparams.styles[battleparams.choosedstyle].nesteddouble == true) {
 
-         battleparams.handleonce[4] = true;
+                console.log(battleparams.sequence);
 
-         this.events.emit('SpeedChecker');
+                this.events.emit('oneturn');
+
+              battleparams.handleonce[4] = true;
+
+               this.events.emit('SpeedChecker');
+
+                this.events.emit('Speedcheckereffect');
+
  
-         battleparams.handleonce[1] = true;
- 
-        this.events.emit('double');
+                this.events.emit('oneturn');
 
-        battleparams.handleonce[4] = true;
+                battleparams.handleonce[4] = true;
 
-        this.events.emit('SpeedChecker');
+                 this.events.emit('SpeedChecker');
 
-        battleparams.handleonce[1] = true;
-
-       this.events.emit('double');
+                 this.events.emit('Speedcheckereffect');
 
 
                  };
       
 
-          console.log(battleparams.sequence);
+          // console.log(battleparams.sequence);
   
-          characterparams.Crittrigger = false;
   
           this.handlesequenceanimation();
 
@@ -1254,9 +1280,9 @@ class Battlescene extends Phaser.Scene
 
       
 
-      //   if (ind<12 ) {this.add.text(100, 340+(40*(ind+1)), `${element}`, { font: '16px Arial', fill: '#ffffff' });}
+      //   if (ind<12 ) {this.add.text(100, 340+(40*(ind+1)), `${element}`, { font: '16px Arial', fill: '#ffffff' })}
  
-      //   else if (ind<30 ) {this.add.text(700, 100+(40*(ind+1-12)), `${element}`, { font: '16px Arial', fill: '#00FF00' });}
+      //   else if (ind<30 ) {this.add.text(700, 100+(40*(ind+1-12)), `${element}`, { font: '16px Arial', fill: '#ffffff' });}
  
       //   else {this.add.text(1300, 100+(40*(ind+1-30)), `${element}`, { font: '16px Arial', fill: '#ffffff' });}
 
@@ -1343,11 +1369,11 @@ class Battlescene extends Phaser.Scene
 
         weapon.on('pointerdown', (element) => {
 
-          console.log(element.button);
+          // console.log(element.button);
 
           if(element.button == 0) {
 
-                console.log(inventoryparams.equippedweapon);
+                // console.log(inventoryparams.equippedweapon);
 
                 inventoryparams.equippedweapon.splice(0 ,1 , selection);
 
@@ -1361,7 +1387,7 @@ class Battlescene extends Phaser.Scene
 
           if(element.button == 2) {
 
-          console.log(inventoryparams.equippedweapon);
+          // console.log(inventoryparams.equippedweapon);
 
           inventoryparams.equippedweapon.splice(1 ,1 , selection);
 
@@ -1376,7 +1402,7 @@ class Battlescene extends Phaser.Scene
 
     };
 
-      console.log(inventoryparams.weaponset);
+      // console.log(inventoryparams.weaponset);
 
 
       let back = this.add.text(1200, 60, `Back to main`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
@@ -1436,7 +1462,7 @@ class Battlescene extends Phaser.Scene
 
       battleparams.enemy[battleparams.enemy.length-1].outputdamage = [];
 
-      console.log(battleparams.enemy[battleparams.enemy.length-1]);
+      // console.log(battleparams.enemy[battleparams.enemy.length-1]);
 
       battleparams.eventslog = [];
 
@@ -1567,7 +1593,7 @@ class Fx{
 
 
 
-      console.log(this.scene);
+      // console.log(this.scene);
 
       this.fxname = this.scene.scene.add.sprite(this.x, this.y, this.spritename).setScale(this.scale);
 

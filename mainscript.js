@@ -16,8 +16,8 @@ class CharacterMenu extends Phaser.Scene
     iceResistance = 1;
     thunderResistance = 1;
     earthResistance = 1;
-    Speed = 200;
-    Luck = 0.96;
+    Speed = 100;
+    Luck = 0.06;
     outputdamage = [];
     HP = 500;
     DefaultHP = 500;

@@ -195,6 +195,7 @@ class Battlescene extends Phaser.Scene
   waituntilidle = true;
   sequence = [];
   damageturnlog = [];
+  Critflag = false;
 
 
   styles = [
@@ -512,29 +513,6 @@ class Battlescene extends Phaser.Scene
 
     }
 
-    playoneenemyattack(){
-
-      this.playanymovableanimation('enemySprite','enemy-attack','enemy'); 
-
-       setTimeout(() => {this.playanyanimation('playerSprite','player-gethit','player');}, 700);
-
-      //  console.log(characterparams.Attacktwice);
-
-       setTimeout(() => {
-
-        this.remaindle();
-        battleparams.sequence = [];
-
-      //  console.log(battleparams.sequence);
-       
-  
-
-
-      }, 700*2);
-      
-    
-
-    }
 
 
     playmagic(magic,key, caster){
@@ -664,11 +642,13 @@ class Battlescene extends Phaser.Scene
 
           setTimeout(() => {
 
-          this.playoneenemyattack();
+           this.remaindle();
+
+            battleparams.sequence = [];
+
+              battleparams.damageturnlog=[];
 
           // console.log(battleparams.sequence);
-
-          battleparams.damageturnlog=[];
 
            
           }, 700*(1+battleparams.sequence.length))
@@ -716,14 +696,16 @@ class Battlescene extends Phaser.Scene
 
             let random = this.random(100);
 
-            random<10? (battleparams.sequence.push('player-attack','enemy-gethit'), console.log(battleparams.sequence),characterparams.BDM = characterparams.BDM*characterparams.CritD, battleparams.eventslog.push(`Turn ${battleparams.turn}: Critical strike!`)) : (characterparams.BDM = characterparams.BDM,   battleparams.sequence.push('player-attack2','enemy-gethit')) ;
+            console.log(`crit: ${random}`);
+
+            random<10? (battleparams.Critflag = true,characterparams.BDM = characterparams.BDM*characterparams.CritD, battleparams.eventslog.push(`Turn ${battleparams.turn}: Critical strike! Roll: ${random}`)) : (characterparams.BDM = characterparams.BDM) ;
           
           
           } else {
             
             let random = this.random(100);
 
-            random<(10+inventoryparams.equippedweapon[0].crit)? (battleparams.sequence.push('player-attack','enemy-gethit'), console.log(battleparams.sequence),characterparams.BDM = characterparams.BDM*(characterparams.CritD*inventoryparams.equippedweapon[0].critDamage), battleparams.eventslog.push(`Turn ${battleparams.turn}: Critical strike!`)) : (characterparams.BDM = characterparams.BDM, battleparams.sequence.push('player-attack2','enemy-gethit')) ;
+            random<(10+inventoryparams.equippedweapon[0].crit)? ( battleparams.Critflag = true ,characterparams.BDM = characterparams.BDM*(characterparams.CritD*inventoryparams.equippedweapon[0].critDamage), battleparams.eventslog.push(`Turn ${battleparams.turn}: Critical strike! Roll: ${random}`)) : (characterparams.BDM = characterparams.BDM) ;
           
             // console.log(characterparams.CritD);
 
@@ -847,7 +829,7 @@ class Battlescene extends Phaser.Scene
 
           let random = this.random(100)/100;
 
-          random<characterparams.Evasion ? (battleparams.sequence.push('player-defense') , battleparams.enemy[battleparams.enemy.length-1].BDM = 0.001, battleparams.eventslog.push(`Turn ${battleparams.turn}: You evade enemy attack!`)) : battleparams.enemy[battleparams.enemy.length-1].BDM = battleparams.enemy[battleparams.enemy.length-1].BDM;
+          random<characterparams.Evasion ? (battleparams.sequence.push('player-defense') , battleparams.enemy[battleparams.enemy.length-1].BDM = 0.001, battleparams.eventslog.push(`Turn ${battleparams.turn}: You evade enemy attack!! Roll: ${random}`)) : battleparams.enemy[battleparams.enemy.length-1].BDM = battleparams.enemy[battleparams.enemy.length-1].BDM;
 
           battleparams.rollitonce[2]=false;
 
@@ -881,7 +863,15 @@ class Battlescene extends Phaser.Scene
 
             // console.log(battleparams.sequence);
 
+            // let ennemystrenght = battleparams.enemy[battleparams.enemy.length-1].element2;
+
+
             let ennemystrenght = battleparams.enemy[battleparams.enemy.length-1].element2;
+
+            battleparams.sequence.push(`fx-${ennemystrenght}!enemy`);
+
+            battleparams.sequence.push('enemy-attack','player-gethit');
+
 
             // battleparams.sequence.push(`fx-${ennemystrenght}!enemy`);
 
@@ -909,7 +899,7 @@ class Battlescene extends Phaser.Scene
 
           if (random<characterparams.Luck)  {let perfectstrike = battleparams.enemy[battleparams.enemy.length-1].HP*0.10 ;battleparams.enemy[battleparams.enemy.length-1].HP = battleparams.enemy[battleparams.enemy.length-1].HP*0.9;
             
-            battleparams.eventslog.push(`Turn ${battleparams.turn}: Luck! You made a perfect strike dealing ${perfectstrike} damages`);
+            battleparams.eventslog.push(`Turn ${battleparams.turn}: Luck! You made a perfect strike dealing ${perfectstrike} damages! Roll: ${random}`);
           
             battleparams.sequence.push('player-attack','enemy-gethit');
 
@@ -933,9 +923,7 @@ class Battlescene extends Phaser.Scene
 
             //enemy strike after every player action
 
-            let ennemystrenght = battleparams.enemy[battleparams.enemy.length-1].element2;
-
-            battleparams.sequence.push(`fx-${ennemystrenght}!enemy`);
+   
 
              //enemy strike after every player action
 
@@ -949,11 +937,11 @@ class Battlescene extends Phaser.Scene
   
             if (random<delta/100)  {battleparams.enemy[battleparams.enemy.length-1].BDM = 0.0001;
             
-              battleparams.eventslog.push(`Turn ${battleparams.turn}: You attack twice!`)
+              battleparams.eventslog.push(`Turn ${battleparams.turn}: You get an extra-attack !! Roll: ${random}`)
 
               characterparams.Attacktwice = true;
 
-            } else {characterparams.Attacktwice = false};
+            } else {characterparams.Attacktwice = false, battleparams.eventslog.push(`Turn ${battleparams.turn}: You missed your extra-attack. Roll: ${random}`)};
 
             // console.log(`double: ${random}`);
   
@@ -984,6 +972,8 @@ class Battlescene extends Phaser.Scene
       this.events.on('Handleequippedweapon', () =>  {
 
         if(battleparams.handleonce[0] == true) {
+
+          battleparams.Critflag == true? (battleparams.Critflag = false, battleparams.sequence.push('player-attack','enemy-gethit')) : battleparams.sequence.push('player-attack2','enemy-gethit');
 
         if(inventoryparams.equippedweapon[0] == undefined) {characterparams.outputdamage.push(characterparams.BDM*inventoryparams.weaponset[0].attack);} 
 
@@ -1039,9 +1029,11 @@ class Battlescene extends Phaser.Scene
   
           battleparams.enemy[battleparams.enemy.length-1].HP = battleparams.enemy[battleparams.enemy.length-1].HP  - characterparams.BDM*inventoryparams.weaponset[0].attack;
   
-          battleparams.eventslog.push(`Turn ${battleparams.turn}: You deal ${Math.round(characterparams.BDM*inventoryparams.weaponset[0].attack)} damages from your second attack.`)
+          battleparams.eventslog.push(`Turn ${battleparams.turn}: You deal ${Math.round(characterparams.BDM*inventoryparams.weaponset[0].attack)} damages from your extra-attack.`)
   
           battleparams.damageturnlog.push(Math.round(characterparams.BDM*inventoryparams.weaponset[0].attack));
+
+          battleparams.Critflag == true? (battleparams.Critflag = false, battleparams.sequence.push('player-attack','enemy-gethit')) : battleparams.sequence.push('player-attack2','enemy-gethit');
 
 
           // console.log(battleparams.eventslog);
@@ -1050,10 +1042,11 @@ class Battlescene extends Phaser.Scene
   
           battleparams.enemy[battleparams.enemy.length-1].HP = battleparams.enemy[battleparams.enemy.length-1].HP  - characterparams.BDM*inventoryparams.equippedweapon[0].attack;
   
-        battleparams.eventslog.push(`Turn ${battleparams.turn}: You deal ${Math.round(characterparams.BDM*inventoryparams.equippedweapon[0].attack)} damages from your second attack.`)
+        battleparams.eventslog.push(`Turn ${battleparams.turn}: You deal ${Math.round(characterparams.BDM*inventoryparams.equippedweapon[0].attack)} damages from your extra-attack.`)
   
         battleparams.damageturnlog.push(Math.round(characterparams.BDM*inventoryparams.equippedweapon[0].attack));
 
+        battleparams.Critflag == true? (battleparams.Critflag = false, battleparams.sequence.push('player-attack','enemy-gethit')) : battleparams.sequence.push('player-attack2','enemy-gethit');
 
         // console.log(battleparams.eventslog);
   
@@ -1081,7 +1074,11 @@ class Battlescene extends Phaser.Scene
 
       this.events.emit('ElementChecker');
 
-      console.log('oneturn');
+      battleparams.rollitonce[3] =true;
+
+      this.events.emit('LuckChecker');
+
+      console.log(`oneturn: ${battleparams.turn}`);
 
       battleparams.doitonce[1] = false;
 
@@ -1101,6 +1098,7 @@ class Battlescene extends Phaser.Scene
           this.events.emit('double');
 
           console.log('proceffect');
+
 
          };
 
@@ -1133,13 +1131,13 @@ class Battlescene extends Phaser.Scene
   
           this.events.emit('LuckystrikeChecker');
   
-          this.events.emit('ElementChecker');
-  
-          this.events.emit('LuckChecker');
-  
           this.events.emit('DamageMitigation');
   
           this.events.emit('ElementalExposure');
+
+          this.events.emit('LuckChecker');
+
+          this.events.emit('ElementChecker');
   
           this.events.emit('TypeChecker');
   
@@ -1168,8 +1166,6 @@ class Battlescene extends Phaser.Scene
 
               this.events.emit('oneturn');
 
-              this.events.emit('LuckChecker');
-
               battleparams.handleonce[1] = true;
 
               this.events.emit('double');
@@ -1180,25 +1176,23 @@ class Battlescene extends Phaser.Scene
 
               battleparams.rollitonce[9] = true;
 
+              battleparams.doitonce[1] = true;
+
               this.events.emit('oneturn');
-
-                battleparams.rollitonce[3] =true;
-
-                this.events.emit('LuckChecker');
-
+           
               battleparams.rollitonce[4] = true;
 
                this.events.emit('SpeedChecker');
 
                 this.events.emit('Speedcheckereffect');
 
+
+
                 battleparams.rollitonce[9] = true;
 
+                battleparams.doitonce[1] = true;
+
                 this.events.emit('oneturn');
-
-                battleparams.rollitonce[3] =true;
-
-                this.events.emit('LuckChecker');
 
                 battleparams.rollitonce[4] = true;
 
@@ -1355,7 +1349,7 @@ class Battlescene extends Phaser.Scene
 
     // }
 
-          ////////DEBUG
+          //////DEBUG
 
 
       if(battleparams.updateitonce[0] == true) {
@@ -1371,10 +1365,17 @@ class Battlescene extends Phaser.Scene
 
               newmessage.name.destroy(); 
 
+
+            }, 5000)
+
+
+            setTimeout(() => {
+
+      
               battleparams.eventslog.shift();
 
       
-            }, 5000)
+            }, 10000)
 
 
        })
@@ -1385,6 +1386,7 @@ class Battlescene extends Phaser.Scene
 
    
       battleparams.ratioTxt.setText(`Wins ${battleparams.nbwin}, Loses ${battleparams.nblose}`);
+
 
       battleparams.turnTxt.setText(`Actual turn: ${battleparams.turn-1}`);
 

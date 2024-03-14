@@ -4,7 +4,7 @@ Updated at 14/03/2014
 Adding new game style:
 - Bared Hands: 
 Allow 2 extras opportunies to act (total of 4 attack round against 1/2 for others)
-Give a garantees extra turn attack round
+Give a garantees extra turn attack round (Minimun 2 attack rounds per turn)
 Increase the speed level by 30
 More tanky than other style with more chance to prock perfect strike (4 perfects strike at maximum occurence vs 2 for others)
 Good damage scaling with the enemy power having the best perfect strike occurence (perfect strike provide imnunities damage for one round while doing damage)

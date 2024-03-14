@@ -19,8 +19,8 @@ Extra attack are disabled but the main attack can still prock perfect strike one
 Perfect strike occurence are the lowest of all style (only one attack per round)
 
 -Standard:
-Best style for crit build type by taking advantage of critdamage and critchange while having 2 maximuns attack rounds
-Dont rely and your enenemy weakness
+Best style for crit build type by taking advantage of critdamage and critchange while having 2 attacks at maximun occurence per round
+Dont rely and your enemy elemental weakness
 Biggest output damage in lategame (Weapon provide +30% crit chance at maximun level and critdamage provided by weapon are uncapped)
 
 Dungeon wet cave in preparation.

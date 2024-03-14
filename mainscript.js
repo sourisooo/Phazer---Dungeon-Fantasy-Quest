@@ -16,8 +16,8 @@ class CharacterMenu extends Phaser.Scene
     iceResistance = 1;
     thunderResistance = 1;
     earthResistance = 1;
-    Speed = 100;
-    Luck = 0.06;
+    Speed = 200;
+    Luck = 0.96;
     outputdamage = [];
     HP = 500;
     DefaultHP = 500;
@@ -63,7 +63,6 @@ class CharacterMenu extends Phaser.Scene
         
       characterparams.ratioTxt = this.add.text(1400, 60, `Wins ${battleparams.nbwin}, Loses ${battleparams.nblose}`, { font: '26px Arial', fill: '#ffffff' });
   
-        
       let stat1 = this.add.text(100, 100, `BaseDamageMultiplier: ${characterparams.DefaultBDM}`, { font: '16px Arial', fill: '#ffffff' });
       let stat2 = this.add.text(100, 140, `CritDamage: ${characterparams.CritD} (10% fixed rate occurence)`, { font: '16px Arial', fill: '#ffffff' });
       let stat3 = this.add.text(100, 180, `Luckystrike: ${characterparams.LStrike} (50% extra damage fixed %damage, Max value: 100%)`, { font: '16px Arial', fill: '#ffffff' });
@@ -180,10 +179,10 @@ class Battlescene extends Phaser.Scene
   enemy=[];
   battleover=false;
   reward = false;
-  doitonce = true;
+  doitonce = [true, true];
   eventslog = [];
   levelstacker = 1;
-  rollitonce = [true,true,true,true, true, true, true, true, true];
+  rollitonce = [true,true,true,true, true, true, true, true, true, true];
   potentie = ['physical', 'magical'];
   element = ['fire', 'ice', 'thunder', 'earth'];
   nbwin = 0;
@@ -192,14 +191,15 @@ class Battlescene extends Phaser.Scene
   powerstacker = 1;
   playitonce = true;
   handleonce = [true, true];
-  updateitonce = true;
+  updateitonce = [true, true];
   waituntilidle = true;
   sequence = [];
   damageturnlog = [];
 
+
   styles = [
   {name:'standard style', speedbonus: 0, equiped1weapon:true, equiped2weapon:false, nesteddouble: false},
-   {name:'barehands style', speedbonus: 25, equiped1weapon:false, equiped2weapon:false, nesteddouble: true},
+   {name:'barehands style', speedbonus: 35, equiped1weapon:false, equiped2weapon:false, nesteddouble: true},
     {name:'doublesword style', speedbonus: -100, equiped1weapon:true, equiped2weapon:true, nesteddouble: false},
 
   ];
@@ -272,7 +272,7 @@ class Battlescene extends Phaser.Scene
       let title = this.add.text(100, 60, `Battle lvl ${battleparams.levelstacker}`, { font: '60px Arial', fill: '#ffffff' });
 
       battleparams.ratioTxt = this.add.text(1400, 60, `Wins ${battleparams.nbwin}, Loses ${battleparams.nblose}`, { font: '26px Arial', fill: '#ffffff' });
-  
+
       const enemy = new Enemy(undefined,20*battleparams.levelstacker, battleparams.element[this.random(3)], battleparams.element[this.random(3)], 500*battleparams.powerstacker, 1*(battleparams.powerstacker),[],battleparams.levelstacker,90, battleparams.potentie[this.random(1)],1*(battleparams.powerstacker));
 
       battleparams.enemy.push(enemy);
@@ -707,10 +707,6 @@ class Battlescene extends Phaser.Scene
 
         this.remaindle();
 
-        // battleparams.firesprite = this.add.sprite(battleparams.playerSprite.x-20, battleparams.playerSprite.y-290, 'fireeffect').setScale(5);
-
-
-      // console.log(battleparams.enemy[battleparams.enemy.length-1]);
 
         this.events.on('CritChecker', () =>  {
 
@@ -909,6 +905,8 @@ class Battlescene extends Phaser.Scene
 
           // console.log(random, characterparams.Luck , random< characterparams.Luck);
 
+            console.log(`luck: ${random}`);
+
           if (random<characterparams.Luck)  {let perfectstrike = battleparams.enemy[battleparams.enemy.length-1].HP*0.10 ;battleparams.enemy[battleparams.enemy.length-1].HP = battleparams.enemy[battleparams.enemy.length-1].HP*0.9;
             
             battleparams.eventslog.push(`Turn ${battleparams.turn}: Luck! You made a perfect strike dealing ${perfectstrike} damages`);
@@ -946,6 +944,8 @@ class Battlescene extends Phaser.Scene
             let delta = characterparams.Speed - battleparams.enemy[battleparams.enemy.length-1].speed+bonus;
 
             let random = this.random(100)/100;
+
+            console.log(random, delta/100);
   
             if (random<delta/100)  {battleparams.enemy[battleparams.enemy.length-1].BDM = 0.0001;
             
@@ -953,7 +953,7 @@ class Battlescene extends Phaser.Scene
 
               characterparams.Attacktwice = true;
 
-            };
+            } else {characterparams.Attacktwice = false};
 
             // console.log(`double: ${random}`);
   
@@ -970,9 +970,9 @@ class Battlescene extends Phaser.Scene
 
           if(battleparams.countitonce == true) {
 
-          if (characterparams.HP<0)  {this.playanyanimation('playerSprite','player-death','player'), battleparams.waituntilidle = false, battleparams.battleover = true, console.log(battleparams.sequence.length), battleparams.nblose=battleparams.nblose+1, setTimeout(() => this.scene.stop().start('Reward'),12000)};
+          if (characterparams.HP<0)  {this.playanyanimation('playerSprite','player-death','player'), battleparams.waituntilidle = false, battleparams.battleover = true, console.log(battleparams.sequence.length), battleparams.nblose=battleparams.nblose+1, setTimeout(() => this.scene.stop().start('Reward'),16000)};
 
-          if (battleparams.enemy[battleparams.enemy.length-1].HP<0)  {this.playanyanimation('enemySprite','enemy-death','enemy'),battleparams.battleover = true, battleparams.waituntilidle = false,battleparams.battleover = true, battleparams.nbwin=battleparams.nbwin+1, (setTimeout(() => this.scene.stop().start('Reward'),12000))};
+          if (battleparams.enemy[battleparams.enemy.length-1].HP<0)  {this.playanyanimation('enemySprite','enemy-death','enemy'),battleparams.battleover = true, battleparams.waituntilidle = false,battleparams.battleover = true, battleparams.nbwin=battleparams.nbwin+1, (setTimeout(() => this.scene.stop().start('Reward'),16000))};
 
           battleparams.countitonce = false;
 
@@ -1069,9 +1069,11 @@ class Battlescene extends Phaser.Scene
 
       this.events.on('oneturn', () => {
 
+        if (battleparams.doitonce[1] == true) {
+
         characterparams.BDM = characterparams.DefaultBDM;
   
-        battleparams.rollitonce = [true,true,false,true, false, true, false, false];
+        battleparams.rollitonce = [true,true,false,true, false, true, false, false, false, true];
 
       this.events.emit('CritChecker');
 
@@ -1079,12 +1081,18 @@ class Battlescene extends Phaser.Scene
 
       this.events.emit('ElementChecker');
 
-      this.events.emit('LuckChecker');
+      console.log('oneturn');
+
+      battleparams.doitonce[1] = false;
+
+        };
 
   
       })
 
       this.events.on('Speedcheckereffect', () => {
+
+        if (battleparams.rollitonce[9] == true ) {
 
         if(  characterparams.Attacktwice == true){
 
@@ -1092,7 +1100,13 @@ class Battlescene extends Phaser.Scene
 
           this.events.emit('double');
 
-         }
+          console.log('proceffect');
+
+         };
+
+         battleparams.rollitonce[9] = false;
+
+        }
 
       })
 
@@ -1138,13 +1152,11 @@ class Battlescene extends Phaser.Scene
           this.events.emit('Handleequippedweapon');
   
 
-
-  
             if(characterparams.Attacktwice == false){
   
               this.handlesequenceanimation();
            
-            } 
+            }; 
   
           characterparams.BDM = characterparams.DefaultBDM;
   
@@ -1152,9 +1164,11 @@ class Battlescene extends Phaser.Scene
   
 
        
-          if(characterparams.Attacktwice == true){
+          if((characterparams.Attacktwice == true)||(battleparams.styles[battleparams.choosedstyle].nesteddouble == true)){
 
               this.events.emit('oneturn');
+
+              this.events.emit('LuckChecker');
 
               battleparams.handleonce[1] = true;
 
@@ -1164,18 +1178,29 @@ class Battlescene extends Phaser.Scene
 
                 console.log(battleparams.sequence);
 
-                this.events.emit('oneturn');
+              battleparams.rollitonce[9] = true;
 
-              battleparams.handleonce[4] = true;
+              this.events.emit('oneturn');
+
+                battleparams.rollitonce[3] =true;
+
+                this.events.emit('LuckChecker');
+
+              battleparams.rollitonce[4] = true;
 
                this.events.emit('SpeedChecker');
 
                 this.events.emit('Speedcheckereffect');
 
- 
+                battleparams.rollitonce[9] = true;
+
                 this.events.emit('oneturn');
 
-                battleparams.handleonce[4] = true;
+                battleparams.rollitonce[3] =true;
+
+                this.events.emit('LuckChecker');
+
+                battleparams.rollitonce[4] = true;
 
                  this.events.emit('SpeedChecker');
 
@@ -1215,11 +1240,11 @@ class Battlescene extends Phaser.Scene
     
 
 
-      if (battleparams.doitonce == true) {
+      if (battleparams.doitonce[0] == true) {
 
       battleparams.attackbutton.on('pointerdown', () => {this.events.emit('PlayerAttack')});
 
-      battleparams.doitonce = false;
+      battleparams.doitonce[0] = false;
 
     };
 
@@ -1229,9 +1254,9 @@ class Battlescene extends Phaser.Scene
     this.input.on('pointerdown', () => {
 
 
-      battleparams.doitonce = true;
+      battleparams.doitonce = [true, true];
 
-      battleparams.rollitonce = [true,true,true,true, true, true, true, true, true];
+      battleparams.rollitonce = [true,true,true,true, true, true, true, true, true, true];
 
       battleparams.countitonce = true;
 
@@ -1239,7 +1264,7 @@ class Battlescene extends Phaser.Scene
 
       battleparams.handleonce = [true, true];
 
-      battleparams.updateitonce = true;
+      battleparams.updateitonce = [true, true];
 
  
     });
@@ -1250,13 +1275,16 @@ class Battlescene extends Phaser.Scene
             
 
     })
-   
+
+
+
 
     }
 
 
     update () 
     {
+
       battleparams.damagedoneTxt.setX(battleparams.enemySprite.x);
 
       battleparams.damagedoneTxt.setY(battleparams.enemySprite.y);
@@ -1274,42 +1302,97 @@ class Battlescene extends Phaser.Scene
       battleparams.HPTxt.setY(battleparams.enemySprite.y-100);
 
 
-      // if(battleparams.updateitonce == true) {
+      ////////DEBUG
 
-      // battleparams.eventslog.forEach((element,ind) => {
+    //   if(battleparams.updateitonce[0] == true) {
+
+    //     battleparams.eventslog.forEach((element,ind) => {
+  
+    //       // console.log(this);
+
+    //   if (ind<12 ) {
+          
+    //     // this.add.text(100, 340+(40*(ind+1)), `${element}`, { font: '16px Arial', fill: '#ffffff' });
+    
+    //     battleparams.newmessage = new Message(`message${ind}`, this.scene, 100, 340+(40*(ind+1)), element );
+
+    //     battleparams.newmessage.messagegen();
+
+    //     // console.log(battleparams.newmessage.name);
+
+    //     // battleparams.newmessage.name.destroy();
+
+    
+    // }
+
+    //   else if (ind<30 ) {
+        
+    //     // this.add.text(700, 100+(40*(ind+1-12)), `${element}`, { font: '16px Arial', fill: '#ffffff' });
+
+    //     battleparams.newmessage =  new Message(`message${ind}`, this.scene, 700, 100+(40*(ind+1-12)), element );
+      
+    //     battleparams.newmessage.messagegen();
+
+
+    //   }
+
+    //   else {
+        
+    //     // this.add.text(1300, 100+(40*(ind+1-30)), `${element}`, { font: '16px Arial', fill: '#ffffff' });
+
+    //     battleparams.newmessage =  new Message(`message${ind}`, this.scene, 1300, 100+(40*(ind+1-30)), element );
+
+    //     battleparams.newmessage.messagegen();
+  
+
+    //   }
 
       
 
-      //   if (ind<12 ) {this.add.text(100, 340+(40*(ind+1)), `${element}`, { font: '16px Arial', fill: '#ffffff' })}
- 
-      //   else if (ind<30 ) {this.add.text(700, 100+(40*(ind+1-12)), `${element}`, { font: '16px Arial', fill: '#ffffff' });}
- 
-      //   else {this.add.text(1300, 100+(40*(ind+1-30)), `${element}`, { font: '16px Arial', fill: '#ffffff' });}
+    //  })
 
-        
+    //  battleparams.updateitonce[0] = false;
 
-      //  })
+    // }
 
-      //  battleparams.updateitonce = false;
+          ////////DEBUG
 
-      // }
+
+      if(battleparams.updateitonce[0] == true) {
+
+      battleparams.eventslog.forEach((element,ind) => {
+          
+          let newmessage = new Message(`message${ind}`, this.scene, 1100, 100+(40*(ind+1)), element );
+
+            newmessage.messagegen();
+
+            
+            setTimeout(() => {
+
+              newmessage.name.destroy(); 
+
+              battleparams.eventslog.shift();
+
+      
+            }, 5000)
+
+
+       })
+
+       battleparams.updateitonce[0] = false;
+
+      }
+
    
-
-
       battleparams.ratioTxt.setText(`Wins ${battleparams.nbwin}, Loses ${battleparams.nblose}`);
 
-      // battleparams.damagedoneTxt.setText(`Damage done: ${characterparams.outputdamage[battleparams.turn-1]}`);
-
-
-      battleparams.turnTxt.setText(`Actual turn: ${battleparams.turn}`);
+      battleparams.turnTxt.setText(`Actual turn: ${battleparams.turn-1}`);
 
       battleparams.damagereceivedTxt.setText(`${Math.round(battleparams.enemy[battleparams.enemy.length-1].outputdamage[battleparams.turn-1] )}`);
 
       battleparams.HHPTxt.setText(`Your HP: ${characterparams.HP}`);
 
       battleparams.HPTxt.setText(`Enemy HP: ${battleparams.enemy[battleparams.enemy.length-1].HP }`);
-
-  
 
     }
 
@@ -1336,8 +1419,6 @@ class Battlescene extends Phaser.Scene
         this.load.setBaseURL('./');
 
         this.load.image('Items', './Default_few_sword_for_an_rpg_game_3.jpg');
-
-
 
     }
 
@@ -1468,7 +1549,7 @@ class Battlescene extends Phaser.Scene
 
       battleparams.turn = 0;
 
-      battleparams.doitonce = true;
+      battleparams.doitonce[0] = true;
 
       battleparams.battleover = false;
 
@@ -1576,7 +1657,6 @@ class Battlescene extends Phaser.Scene
  
     }
 
-    // battleparams.firesprite = this.add.sprite(battleparams.playerSprite.x-20, battleparams.playerSprite.y-290, 'fireeffect').setScale(5);
 
 class Fx{
   constructor(scene, fxname, x, y, spritename, scale){
@@ -1603,6 +1683,34 @@ class Fx{
   }
 
   const fxparams = new Fx();
+
+
+
+
+
+  class Message{
+    constructor(name, scene, x , y, content){
+        this.name = name;
+        this.scene = scene;
+        this.x = x;
+        this.y = y;
+        this.content = content;
+
+
+    }
+
+    messagegen = () => {
+
+
+      this.name = this.scene.scene.add.text(this.x, this.y, this.content, { font: '16px Arial', fill: '#ffffff' });
+
+      return this.name;
+
+
+    }
+
+
+  }
 
 
 

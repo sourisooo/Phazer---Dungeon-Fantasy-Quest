@@ -1,7 +1,7 @@
 Dungeon Fantasy Quest
 
 Updated at 14/03/2014
-Adding new game style:
+Adding new game styles:
 - Bared Hands: 
 Allow 2 extras opportunies to act (total of 4 attack round against 1/2 for others)
 Give a garantees extra turn attack round (Minimun 2 attack rounds per turn)

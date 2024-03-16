@@ -1,5 +1,7 @@
 Dungeon Fantasy Quest
 
+Incoming soon: new style available.
+
 Updated at 16/03/2024
 New maze/dungeon generator with random encounter/battle, find the exit and survive the assault!
 

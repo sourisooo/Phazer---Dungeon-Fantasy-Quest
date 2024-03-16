@@ -1917,23 +1917,6 @@ const TILES = {
 
              };
 
-             const randomTileIndex = [81]; // Example array
-
-               const widthInTiles = this.layer.width;
-               const heightInTiles = this.layer.height;
-             
-               // Generate random position within layer bounds
-               const randomX = Math.floor(Math.random() * widthInTiles);
-               const randomY = Math.floor(Math.random() * heightInTiles);
-             
-               // Optional check for existing tile (replace with your condition if needed)
-              //  if (!this.layer.getTileAt(randomX, randomY)) {
-                 // Select a random tile index from the defined array
-                 const randomTile = randomTileIndex[Math.floor(Math.random() * randomTileIndex.length)];
-                 this.layer.putTileAt(81, randomX, randomY);
-              //  }
-  
-
         }, this);
 
 

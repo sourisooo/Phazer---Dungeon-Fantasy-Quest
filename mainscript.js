@@ -1754,7 +1754,6 @@ const TILES = {
   {
      doitonce = [true, true];
      dungeoncopie = [];
-     rollitonce = true;
      activeRoom;
      dungeon;
      map;
@@ -1767,8 +1766,7 @@ const TILES = {
      exitroom = [];
      saveplayercoordinate = [];
      discoverdrooms = [];
-     randomitonce = true;
-  
+
   
     constructor() {
       super({key:'Trainingmap'}); // Scene key
@@ -1795,7 +1793,6 @@ const TILES = {
       discoverdrooms = [];
       doitonce = [true, true];
       dungeoncopie = [];
-      rollitonce = true;
 
     }
 
@@ -2089,11 +2086,11 @@ const TILES = {
 
     randomizebattle(){
 
-        trainingmapparams.randomitonce = false;
-
       let random = Math.random();
+
+      console.log(random);
     
-      random<0.08? (trainingmapparams.saveplayercoordinate=[],trainingmapparams.saveplayercoordinate.push({x:trainingmapparams.player.x, y:trainingmapparams.player.y},this.scene.pause,this.scene.start('Battle'))) : '';
+      random<0.05? (trainingmapparams.saveplayercoordinate=[],trainingmapparams.saveplayercoordinate.push({x:trainingmapparams.player.x, y:trainingmapparams.player.y},this.scene.pause,this.scene.start('Battle'))) : '';
 
 
     }

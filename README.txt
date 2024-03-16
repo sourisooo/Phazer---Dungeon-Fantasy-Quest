@@ -1,6 +1,9 @@
 Dungeon Fantasy Quest
 
-Updated at 14/03/2014
+Updated at 16/03/2024
+New maze/dungeon generator with random encounter/battle, find the exit and survive the assault!
+
+Updated at 14/03/2024
 Adding new game styles:
 - Bared Hands: 
 Allow 2 extras opportunies to act (total of 4 attack round against 1/2 for others)

@@ -14,6 +14,7 @@ Dynamic messages of what was happen recently.
 Style can be change in battle.
 Many way to play the game, many choices of buff reward after each battle.
 Displayed inventory and menu for equipping weapon, examing stats or changing style.
+Diplay rolls when a roll is performed
 
 How does the calculation are performed for the standard style
 Each turn character can make a critical strike or strike normaly(1), have an extra acttack(2), evade an attack(3), make a perfect strike(4). So 4 actions can be performed each turn.

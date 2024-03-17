@@ -1323,6 +1323,8 @@ class Battlescene extends Phaser.Scene
 
             battleparams.sequence = [];
 
+            battleparams.enemy[battleparams.enemy.length-1].BDM = battleparams.enemy[battleparams.enemy.length-1].defaultBDM;
+
   
           }
   
@@ -1422,7 +1424,7 @@ class Battlescene extends Phaser.Scene
     
     //     battleparams.newmessage = new Message(`message${ind}`, this.scene, 100, 340+(40*(ind+1)), element );
 
-    //     battleparams.newmessage.messagegen();
+    //     battleparams.newmessage.messagegen(16);
 
     //     // console.log(battleparams.newmessage.name);
 
@@ -1437,7 +1439,7 @@ class Battlescene extends Phaser.Scene
 
     //     battleparams.newmessage =  new Message(`message${ind}`, this.scene, 700, 100+(40*(ind+1-12)), element );
       
-    //     battleparams.newmessage.messagegen();
+    //     battleparams.newmessage.messagegen(16);
 
 
     //   }
@@ -1448,7 +1450,7 @@ class Battlescene extends Phaser.Scene
 
     //     battleparams.newmessage =  new Message(`message${ind}`, this.scene, 1300, 100+(40*(ind+1-30)), element );
 
-    //     battleparams.newmessage.messagegen();
+    //     battleparams.newmessage.messagegen(16);
   
 
     //   }
@@ -1470,7 +1472,7 @@ class Battlescene extends Phaser.Scene
           
           let newmessage = new Message(`message${ind}`, this.scene, 1100, 100+(40*(ind+1)), element );
 
-            newmessage.messagegen();
+            newmessage.messagegen(16);
 
             
             setTimeout(() => {
@@ -1816,14 +1818,15 @@ class Battlescene extends Phaser.Scene
 
     }
 
-    messagegen = () => {
+    messagegen = (size) => {
 
-      this.name = this.scene.scene.add.text(this.x, this.y, this.content, { font: '16px Arial', fill: '#ffffff' });
+      this.name = this.scene.scene.add.text(this.x, this.y, this.content, { font: `${size}px Arial`, fill: '#ffffff' });
 
       return this.name;
 
 
     }
+
 
 
   }
@@ -1946,8 +1949,8 @@ const TILES = {
       if (trainingmapparams.doitonce[0] == true){
 
         this.dungeon = new Dungeon({
-            width: 150,
-            height: 150,
+            width: 100,
+            height: 100,
             rooms: {
                 width: { min: 7, max: 20, onlyOdd: true },
                 height: { min: 7, max: 20, onlyOdd: true }
@@ -2147,9 +2150,17 @@ const TILES = {
 
           if ( currentroom == trainingmapparams.exitroom[trainingmapparams.exitroom.length-1]){
 
-            this.add.text(700, 50, `you find the exit`, { font: '30px Arial', fill: '#ffffff', marginLeft: '40 vw' });
+            console.log(this.scene);
 
-            setTimeout(() => {this.resetdungeon(); this.scene.stop().start('Main')}, 2000)
+             let message = new Message(`Endmessage`, this.scene, 800, 600, `You find the exit!` );
+
+            message.messagegen(48).setScrollFactor(0);
+
+            setTimeout(() => {
+
+              this.resetdungeon(); this.scene.stop().start('Main');
+
+            }, 2000)
 
         };
 
@@ -2196,7 +2207,7 @@ const TILES = {
 
       // console.log(random);
     
-      random<0.015? (trainingmapparams.saveplayercoordinate=[],trainingmapparams.saveplayercoordinate.push({x:trainingmapparams.player.x, y:trainingmapparams.player.y},this.scene.pause,this.scene.start('Battle'))) : '';
+      random<0.005? (trainingmapparams.saveplayercoordinate=[],trainingmapparams.saveplayercoordinate.push({x:trainingmapparams.player.x, y:trainingmapparams.player.y},this.scene.pause,this.scene.start('Battle'))) : '';
 
 
     }

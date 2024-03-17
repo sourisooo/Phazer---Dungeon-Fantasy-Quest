@@ -1685,7 +1685,7 @@ class Battlescene extends Phaser.Scene
 
       let reward1 = this.add.text(100, 100, `Click me to Buff your Base Damage Multiplier by 15%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
 
-      reward1.on('pointerdown', () => {characterparams.DefaultBDM = characterparams.BDM*1.15; this.scene.stop().start('Trainingmap')});
+      reward1.on('pointerdown', () => {characterparams.DefaultBDM = characterparams.DefaultBDM*1.15; this.scene.stop().start('Trainingmap')});
 
       let reward2 = this.add.text(100, 140, `Click me to Buff your CritDamage by 40%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
 

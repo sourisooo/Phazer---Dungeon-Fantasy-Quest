@@ -1111,10 +1111,11 @@ class Battlescene extends Phaser.Scene
 
           this.events.emit('BleedStacker');
 
-          battleparams.handleonce[0] = false;
+        
 
      }
 
+            battleparams.handleonce[0] = false;
 
       })
 

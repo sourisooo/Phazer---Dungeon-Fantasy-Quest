@@ -14,6 +14,23 @@ Dynamic messages of what was happen recently.
 Style can be change in battle.
 Many way to play the game, many choices of buff reward after each battle.
 
+How does the calculation are performed for the standard style
+Each turn character can make a critical strike or strike normaly(1), have an extra acttack(2), evade an attack(3), make a perfect strike(4). So 4 actions can be performed each turn.
+If an extra attack is successfully done, the first step is repeating one time again but without the possiblity to make an extra-attack.
+To exploit enemy elemental weakness, heroes need to have an equiped sword that matched the enemy elemental weakness (ex: fire weakness with fire elemental weapon). The elemental buff that is going to be
+applyed is the elemental bearing the same name as the weapon (ex:fire for character with fire elemental weapon).
+Elemental damage can be rised by investiong buff as reward after each battle.
+CritDamage can be rised by investing buff in criticalstrike damage and equiping a weapon.
+Critical strike chance can only be increased by equiping a weapon.
+Enemy can have 2 types: physical or magical. Equiping a weapon with the same type (ex: magical for weapon with magical enemy type) increase heroe damage by 50% and reduced damage received by 50%.
+Speed increase your oppotunity to make an extra-attack
+Luck increase your opportunity to make an perfect strike.
+Equiping a weapon provide, damage, critical strike chance, critical strike damage.
+Changing style can increased or decreased all the stats tell before.
+Enemy can attack one time a turn and only perform a normal strike.
+After a battle, one buff between 11 differents buffs can be choosen as reward that rise permantly the heroes stat.
+Walking inside the dungeon can trigger a battle.
+
 Updated at 17/03/2024
 Adding the new style: bleeding style. Your attack no longer make damage.
 Instead you accumulate on enemy bleeding wound  until you reach a certain amounts of bleeding woud(4-8) depending on your enemy and deal damage based on your elemental damage.

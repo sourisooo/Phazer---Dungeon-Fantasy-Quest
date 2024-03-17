@@ -61,7 +61,7 @@ class CharacterMenu extends Phaser.Scene
 
       let title = this.add.text(100, 60, `Character stat`, { font: '25px Arial', fill: '#ffffff' });
         
-      characterparams.ratioTxt = this.add.text(1400, 60, `Wins ${battleparams.nbwin}, Loses ${battleparams.nblose}`, { font: '26px Arial', fill: '#ffffff' });
+      characterparams.ratioTxt = this.add.text(1550, 60, `Wins ${battleparams.nbwin}, Loses ${battleparams.nblose}`, { font: '26px Arial', fill: '#ffffff' });
   
       let stat1 = this.add.text(100, 100, `BaseDamageMultiplier: ${characterparams.DefaultBDM}`, { font: '16px Arial', fill: '#ffffff' });
       let stat2 = this.add.text(100, 140, `CritDamage: ${characterparams.CritD} (10% fixed rate occurence)`, { font: '16px Arial', fill: '#ffffff' });
@@ -94,23 +94,29 @@ class CharacterMenu extends Phaser.Scene
 
       // console.log(inventoryparams.weaponset);
 
-      characterparams.actualstyle = this.add.text(950, 50, `Actual style`, { font: '26px Arial', fill: '#000000' }).setInteractive();
+      characterparams.actualstyle = this.add.text(1050, 50, `Actual style`, { font: '26px Arial', fill: '#000000' }).setInteractive();
 
-      let standardstyle = this.add.text(1100, 200, `Click to switch to standard style`, { font: '26px Arial', fill: '#000000' }).setInteractive();
+      let standardstyle = this.add.text(950, 200, `Click to switch to standard style`, { font: '26px Arial', fill: '#000000' }).setInteractive();
 
       standardstyle.on('pointerdown', () => (this.handlestyle(0)));
 
-      let barehandstyle = this.add.text(1100, 400, `Click to switch to barehandstyle style`, { font: '26px Arial', fill: '#000000' }).setInteractive();
+      let barehandstyle = this.add.text(950, 300, `Click to switch to barehandstyle style`, { font: '26px Arial', fill: '#000000' }).setInteractive();
 
-      let barehandstyletext = this.add.text(1100, 440, `More speed, more opportunity to perform ability`, { font: '16px Arial', fill: '#000000' });
+      let barehandstyletext = this.add.text(950, 340, `More speed, more opportunity to perform ability`, { font: '16px Arial', fill: '#000000' });
 
       barehandstyle.on('pointerdown', () => (this.handlestyle(1)));
 
-      let doublestyle = this.add.text(1100, 700, `Click to switch to doublesword style`, { font: '26px Arial', fill: '#000000' }).setInteractive();
+      let doublestyle = this.add.text(950, 500, `Click to switch to doublesword style`, { font: '26px Arial', fill: '#000000' }).setInteractive();
 
-      let doublestyletext = this.add.text(1100, 740, `Bear two elemental potencies to the battle`, { font: '16px Arial', fill: '#000000' });
+      let doublestyletext = this.add.text(950, 540, `Bear two elemental potencies to the battle`, { font: '16px Arial', fill: '#000000' });
 
       doublestyle.on('pointerdown', () => (this.handlestyle(2)));
+
+      let bleedingstyle = this.add.text(950, 700, `Click to switch to bleeding style`, { font: '26px Arial', fill: '#000000' }).setInteractive();
+
+      let bleedingstyletext = this.add.text(950, 740, `Deal fix amount of damage after successfully attacking a target between 4-8 times`, { font: '16px Arial', fill: '#000000' });
+
+      bleedingstyle.on('pointerdown', () => (this.handlestyle(3)));
 
 
     }
@@ -151,6 +157,17 @@ class CharacterMenu extends Phaser.Scene
               }
                 
                 break;
+
+                case 3: {
+
+                  inventoryparams.equippedweapon.pop();
+                  battleparams.styles[battleparams.choosedstyle].equiped2weapon = false;
+                  battleparams.styles[battleparams.choosedstyle].nesteddouble = false;
+                  // console.log(inventoryparams.equippedweapon);
+      
+                }
+                  
+                  break;
         
           default:
             break;
@@ -202,9 +219,10 @@ class Battlescene extends Phaser.Scene
 
 
   styles = [
-  {name:'standard style', speedbonus: 0, equiped1weapon:true, equiped2weapon:false, nesteddouble: false},
-   {name:'barehands style', speedbonus: 35, equiped1weapon:false, equiped2weapon:false, nesteddouble: true},
-    {name:'doublesword style', speedbonus: -100, equiped1weapon:true, equiped2weapon:true, nesteddouble: false},
+  {name:'standard style', speedbonus: 0, equiped1weapon:true, equiped2weapon:false, nesteddouble: false, stackdamage:0, critbonus:0, luckbonus:0, elementalanimation: true},
+   {name:'barehands style', speedbonus: 35, equiped1weapon:false, equiped2weapon:false, nesteddouble: true, stackdamage:0, critbonus:0, luckbonus:0, elementalanimation: true},
+    {name:'doublesword style', speedbonus: -100, equiped1weapon:true, equiped2weapon:true, nesteddouble: false, stackdamage:0, critbonus:0, luckbonus:0, elementalanimation: true},
+    {name:'bleeding style', speedbonus: 0, equiped1weapon:true, equiped2weapon:false, nesteddouble: false, stackdamage:1, critbonus:-50, luckbonus:-50, elementalanimation: false},
 
   ];
 
@@ -273,7 +291,9 @@ class Battlescene extends Phaser.Scene
 
       battleparams.ratioTxt = this.add.text(1400, 60, `Wins ${battleparams.nbwin}, Loses ${battleparams.nblose}`, { font: '26px Arial', fill: '#ffffff' });
 
-      const enemy = new Enemy(undefined,20*battleparams.levelstacker, battleparams.element[this.random(3)], battleparams.element[this.random(3)], 500*battleparams.powerstacker, 1*(battleparams.powerstacker),[],battleparams.levelstacker,90, battleparams.potentie[this.random(1)],1*(battleparams.powerstacker));
+      let randomstacktrigger = Math.random()*4+4;
+
+      const enemy = new Enemy(undefined,20*battleparams.levelstacker, battleparams.element[this.random(3)], battleparams.element[this.random(3)], 500*battleparams.powerstacker, 1*(battleparams.powerstacker),[],battleparams.levelstacker,90, battleparams.potentie[this.random(1)],1*(battleparams.powerstacker),randomstacktrigger,randomstacktrigger);
 
       battleparams.enemy.push(enemy);
 
@@ -693,14 +713,18 @@ class Battlescene extends Phaser.Scene
 
             console.log(`crit: ${random}`);
 
-            random<10? (battleparams.Critflag = true,characterparams.BDM = characterparams.BDM*characterparams.CritD, battleparams.eventslog.push(`Turn ${battleparams.turn}: Critical strike! Roll: ${random}`)) : (characterparams.BDM = characterparams.BDM) ;
+            let bonus = battleparams.styles[battleparams.choosedstyle].critbonus;
+
+            random<10+bonus? (battleparams.Critflag = true,characterparams.BDM = characterparams.BDM*characterparams.CritD, battleparams.eventslog.push(`Turn ${battleparams.turn}: Critical strike! Roll: ${random}`)) : (characterparams.BDM = characterparams.BDM) ;
           
           
           } else {
             
             let random = this.random(100);
 
-            random<(10+inventoryparams.equippedweapon[0].crit)? ( battleparams.Critflag = true ,characterparams.BDM = characterparams.BDM*(characterparams.CritD*inventoryparams.equippedweapon[0].critDamage), battleparams.eventslog.push(`Turn ${battleparams.turn}: Critical strike! Roll: ${random}`)) : (characterparams.BDM = characterparams.BDM) ;
+            let bonus = battleparams.styles[battleparams.choosedstyle].critbonus;
+
+            random<(10+bonus+inventoryparams.equippedweapon[0].crit)? ( battleparams.Critflag = true ,characterparams.BDM = characterparams.BDM*(characterparams.CritD*inventoryparams.equippedweapon[0].critDamage), battleparams.eventslog.push(`Turn ${battleparams.turn}: Critical strike! Roll: ${random}`)) : (characterparams.BDM = characterparams.BDM) ;
           
             // console.log(characterparams.CritD);
 
@@ -729,7 +753,7 @@ class Battlescene extends Phaser.Scene
 
         this.events.on('ElementChecker', () => {
 
-          if (battleparams.rollitonce[5] ==true) {
+          if ((battleparams.rollitonce[5] ==true)&&(battleparams.styles[battleparams.choosedstyle].elementalanimation == true)) {
 
           if((inventoryparams.equippedweapon[0] == undefined)||(inventoryparams.equippedweapon[0].length == 0)) {
 
@@ -888,11 +912,13 @@ class Battlescene extends Phaser.Scene
 
           let random = this.random(100)/100;
 
+          let bonus = battleparams.styles[battleparams.choosedstyle].luckbonus;
+
           // console.log(random, characterparams.Luck , random< characterparams.Luck);
 
             console.log(`luck: ${random}`);
 
-          if (random<characterparams.Luck)  {let perfectstrike = battleparams.enemy[battleparams.enemy.length-1].HP*0.10 ;battleparams.enemy[battleparams.enemy.length-1].HP = battleparams.enemy[battleparams.enemy.length-1].HP*0.9;
+          if (random<characterparams.Luck+bonus)  {let perfectstrike = battleparams.enemy[battleparams.enemy.length-1].HP*0.10 ;battleparams.enemy[battleparams.enemy.length-1].HP = battleparams.enemy[battleparams.enemy.length-1].HP*0.9;
             
             battleparams.eventslog.push(`Turn ${battleparams.turn}: Luck! You made a perfect strike dealing ${perfectstrike} damages! Roll: ${random}`);
           
@@ -930,7 +956,7 @@ class Battlescene extends Phaser.Scene
 
             console.log(random, delta/100);
   
-            if (random<delta/100)  {battleparams.enemy[battleparams.enemy.length-1].BDM = 0.0001;
+            if (random<delta/100)  {battleparams.enemy[battleparams.enemy.length-1].BDM = 0.5;
             
               battleparams.eventslog.push(`Turn ${battleparams.turn}: You get an extra-attack !! Roll: ${random}`)
 
@@ -943,6 +969,36 @@ class Battlescene extends Phaser.Scene
             battleparams.rollitonce[4] = false;
   
           } 
+
+
+        })
+
+
+        this.events.on('BleedStacker', () => {
+
+          let stackBDM = (characterparams.fire+characterparams.ice+characterparams.thunder+characterparams.earth*2)+4;
+
+          let stackblast = inventoryparams.equippedweapon[0].attack*stackBDM;
+    
+          battleparams.enemy[battleparams.enemy.length-1].stacktrigger>0? (battleparams.enemy[battleparams.enemy.length-1].stacktrigger -= 1,
+            
+            battleparams.eventslog.push(`Turn ${battleparams.turn}: You stack one bleed, ${battleparams.enemy[battleparams.enemy.length-1].stacktrigger} stacks remaining before stagger your enemy.`),
+            
+            battleparams.sequence.push('player-attack','enemy-gethit')
+            
+            ) : (battleparams.enemy[battleparams.enemy.length-1].HP= battleparams.enemy[battleparams.enemy.length-1].HP-stackblast,
+
+              battleparams.enemy[battleparams.enemy.length-1].stacktrigger = battleparams.enemy[battleparams.enemy.length-1].defaultstacktrigger,
+    
+          battleparams.eventslog.push(`Turn ${battleparams.turn}: You deal ${stackblast} damages from bleeding.`),
+  
+          battleparams.damageturnlog.push(stackblast),
+
+          battleparams.sequence.push(`fx-fire!player`,`fx-ice!player`,`fx-thunder!player`,`fx-earth!player`,'enemy-gethit','enemy-idle'));
+
+          battleparams.handleonce[0] = false;
+    
+          console.log(battleparams.enemy[battleparams.enemy.length-1].stacktrigger);
 
 
         })
@@ -966,7 +1022,7 @@ class Battlescene extends Phaser.Scene
 
       this.events.on('Handleequippedweapon', () =>  {
 
-        if(battleparams.handleonce[0] == true) {
+        if((battleparams.handleonce[0] == true)&&(battleparams.styles[battleparams.choosedstyle].stackdamage== 0)) {
 
           battleparams.Critflag == true? (battleparams.Critflag = false, battleparams.sequence.push('player-attack','enemy-gethit')) : battleparams.sequence.push('player-attack2','enemy-gethit');
 
@@ -974,11 +1030,11 @@ class Battlescene extends Phaser.Scene
 
         else { characterparams.outputdamage.push(characterparams.BDM*inventoryparams.equippedweapon[0].attack);}
 
-        battleparams.enemy[battleparams.enemy.length-1].outputdamage.push(battleparams.enemy[battleparams.enemy.length-1].BDM*battleparams.enemy[battleparams.enemy.length-1].attack);
-    
-  
+        let enemydamage = battleparams.enemy[battleparams.enemy.length-1].BDM*battleparams.enemy[battleparams.enemy.length-1].attack;
 
-        characterparams.HP = characterparams.HP - battleparams.enemy[battleparams.enemy.length-1].BDM*battleparams.enemy[battleparams.enemy.length-1].attack;
+        battleparams.enemy[battleparams.enemy.length-1].outputdamage.push(enemydamage);
+    
+        characterparams.HP = characterparams.HP - enemydamage;
 
         
         if(inventoryparams.equippedweapon[0] == undefined) {
@@ -1005,6 +1061,22 @@ class Battlescene extends Phaser.Scene
 
       battleparams.handleonce[0] = false;
 
+     } else if ((battleparams.styles[battleparams.choosedstyle].stackdamage== 1)&&(inventoryparams.equippedweapon[0] != undefined)) {
+
+      console.log(battleparams.enemy, battleparams.enemy[battleparams.enemy.length-1].BDM, battleparams.enemy[battleparams.enemy.length-1].attack);
+
+      let enemydamage = battleparams.enemy[battleparams.enemy.length-1].BDM*battleparams.enemy[battleparams.enemy.length-1].attack;
+
+      battleparams.enemy[battleparams.enemy.length-1].outputdamage.push(enemydamage);
+    
+      characterparams.HP = characterparams.HP - enemydamage;
+
+      battleparams.eventslog.push(`Turn ${battleparams.turn}: You received ${enemydamage} damages.`)
+
+          this.events.emit('BleedStacker');
+
+          battleparams.handleonce[0] = false;
+
      }
 
 
@@ -1013,7 +1085,7 @@ class Battlescene extends Phaser.Scene
 
       this.events.on('double', () => {
 
-        if(battleparams.handleonce[1] == true) {
+        if((battleparams.handleonce[1] == true)&&(battleparams.styles[battleparams.choosedstyle].stackdamage== 0)) {
 
         if(inventoryparams.equippedweapon[0] == undefined) {characterparams.outputdamage.push(characterparams.BDM*inventoryparams.weaponset[0].attack);} 
 
@@ -1049,8 +1121,16 @@ class Battlescene extends Phaser.Scene
 
     }
 
+        else if ((battleparams.styles[battleparams.choosedstyle].stackdamage== 1)&&(inventoryparams.equippedweapon[0] != undefined)) {
+
+      this.events.emit('BleedStacker');
+
+
+      };
+
       battleparams.handleonce[1] = false;
       battleparams.Attacktwice= false;
+
 
       })
 
@@ -1626,7 +1706,7 @@ class Battlescene extends Phaser.Scene
 
 
     class Enemy {
-      constructor(health, attack, element, element2, HP, BDM, outputdamage, level, speed, potencie, defaultBDM) {
+      constructor(health, attack, element, element2, HP, BDM, outputdamage, level, speed, potencie, defaultBDM, stacktrigger, defaultstacktrigger) {
         this.health = health;
         this.attack = attack;
         this.element = element;
@@ -1638,7 +1718,9 @@ class Battlescene extends Phaser.Scene
         this.speed = speed;
         this.potencie = potencie;
         this.defaultBDM = defaultBDM;
-  
+        this.stacktrigger = stacktrigger;
+        this.defaultstacktrigger = defaultstacktrigger;
+
       }
     
 

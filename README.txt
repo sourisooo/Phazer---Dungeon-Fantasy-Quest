@@ -53,7 +53,7 @@ Give a garantees extra turn attack round (Minimun 2 attack rounds per turn)
 Increase the speed level by 30 meaning +30% to have an extra atack (Putting the maximun cap speed level 150 providing 70% of chance to prock extra attack)
 More tanky than other style with more chance to prock perfect strike (4 perfects strike at maximum occurence vs 2 for others)
 Good damage scaling with the enemy power having the best perfect strike occurence (perfect strike provide 50% of reduction damage for one round while doing damage based an enemy HP, and an chance to prock perfect strike is given each time you attack your enemy as main attack or extra attack)
-Dont take benefit of weapon crit chance and crit damage, lowest crit chance style
+Dont take benefit of weapon crit chance and crit damage, low crit chance style (10%) as the bleeding style (0%)
 Dont take any benefit from element damage and type
 
 -Two swords:

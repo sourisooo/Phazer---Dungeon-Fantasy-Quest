@@ -48,7 +48,7 @@ Incoming soon: new style available.
 Updated at 14/03/2024
 Adding new game styles:
 - Bared Hands: 
-Allow 2 extras opportunies to act (total of 4 attack round against 1/2 for others)
+Allow 2 extras opportunies to act (total of 4 attack round against 1/2 for others, allowing up to 8 attacks including critical, normal, extra and perfect strike)
 Give a garantees extra turn attack round (Minimun 2 attack rounds per turn)
 Increase the speed level by 30 meaning +30% to have an extra atack (Putting the maximun cap speed level 150 providing 70% of chance to prock extra attack)
 More tanky than other style with more chance to prock perfect strike (4 perfects strike at maximum occurence vs 2 for others)

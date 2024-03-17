@@ -1890,6 +1890,7 @@ const TILES = {
      exitroom = [];
      saveplayercoordinate = [];
      discoverdrooms = [];
+     dontallowbattle = false;
 
   
     constructor() {
@@ -2150,13 +2151,15 @@ const TILES = {
 
           if ( currentroom == trainingmapparams.exitroom[trainingmapparams.exitroom.length-1]){
 
-            console.log(this.scene);
+             trainingmapparams.dontallowbattle = true;
 
              let message = new Message(`Endmessage`, this.scene, 800, 600, `You find the exit!` );
 
             message.messagegen(48).setScrollFactor(0);
 
             setTimeout(() => {
+
+              trainingmapparams.dontallowbattle = false;
 
               this.resetdungeon(); this.scene.stop().start('Main');
 
@@ -2227,7 +2230,7 @@ const TILES = {
               
                   trainingmapparams.player.y += th;
                     this.lastMoveTime = time;
-                    this.randomizebattle();
+                    trainingmapparams.dontallowbattle == false ? this.randomizebattle() : '';
                 }
             }
             else if (this.cursors.up.isDown)
@@ -2237,7 +2240,7 @@ const TILES = {
      
                   trainingmapparams.player.y -= th;
                     this.lastMoveTime = time;
-                    this.randomizebattle();
+                    trainingmapparams.dontallowbattle == false ? this.randomizebattle() : '';
                 }
             }
 
@@ -2248,7 +2251,7 @@ const TILES = {
 
                   trainingmapparams.player.x -= tw;
                     this.lastMoveTime = time;
-                    this.randomizebattle();
+                    trainingmapparams.dontallowbattle == false ? this.randomizebattle() : '';
                 }
             }
             else if (this.cursors.right.isDown)
@@ -2258,7 +2261,7 @@ const TILES = {
           
                   trainingmapparams.player.x += tw;
                     this.lastMoveTime = time;
-                    this.randomizebattle();
+                    trainingmapparams.dontallowbattle == false ? this.randomizebattle() : '';
                 }
             }
         }

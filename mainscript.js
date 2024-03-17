@@ -1087,7 +1087,7 @@ class Battlescene extends Phaser.Scene
 
           battleparams.enemy[battleparams.enemy.length-1].HP = battleparams.enemy[battleparams.enemy.length-1].HP  - characterparams.BDM*inventoryparams.equippedweapon[0].attack;
 
-        battleparams.eventslog.push(`Turn ${battleparams.turn}: You deal ${Math.round(characterparams.BDM*inventoryparams.equippedweapon[0].attack)} damages. You receivedstck0 ${Math.round(battleparams.enemy[battleparams.enemy.length-1].BDM*battleparams.enemy[battleparams.enemy.length-1].attack)} damages.`)
+        battleparams.eventslog.push(`Turn ${battleparams.turn}: You deal ${Math.round(characterparams.BDM*inventoryparams.equippedweapon[0].attack)} damages. You received ${Math.round(battleparams.enemy[battleparams.enemy.length-1].BDM*battleparams.enemy[battleparams.enemy.length-1].attack)} damages.`)
 
         battleparams.damageturnlog.push(Math.round(characterparams.BDM*inventoryparams.equippedweapon[0].attack));
 
@@ -1097,7 +1097,7 @@ class Battlescene extends Phaser.Scene
 
       battleparams.handleonce[0] = false;
 
-     } else if ((battleparams.styles[battleparams.choosedstyle].stackdamage== 1)&&(inventoryparams.equippedweapon[0] != undefined)) {
+     } else if ((battleparams.styles[battleparams.choosedstyle].stackdamage== 1)&&(inventoryparams.equippedweapon[0] != undefined)&&(battleparams.handleonce[0] == true)) {
 
       console.log(battleparams.enemy, battleparams.enemy[battleparams.enemy.length-1].BDM, battleparams.enemy[battleparams.enemy.length-1].attack);
 
@@ -2196,7 +2196,7 @@ const TILES = {
 
       // console.log(random);
     
-      random<0.05? (trainingmapparams.saveplayercoordinate=[],trainingmapparams.saveplayercoordinate.push({x:trainingmapparams.player.x, y:trainingmapparams.player.y},this.scene.pause,this.scene.start('Battle'))) : '';
+      random<0.015? (trainingmapparams.saveplayercoordinate=[],trainingmapparams.saveplayercoordinate.push({x:trainingmapparams.player.x, y:trainingmapparams.player.y},this.scene.pause,this.scene.start('Battle'))) : '';
 
 
     }

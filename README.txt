@@ -1,5 +1,28 @@
 Dungeon Fantasy Quest
 
+Global Features:
+Randomly generated dungeon with random exit.
+Persistance of every data concerning the dungeon until completion.
+Random encounter.
+Heroes gains customable power after each battle as well as enemy.
+Few styles usables having direct impact on heroes damage based on the stats scheme.
+After each battle, heroes received a weapon depending on the level of the battle.
+Animations are matching every attack that have been activated during one round. Coherence 
+between the number and type of attack as been performed during one round and the animations output.
+Dynamic displays of HP and damage of both enemy and heroes.
+Dynamic messages of what was happen recently.
+Style can be change in battle.
+Many way to play the game, many choices of buff reward after each battle.
+
+Updated at 17/03/2024
+Adding the new style: bleeding style. Your attack no longer make damage.
+Instead you accumulate on enemy bleeding wound  until you reach a certain amounts of bleeding woud(4-8) depending on your enemy and deal damage based on your elemental damage.
+Your attack no longer make critical strick and perfectstrike.
+Elemental weakness cannot be exploited as the same for type multiplier damage.
+
+New feature:
+Styles can also be change in battle. Last weapons of your arsenal will be automaticlly equipped.
+
 Updated at 16/03/2024
 New maze/dungeon generator with random encounter/battle, find the exit and survive the assault!
 

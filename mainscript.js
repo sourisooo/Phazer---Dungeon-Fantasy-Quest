@@ -317,19 +317,19 @@ class Battlescene extends Phaser.Scene
 
       let Activatestandard = this.add.text(100, 340, `Activate Standard style`, { font: '24px Arial', fill: '#ffffff' }).setInteractive();
 
-      Activatestandard.on('pointerdown', () => (characterparams.handlestyle(0)));
+      Activatestandard.on('pointerdown', () => (battleparams.battleover == false?characterparams.handlestyle(0):''));
 
       let Activatebarehands = this.add.text(100, 380, `Activate Barehands style`, { font: '24px Arial', fill: '#ffffff' }).setInteractive();
 
-      Activatebarehands.on('pointerdown', () => (characterparams.handlestyle(1)));
+      Activatebarehands.on('pointerdown', () => (battleparams.battleover == false?characterparams.handlestyle(1):''));
 
       let Activatesdouble = this.add.text(100, 420, `Activate Doublesword style`, { font: '24px Arial', fill: '#ffffff' }).setInteractive();
 
-      Activatesdouble.on('pointerdown', () => (characterparams.handlestyle(2)));
+      Activatesdouble.on('pointerdown', () => (battleparams.battleover == false?characterparams.handlestyle(2):''));
 
       let Activatesstack = this.add.text(100, 460, `Activate Bleeding style`, { font: '24px Arial', fill: '#ffffff' }).setInteractive();
 
-      Activatesstack.on('pointerdown', () => (characterparams.handlestyle(3)));
+      Activatesstack.on('pointerdown', () => (battleparams.battleover == false?characterparams.handlestyle(3):''));
 
       battleparams.damagedoneTxt = this.add.text(100, 180, `${characterparams.outputdamage[battleparams.turn-1]}`, { font: '32px Arial', fill: 'green' });
 
@@ -1083,11 +1083,11 @@ class Battlescene extends Phaser.Scene
 
           // console.log(battleparams.eventslog);
 
-        } else {
+        } else if ((battleparams.styles[battleparams.choosedstyle].stackdamage== 0)&&(inventoryparams.equippedweapon[0] != undefined)){
 
           battleparams.enemy[battleparams.enemy.length-1].HP = battleparams.enemy[battleparams.enemy.length-1].HP  - characterparams.BDM*inventoryparams.equippedweapon[0].attack;
 
-        battleparams.eventslog.push(`Turn ${battleparams.turn}: You deal ${Math.round(characterparams.BDM*inventoryparams.equippedweapon[0].attack)} damages. You received ${Math.round(battleparams.enemy[battleparams.enemy.length-1].BDM*battleparams.enemy[battleparams.enemy.length-1].attack)} damages.`)
+        battleparams.eventslog.push(`Turn ${battleparams.turn}: You deal ${Math.round(characterparams.BDM*inventoryparams.equippedweapon[0].attack)} damages. You receivedstck0 ${Math.round(battleparams.enemy[battleparams.enemy.length-1].BDM*battleparams.enemy[battleparams.enemy.length-1].attack)} damages.`)
 
         battleparams.damageturnlog.push(Math.round(characterparams.BDM*inventoryparams.equippedweapon[0].attack));
 
@@ -1107,7 +1107,7 @@ class Battlescene extends Phaser.Scene
     
       characterparams.HP = characterparams.HP - enemydamage;
 
-      battleparams.eventslog.push(`Turn ${battleparams.turn}: You received ${enemydamage} damages.`)
+      battleparams.eventslog.push(`Turn ${battleparams.turn}: You receivedstk1 ${enemydamage} damages.`)
 
           this.events.emit('BleedStacker');
 
@@ -1115,7 +1115,7 @@ class Battlescene extends Phaser.Scene
 
      }
 
-            battleparams.handleonce[0] = false;
+     battleparams.handleonce[0] = false;
 
       })
 

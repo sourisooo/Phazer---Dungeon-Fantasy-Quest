@@ -129,9 +129,12 @@ class CharacterMenu extends Phaser.Scene
           case 0: {
 
             inventoryparams.equippedweapon.pop();
+            inventoryparams.equippedweapon.pop();
+            inventoryparams.equippedweapon[0]= inventoryparams.weaponset[inventoryparams.weaponset.length-1];
             battleparams.styles[battleparams.choosedstyle].equiped2weapon = false;
             battleparams.styles[battleparams.choosedstyle].nesteddouble = false;
             // console.log(inventoryparams.equippedweapon);
+            console.log(battleparams.choosedstyle);
 
           }
             
@@ -144,6 +147,7 @@ class CharacterMenu extends Phaser.Scene
               battleparams.styles[battleparams.choosedstyle].equiped2weapon = false;
               battleparams.styles[battleparams.choosedstyle].nesteddouble = true;
               // console.log(inventoryparams.equippedweapon);
+              console.log(battleparams.choosedstyle);
   
             }
               
@@ -151,8 +155,13 @@ class CharacterMenu extends Phaser.Scene
 
               case 2: {
 
+                inventoryparams.equippedweapon.pop();
+                inventoryparams.equippedweapon.pop();
+                inventoryparams.equippedweapon[0]= inventoryparams.weaponset[inventoryparams.weaponset.length-1];
+                inventoryparams.weaponset[inventoryparams.weaponset.length-2]? inventoryparams.equippedweapon[1]= inventoryparams.weaponset[inventoryparams.weaponset.length-2]: inventoryparams.equippedweapon[1]=inventoryparams.weaponset[inventoryparams.weaponset.length-1];
                 battleparams.styles[battleparams.choosedstyle].equiped2weapon = true;
                 battleparams.styles[battleparams.choosedstyle].nesteddouble = false;
+                console.log(battleparams.choosedstyle);
     
               }
                 
@@ -161,9 +170,12 @@ class CharacterMenu extends Phaser.Scene
                 case 3: {
 
                   inventoryparams.equippedweapon.pop();
+                  inventoryparams.equippedweapon.pop();
+                  inventoryparams.equippedweapon[0]= inventoryparams.weaponset[inventoryparams.weaponset.length-1];
                   battleparams.styles[battleparams.choosedstyle].equiped2weapon = false;
                   battleparams.styles[battleparams.choosedstyle].nesteddouble = false;
                   // console.log(inventoryparams.equippedweapon);
+                  console.log(battleparams.choosedstyle);
       
                 }
                   
@@ -299,7 +311,25 @@ class Battlescene extends Phaser.Scene
 
       let enemyannouce = this.add.text(1100, 100, `An enemy is coming: Weakness: ${battleparams.enemy[battleparams.enemy.length-1].element} & Strenght: ${battleparams.enemy[battleparams.enemy.length-1].element2} & Type: ${battleparams.enemy[battleparams.enemy.length-1].potencie}`, { font: '16px Arial', fill: '#ffffff' });
 
+      battleparams.currentstyle = this.add.text(100, 260, `Currentstyle: ${characterparams.choosedstyle}`, { font: '24px Arial', fill: '#ffffff' });
+
       battleparams.attackbutton = this.add.text(100, 300, `Click me to attack`, { font: '32px Arial', fill: '#ffffff' }).setInteractive();
+
+      let Activatestandard = this.add.text(100, 340, `Activate Standard style`, { font: '24px Arial', fill: '#ffffff' }).setInteractive();
+
+      Activatestandard.on('pointerdown', () => (characterparams.handlestyle(0)));
+
+      let Activatebarehands = this.add.text(100, 380, `Activate Barehands style`, { font: '24px Arial', fill: '#ffffff' }).setInteractive();
+
+      Activatebarehands.on('pointerdown', () => (characterparams.handlestyle(1)));
+
+      let Activatesdouble = this.add.text(100, 420, `Activate Doublesword style`, { font: '24px Arial', fill: '#ffffff' }).setInteractive();
+
+      Activatesdouble.on('pointerdown', () => (characterparams.handlestyle(2)));
+
+      let Activatesstack = this.add.text(100, 460, `Activate Bleeding style`, { font: '24px Arial', fill: '#ffffff' }).setInteractive();
+
+      Activatesstack.on('pointerdown', () => (characterparams.handlestyle(3)));
 
       battleparams.damagedoneTxt = this.add.text(100, 180, `${characterparams.outputdamage[battleparams.turn-1]}`, { font: '32px Arial', fill: 'green' });
 
@@ -1476,6 +1506,8 @@ class Battlescene extends Phaser.Scene
       battleparams.HHPTxt.setText(`Your HP: ${characterparams.HP}`);
 
       battleparams.HPTxt.setText(`Enemy HP: ${battleparams.enemy[battleparams.enemy.length-1].HP }`);
+
+      battleparams.currentstyle.setText(`Currentstyle: ${battleparams.styles[battleparams.choosedstyle].name}`);
 
     }
 

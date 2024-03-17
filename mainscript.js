@@ -202,7 +202,7 @@ class Battlescene extends Phaser.Scene
   doitonce = [true, true];
   eventslog = [];
   levelstacker = 1;
-  rollitonce = [true,true,true,true, true, true, true, true, true, true];
+  rollitonce = [true,true,true,true, true, true, true, true, true, true,true];
   potentie = ['physical', 'magical'];
   element = ['fire', 'ice', 'thunder', 'earth'];
   nbwin = 0;
@@ -976,6 +976,10 @@ class Battlescene extends Phaser.Scene
 
         this.events.on('BleedStacker', () => {
 
+          if(battleparams.rollitonce[10] == true){
+
+            battleparams.rollitonce[10] = false;
+
           let stackBDM = (characterparams.fire+characterparams.ice+characterparams.thunder+characterparams.earth*2)+4;
 
           let stackblast = inventoryparams.equippedweapon[0].attack*stackBDM;
@@ -999,6 +1003,8 @@ class Battlescene extends Phaser.Scene
           battleparams.handleonce[0] = false;
     
           console.log(battleparams.enemy[battleparams.enemy.length-1].stacktrigger);
+
+            };
 
 
         })
@@ -1141,7 +1147,7 @@ class Battlescene extends Phaser.Scene
 
         characterparams.BDM = characterparams.DefaultBDM;
   
-        battleparams.rollitonce = [true,true,false,true, false, true, false, false, false, true];
+        battleparams.rollitonce = [true,true,false,true, false, true, false, false, false, true,true];
 
       this.events.emit('CritChecker');
 
@@ -1325,7 +1331,7 @@ class Battlescene extends Phaser.Scene
 
       battleparams.doitonce = [true, true];
 
-      battleparams.rollitonce = [true,true,true,true, true, true, true, true, true, true];
+      battleparams.rollitonce = [true,true,true,true, true, true, true, true, true, true, true];
 
       battleparams.countitonce = true;
 

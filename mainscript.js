@@ -137,6 +137,7 @@ class CharacterMenu extends Phaser.Scene
             battleparams.styles[battleparams.choosedstyle].nesteddouble = false;
             // console.log(inventoryparams.equippedweapon);
             console.log(battleparams.choosedstyle);
+            battleparams.styles[battleparams.choosedstyle].elementalanimation = true;
 
           }
             
@@ -150,6 +151,7 @@ class CharacterMenu extends Phaser.Scene
               battleparams.styles[battleparams.choosedstyle].nesteddouble = true;
               // console.log(inventoryparams.equippedweapon);
               console.log(battleparams.choosedstyle);
+              battleparams.styles[battleparams.choosedstyle].elementalanimation = true;
   
             }
               
@@ -164,6 +166,7 @@ class CharacterMenu extends Phaser.Scene
                 battleparams.styles[battleparams.choosedstyle].equiped2weapon = true;
                 battleparams.styles[battleparams.choosedstyle].nesteddouble = false;
                 console.log(battleparams.choosedstyle);
+                battleparams.styles[battleparams.choosedstyle].elementalanimation = true;
     
               }
                 
@@ -178,6 +181,7 @@ class CharacterMenu extends Phaser.Scene
                   battleparams.styles[battleparams.choosedstyle].nesteddouble = false;
                   // console.log(inventoryparams.equippedweapon);
                   console.log(battleparams.choosedstyle);
+                  battleparams.styles[battleparams.choosedstyle].elementalanimation = false;
       
                 }
                   

@@ -72,10 +72,10 @@ class CharacterMenu extends Phaser.Scene
       let stat6 = this.add.text(100, 260, `Evade: ${characterparams.Evasion} (Full damage reduction, , Max value: 33%)`, { font: '16px Arial', fill: '#ffffff' });
       let stat7 = this.add.text(100, 340, `Physical potencie: ${characterparams.PhysicalP} (Provide damage and defense against Physical type foes)`, { font: '16px Arial', fill: '#ffffff' });
       let stat8 = this.add.text(100, 380, `Magical potencie: ${characterparams.MagicalP} (Provide damage and defense against Magical type foes)`, { font: '16px Arial', fill: '#ffffff' });
-      let stat9 = this.add.text(100, 420, `Fire potencie: ${characterparams.fire} (deal double extra-damage against a vulnerablity. reduce your elemental defense)`, { font: '16px Arial', fill: '#ffffff' });
-      let stat10 = this.add.text(100, 460, `Ice potencie: ${characterparams.ice} ( deal double extra-damage against a vulnerablity. reduce your elemental defense)`, { font: '16px Arial', fill: '#ffffff' });
-      let stat11 = this.add.text(100, 500, `Thunder potencie: ${characterparams.thunder} ( deal double extra-damage against a vulnerablity. reduce your elemental defense)`, { font: '16px Arial', fill: '#ffffff' });
-      let stat12 = this.add.text(100, 540, `Earth potencie: ${characterparams.earth} ( deal double extra-damage against a vulnerablity. reduce your elemental defense)`, { font: '16px Arial', fill: '#ffffff' });
+      let stat9 = this.add.text(100, 420, `Fire potencie: ${characterparams.fire} (deal extra-damage against a vulnerablity. reduce your elemental defense)`, { font: '16px Arial', fill: '#ffffff' });
+      let stat10 = this.add.text(100, 460, `Ice potencie: ${characterparams.ice} ( deal extra-damage against a vulnerablity. reduce your elemental defense)`, { font: '16px Arial', fill: '#ffffff' });
+      let stat11 = this.add.text(100, 500, `Thunder potencie: ${characterparams.thunder} ( deal extra-damage against a vulnerablity. reduce your elemental defense)`, { font: '16px Arial', fill: '#ffffff' });
+      let stat12 = this.add.text(100, 540, `Earth potencie: ${characterparams.earth} ( deal extra-damage against a vulnerablity. reduce your elemental defense)`, { font: '16px Arial', fill: '#ffffff' });
       let stat13 = this.add.text(100, 580, `Speed: ${characterparams.Speed} (Opportunity to strike again: , Max value: 125)`, { font: '16px Arial', fill: '#ffffff' });
       let stat14 = this.add.text(100, 620, `Luck: ${characterparams.Luck} (Remove 10% of the current enemy HP, Max value: 25%)`, { font: '16px Arial', fill: '#ffffff' });
       
@@ -817,7 +817,7 @@ class Battlescene extends Phaser.Scene
             
             {
               
-              inventoryparams.equippedweapon[1]?.element? characterparams.BDM=characterparams.BDM*(this.elementcompare()+1) : characterparams.BDM=characterparams.BDM*(characterparams[El]+1);
+              inventoryparams.equippedweapon[1]?.element? characterparams.BDM=characterparams.BDM*((this.elementcompare())*2) : characterparams.BDM=characterparams.BDM*(characterparams[El]*2);
 
               console.log(`elem damage:${characterparams.BDM}`);
 
@@ -1727,19 +1727,19 @@ class Battlescene extends Phaser.Scene
 
       reward6.on('pointerdown', () => {characterparams.Luck = Math.min((characterparams.Luck+0.1),0.25); this.scene.stop().start('Trainingmap') });
 
-      let reward7 = this.add.text(100, 340, `Click me to Buff your fire potencie by 100%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
+      let reward7 = this.add.text(100, 340, `Click me to Buff your fire potencie by 300%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
 
       reward7.on('pointerdown', () => {characterparams.fire = (characterparams.fire+3); characterparams.iceResistance = (characterparams.iceResistance+0.1); this.scene.stop().start('Trainingmap') });
 
-      let reward8 = this.add.text(100, 380, `Click me to Buff your ice potencie by 100%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
+      let reward8 = this.add.text(100, 380, `Click me to Buff your ice potencie by 300%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
 
       reward8.on('pointerdown', () => {characterparams.ice = (characterparams.ice+3);characterparams.fireResistance = (characterparams.fireResistance+0.1); this.scene.stop().start('Trainingmap') });
 
-      let reward9 = this.add.text(100, 420, `Click me to Buff your thunder potencie by 100%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
+      let reward9 = this.add.text(100, 420, `Click me to Buff your thunder potencie by 300%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
 
       reward9.on('pointerdown', () => {characterparams.thunder = (characterparams.thunder+3);characterparams.earthResistance = (characterparams.earthResistance+0.1); this.scene.stop().start('Trainingmap') });
 
-      let reward10 = this.add.text(100, 460, `Click me to Buff your earth potencie by 100%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
+      let reward10 = this.add.text(100, 460, `Click me to Buff your earth potencie by 300%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
 
       reward10.on('pointerdown', () => {characterparams.earth = (characterparams.earth+3); characterparams.thunderResistance = (characterparams.thunderResistance +0.1);  this.scene.stop().start('Trainingmap') });
 

@@ -2,6 +2,7 @@ Dungeon Fantasy Quest
 
 Updated at 18/03/2024
 One chest can be found and granted a permanant +10attack bonus.
+The chest is randomly placed.
 The chest can provided the buff once time per dungeon.
 The chest is reset when the dungeon is completed/the exit is founded.
 

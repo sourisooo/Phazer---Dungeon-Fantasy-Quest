@@ -238,9 +238,9 @@ class Battlescene extends Phaser.Scene
 
   styles = [
   {name:'standard style', speedbonus: 0, equiped1weapon:true, equiped2weapon:false, nesteddouble: false, stackdamage:0, critbonus:0, luckbonus:0, elementalanimation: true},
-   {name:'barehands style', speedbonus: 35, equiped1weapon:false, equiped2weapon:false, nesteddouble: true, stackdamage:0, critbonus:0, luckbonus: 10, elementalanimation: true},
+   {name:'barehands style', speedbonus: 35, equiped1weapon:false, equiped2weapon:false, nesteddouble: true, stackdamage:0, critbonus:0, luckbonus: 0.1, elementalanimation: true},
     {name:'doublesword style', speedbonus: -100, equiped1weapon:true, equiped2weapon:true, nesteddouble: false, stackdamage:0, critbonus:0, luckbonus:0, elementalanimation: true},
-    {name:'bleeding style', speedbonus: 0, equiped1weapon:true, equiped2weapon:false, nesteddouble: false, stackdamage:1, critbonus:-50, luckbonus:-50, elementalanimation: false},
+    {name:'bleeding style', speedbonus: 0, equiped1weapon:true, equiped2weapon:false, nesteddouble: false, stackdamage:1, critbonus:-50, luckbonus:-0.5, elementalanimation: false},
 
   ];
 

@@ -1020,7 +1020,7 @@ class Battlescene extends Phaser.Scene
 
           let stackBDM = (characterparams.fire+characterparams.ice+characterparams.thunder+characterparams.earth)*4+4;
 
-          let stackblast = weapondamage*stackBDM*characterparams.defaultBDM;
+          let stackblast = weapondamage*stackBDM*characterparams.DefaultBDM;
     
           battleparams.enemy[battleparams.enemy.length-1].stacktrigger>0? (battleparams.enemy[battleparams.enemy.length-1].stacktrigger -= 1,
             

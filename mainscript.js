@@ -1848,7 +1848,7 @@ class Battlescene extends Phaser.Scene
 
 
   //  Toggle this to disable the room hiding / layer scale, so you can see the extent of the map easily!
-const debug = false;
+const debug = true;
 
 // Tile index mapping to make the code more readable
 const TILES = {
@@ -1938,6 +1938,8 @@ const TILES = {
       trainingmapparams.doitonce = [true, true];
       trainingmapparams.dungeoncopie = [];
       trainingmapparams.getrewardonce = true;
+      trainingmapparams.treasure = 0;
+      trainingmapparams.treasureroom = [];
 
     }
 

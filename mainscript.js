@@ -54,6 +54,8 @@ class CharacterMenu extends Phaser.Scene
     create ()
     {
 
+      console.log( battleparams.dungeoncompletionbonus);
+
       this.sprites = this.physics.add.group({ immovable: false });
 
       let sprite = this.sprites.create(1600, 500, 'charactersheet');
@@ -228,7 +230,7 @@ class Battlescene extends Phaser.Scene
   sequence = [];
   damageturnlog = [];
   Critflag = false;
-
+  dungeoncompletionbonus = 0;
 
   styles = [
   {name:'standard style', speedbonus: 0, equiped1weapon:true, equiped2weapon:false, nesteddouble: false, stackdamage:0, critbonus:0, luckbonus:0, elementalanimation: true},
@@ -1006,13 +1008,15 @@ class Battlescene extends Phaser.Scene
 
         this.events.on('BleedStacker', () => {
 
+          let weapondamage = inventoryparams.equippedweapon[0].attack + battleparams.dungeoncompletionbonus;
+
           if(battleparams.rollitonce[10] == true){
 
             battleparams.rollitonce[10] = false;
 
-          let stackBDM = (characterparams.fire+characterparams.ice+characterparams.thunder+characterparams.earth*2)+4;
+          let stackBDM = (characterparams.fire+characterparams.ice+characterparams.thunder+characterparams.earth)*4+4;
 
-          let stackblast = inventoryparams.equippedweapon[0].attack*stackBDM;
+          let stackblast = weapondamage*stackBDM;
     
           battleparams.enemy[battleparams.enemy.length-1].stacktrigger>0? (battleparams.enemy[battleparams.enemy.length-1].stacktrigger -= 1,
             
@@ -1058,13 +1062,18 @@ class Battlescene extends Phaser.Scene
 
       this.events.on('Handleequippedweapon', () =>  {
 
+
         if((battleparams.handleonce[0] == true)&&(battleparams.styles[battleparams.choosedstyle].stackdamage== 0)) {
 
           battleparams.Critflag == true? (battleparams.Critflag = false, battleparams.sequence.push('player-attack','enemy-gethit')) : battleparams.sequence.push('player-attack2','enemy-gethit');
 
         if(inventoryparams.equippedweapon[0] == undefined) {characterparams.outputdamage.push(characterparams.BDM*inventoryparams.weaponset[0].attack);} 
 
-        else { characterparams.outputdamage.push(characterparams.BDM*inventoryparams.equippedweapon[0].attack);}
+        else { 
+            
+          let weapondamage = inventoryparams.equippedweapon[0].attack + battleparams.dungeoncompletionbonus;
+
+          characterparams.outputdamage.push(characterparams.BDM*weapondamage);}
 
         let enemydamage = battleparams.enemy[battleparams.enemy.length-1].BDM*battleparams.enemy[battleparams.enemy.length-1].attack;
 
@@ -1085,11 +1094,13 @@ class Battlescene extends Phaser.Scene
 
         } else if ((battleparams.styles[battleparams.choosedstyle].stackdamage== 0)&&(inventoryparams.equippedweapon[0] != undefined)){
 
-          battleparams.enemy[battleparams.enemy.length-1].HP = battleparams.enemy[battleparams.enemy.length-1].HP  - characterparams.BDM*inventoryparams.equippedweapon[0].attack;
+          let weapondamage = inventoryparams.equippedweapon[0].attack + battleparams.dungeoncompletionbonus;
 
-        battleparams.eventslog.push(`Turn ${battleparams.turn}: You deal ${Math.round(characterparams.BDM*inventoryparams.equippedweapon[0].attack)} damages. You received ${Math.round(battleparams.enemy[battleparams.enemy.length-1].BDM*battleparams.enemy[battleparams.enemy.length-1].attack)} damages.`)
+          battleparams.enemy[battleparams.enemy.length-1].HP = battleparams.enemy[battleparams.enemy.length-1].HP  - characterparams.BDM*weapondamage;
 
-        battleparams.damageturnlog.push(Math.round(characterparams.BDM*inventoryparams.equippedweapon[0].attack));
+        battleparams.eventslog.push(`Turn ${battleparams.turn}: You deal ${Math.round(characterparams.BDM*weapondamage)} damages. You received ${Math.round(battleparams.enemy[battleparams.enemy.length-1].BDM*battleparams.enemy[battleparams.enemy.length-1].attack)} damages.`)
+
+        battleparams.damageturnlog.push(Math.round(characterparams.BDM*weapondamage));
 
         // console.log(battleparams.eventslog);
 
@@ -1126,7 +1137,9 @@ class Battlescene extends Phaser.Scene
 
         if(inventoryparams.equippedweapon[0] == undefined) {characterparams.outputdamage.push(characterparams.BDM*inventoryparams.weaponset[0].attack);} 
 
-        else { characterparams.outputdamage.push(characterparams.BDM*inventoryparams.equippedweapon[0].attack);}
+        else {let weapondamage = inventoryparams.equippedweapon[0].attack + battleparams.dungeoncompletionbonus;
+
+          characterparams.outputdamage.push(characterparams.BDM*weapondamage);}
   
   
         if(inventoryparams.equippedweapon[0] == undefined) {
@@ -1143,12 +1156,14 @@ class Battlescene extends Phaser.Scene
           // console.log(battleparams.eventslog);
   
         } else {
+
+          let weapondamage = inventoryparams.equippedweapon[0].attack + battleparams.dungeoncompletionbonus;
   
-          battleparams.enemy[battleparams.enemy.length-1].HP = battleparams.enemy[battleparams.enemy.length-1].HP  - characterparams.BDM*inventoryparams.equippedweapon[0].attack;
+          battleparams.enemy[battleparams.enemy.length-1].HP = battleparams.enemy[battleparams.enemy.length-1].HP  - characterparams.BDM*weapondamage;
   
-        battleparams.eventslog.push(`Turn ${battleparams.turn}: You deal ${Math.round(characterparams.BDM*inventoryparams.equippedweapon[0].attack)} damages from your extra-attack.`)
+        battleparams.eventslog.push(`Turn ${battleparams.turn}: You deal ${Math.round(characterparams.BDM*weapondamage)} damages from your extra-attack.`)
   
-        battleparams.damageturnlog.push(Math.round(characterparams.BDM*inventoryparams.equippedweapon[0].attack));
+        battleparams.damageturnlog.push(Math.round(characterparams.BDM*weapondamage));
 
         battleparams.Critflag == true? (battleparams.Critflag = false, battleparams.sequence.push('player-attack','enemy-gethit')) : battleparams.sequence.push('player-attack2','enemy-gethit');
 
@@ -1891,6 +1906,9 @@ const TILES = {
      saveplayercoordinate = [];
      discoverdrooms = [];
      dontallowbattle = false;
+     treasure;
+     treasureroom = [];
+     getrewardonce = true;
 
   
     constructor() {
@@ -1964,6 +1982,10 @@ const TILES = {
           trainingmapparams.exit = Math.floor(Math.random() * this.dungeon.rooms.length);
         } while (trainingmapparams.exit == 0);
 
+        do {
+          trainingmapparams.treasure = Math.floor(Math.random() * this.dungeon.rooms.length);
+        } while ((trainingmapparams.treasure == 0)||(trainingmapparams.exit == trainingmapparams.treasure));
+
         trainingmapparams.doitonce[0] = false;
 
       }
@@ -2029,17 +2051,20 @@ const TILES = {
                 this.map.putTileAt(6, x + doors[i].x, y + doors[i].y);
             }
 
-            //  console.log(this.layer);
 
              if (trainingmapparams.exit == index) {
 
              this.layer.putTileAt(81, cx, cy); // Stairs
-
-            //  console.log(room);
-
              trainingmapparams.exitroom.push(room);
 
              };
+
+             if (trainingmapparams.treasure == index) {
+
+              this.layer.putTileAt(166, cx, cy); // Chest
+              trainingmapparams.treasureroom.push(room);
+ 
+              };
 
         }, this);
 
@@ -2161,11 +2186,39 @@ const TILES = {
 
               trainingmapparams.dontallowbattle = false;
 
+              trainingmapparams.getrewardonce = true;
+
               this.resetdungeon(); this.scene.stop().start('Main');
 
             }, 2000)
 
         };
+
+        if ( currentroom == trainingmapparams.treasureroom[trainingmapparams.treasureroom.length-1]){
+
+    
+
+          if (trainingmapparams.getrewardonce == true){
+
+          let message = new Message(`Treasure`, this.scene, 300, 600, `You find  a chest! You get a permanant attack+10 bonus` );
+
+          battleparams.dungeoncompletionbonus = battleparams.dungeoncompletionbonus +10;
+
+          trainingmapparams.getrewardonce = false;
+
+          console.log( battleparams.dungeoncompletionbonus);
+
+          message.messagegen(48).setScrollFactor(0);
+
+          setTimeout(() => {message.name.destroy()},2000);
+
+        };
+
+         
+
+     };
+
+
 
         this.activeRoom = room;
 
@@ -2210,7 +2263,7 @@ const TILES = {
 
       // console.log(random);
     
-      random<0.005? (trainingmapparams.saveplayercoordinate=[],trainingmapparams.saveplayercoordinate.push({x:trainingmapparams.player.x, y:trainingmapparams.player.y},this.scene.pause,this.scene.start('Battle'))) : '';
+      random<0.095? (trainingmapparams.saveplayercoordinate=[],trainingmapparams.saveplayercoordinate.push({x:trainingmapparams.player.x, y:trainingmapparams.player.y}),this.scene.stop().start('Battle')) : '';
 
 
     }

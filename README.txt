@@ -1,5 +1,10 @@
 Dungeon Fantasy Quest
 
+Updated at 18/03/2024
+One chest can be found and granted a permanant +10attack bonus.
+The chest can provided the buff once time per dungeon.
+The chest is reset when the dungeon is completed/the exit is founded.
+
 Global Features:
 Randomly generated dungeon with random exit.
 Persistance of every data concerning the dungeon until completion.

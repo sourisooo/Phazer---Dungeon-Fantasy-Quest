@@ -1,7 +1,7 @@
 Dungeon Fantasy Quest
 
 Updated at 19/03/2024
-Reach the floor 10 and get your score!
+Reach the floor 10 and get your score! 80> A, 150> S!
 Weapon bonus provided by chest scales on the dungeon floor level.
 Minor quality game improvement: Enter in the exit room no longer end the dungeon automaticly.
 

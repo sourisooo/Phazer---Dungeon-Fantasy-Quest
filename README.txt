@@ -1,5 +1,10 @@
 Dungeon Fantasy Quest
 
+Updated at 19/03/2024
+Reach the floor 25 and get your score!
+Weapon bonus provided by chest scales on the dungeon floor level.
+Minor quality game improvement: Enter in the exit room no longer end the dungeon automaticly.
+
 Updated at 18/03/2024
 One chest can be found and granted a permanant +10attack bonus.
 The chest is randomly placed.

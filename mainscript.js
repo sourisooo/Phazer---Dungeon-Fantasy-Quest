@@ -56,6 +56,8 @@ class CharacterMenu extends Phaser.Scene
 
       console.log( battleparams.dungeoncompletionbonus);
 
+      console.log( trainingmapparams.floor );
+
       this.sprites = this.physics.add.group({ immovable: false });
 
       let sprite = this.sprites.create(1600, 500, 'charactersheet');
@@ -86,7 +88,9 @@ class CharacterMenu extends Phaser.Scene
 
       inventory.on('pointerdown', () => (this.scene.stop().start('Inventory')));
 
-      let battlestart = this.add.text(100, 740, `Resume dungeon / Start a new dungeon`, { font: '26px Arial', fill: '#ffffff' }).setInteractive();
+      console.log(inventory);
+
+      let battlestart = this.add.text(100, 740, `Resume dungeon`, { font: '26px Arial', fill: '#ffffff' }).setInteractive();
 
       battlestart.on('pointerdown', () => this.scene.stop().start('Trainingmap'));
 
@@ -1909,12 +1913,15 @@ const TILES = {
      exitroom = [];
      saveplayercoordinate = [];
      discoverdrooms = [];
-     dontallowbattle = false;
      treasure;
      treasureroom = [];
      getrewardonce = true;
+     floor = 1;
+     leveluponce = true;
+     floorsize = 25;
+     winflag = false;
 
-  
+
     constructor() {
       super({key:'Trainingmap'}); // Scene key
 
@@ -1941,15 +1948,19 @@ const TILES = {
       trainingmapparams.discoverdrooms = [];
       trainingmapparams.doitonce = [true, true];
       trainingmapparams.dungeoncopie = [];
-      trainingmapparams.getrewardonce = true;
+      trainingmapparams.getrewardonce = true; 
       trainingmapparams.treasure = 0;
       trainingmapparams.treasureroom = [];
-
+      trainingmapparams.leveluponce = true;
+   
     }
 
 
     create ()
     {
+      let floordisplay = this.add.text(1500, 30, `Actual floor: ${trainingmapparams.floor}`, { font: '40px Arial', fill: '#ffffff' });
+
+      floordisplay.setScrollFactor(0);
 
       characterparams.actualstyle = this.add.text(16, 50, `Actual style`, { font: '26px Arial', fill: '#ffffff' }).setInteractive();
 
@@ -2183,21 +2194,62 @@ const TILES = {
 
           if ( currentroom == trainingmapparams.exitroom[trainingmapparams.exitroom.length-1]){
 
-             trainingmapparams.dontallowbattle = true;
-
-             let message = new Message(`Endmessage`, this.scene, 800, 600, `You find the exit!` );
+             let message = new Message(`Endmessage`, this.scene, 400, 600, `You find the exit!, Do you want to proceed to next floor?` );
 
             message.messagegen(48).setScrollFactor(0);
 
+            let message2 = new Message(`Yes`, this.scene, 400, 700, `Yes, Press ENTER` );
+
+            message2.messagegen(48).setScrollFactor(0);
+
+            this.input.keyboard.on('keydown-ENTER', ()=> {
+
+              if(trainingmapparams.leveluponce == true){
+              
+                trainingmapparams.leveluponce = false;
+              trainingmapparams.floor = trainingmapparams.floor+1;};
+
+              if(trainingmapparams.floor == trainingmapparams.floorsize){
+
+                trainingmapparams.winflag = true;
+      
+                let message3 = new Message(`Congrat`, this.scene, 400, 350, `Congrat! you complete the game!` );
+
+                message3.messagegen(48).setScrollFactor(0);
+
+                let score = battleparams.nbwin*5-battleparams.nblose*3
+
+                let message4 = new Message(`Score`, this.scene, 400, 450, `Your score:${score}` );
+
+                message4.messagegen(48).setScrollFactor(0);
+
+              };
+
+
+              if (trainingmapparams.winflag == false){
+
+        
+              setTimeout(() => {
+
+                this.resetdungeon(); this.scene.stop().start('Main');
+  
+              }, 150)
+
+                } else {{this.input.keyboard.off('keydown-ENTER')}};
+  
+    
+            });
+
             setTimeout(() => {
 
-              trainingmapparams.dontallowbattle = false;
+              message.name.destroy();
 
-              this.resetdungeon(); this.scene.stop().start('Main');
+              message2.name.destroy();
 
-            }, 2000)
+            },1);
 
-        };
+        } else if (( currentroom != trainingmapparams.exitroom[trainingmapparams.exitroom.length-1])){this.input.keyboard.off('keydown-ENTER')};
+
 
         if ( currentroom == trainingmapparams.treasureroom[trainingmapparams.treasureroom.length-1]){
 
@@ -2205,9 +2257,9 @@ const TILES = {
 
           if (trainingmapparams.getrewardonce == true){
 
-          let message = new Message(`Treasure`, this.scene, 300, 600, `You find  a chest! You get a permanant attack+10 bonus` );
+            battleparams.dungeoncompletionbonus = battleparams.dungeoncompletionbonus +10*trainingmapparams.floor;
 
-          battleparams.dungeoncompletionbonus = battleparams.dungeoncompletionbonus +10;
+          let message = new Message(`Treasure`, this.scene, 300, 600, `You find  a chest! You get a permanant attack+${battleparams.dungeoncompletionbonus} bonus` );
 
           trainingmapparams.getrewardonce = false;
 
@@ -2268,7 +2320,7 @@ const TILES = {
 
       // console.log(random);
     
-      random<0.005? (trainingmapparams.saveplayercoordinate=[],trainingmapparams.saveplayercoordinate.push({x:trainingmapparams.player.x, y:trainingmapparams.player.y}),this.scene.stop().start('Battle')) : '';
+      random<0.000? (trainingmapparams.saveplayercoordinate=[],trainingmapparams.saveplayercoordinate.push({x:trainingmapparams.player.x, y:trainingmapparams.player.y}),this.scene.stop().start('Battle')) : '';
 
 
     }
@@ -2288,7 +2340,7 @@ const TILES = {
               
                   trainingmapparams.player.y += th;
                     this.lastMoveTime = time;
-                    trainingmapparams.dontallowbattle == false ? this.randomizebattle() : '';
+                   this.randomizebattle() ;
                 }
             }
             else if (this.cursors.up.isDown)
@@ -2298,7 +2350,7 @@ const TILES = {
      
                   trainingmapparams.player.y -= th;
                     this.lastMoveTime = time;
-                    trainingmapparams.dontallowbattle == false ? this.randomizebattle() : '';
+                    this.randomizebattle() ;
                 }
             }
 
@@ -2309,7 +2361,7 @@ const TILES = {
 
                   trainingmapparams.player.x -= tw;
                     this.lastMoveTime = time;
-                    trainingmapparams.dontallowbattle == false ? this.randomizebattle() : '';
+                    this.randomizebattle() ;
                 }
             }
             else if (this.cursors.right.isDown)
@@ -2319,7 +2371,7 @@ const TILES = {
           
                   trainingmapparams.player.x += tw;
                     this.lastMoveTime = time;
-                    trainingmapparams.dontallowbattle == false ? this.randomizebattle() : '';
+                    this.randomizebattle() ;
                 }
             }
         }

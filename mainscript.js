@@ -1924,10 +1924,10 @@ const TILES = {
      getrewardonce = true;
      floor = 1;
      leveluponce = true;
-     floorsize = 10;
+     floorsize = 2;
      winflag = false;
 
-
+  
     constructor() {
       super({key:'Trainingmap'}); // Scene key
 
@@ -2225,9 +2225,21 @@ const TILES = {
 
                 let score = battleparams.nbwin*5-battleparams.nblose*3
 
-                let message4 = new Message(`Score`, this.scene, 400, 450, `Your score:${score}` );
+                let message4 = new Message(`Score`, this.scene, 400, 450, `Your score: ${score}` );
 
                 message4.messagegen(48).setScrollFactor(0);
+
+                  let rank = '';
+              
+                    if( score>150){rank='S'}
+
+                    else if (score>80) {rank='A'}
+                    
+                     else {rank='unranked'};
+                  
+                let message5 = new Message(`Rank`, this.scene, 900, 450, `Your Rank: ${rank}` );
+
+                message5.messagegen(48).setScrollFactor(0);
 
               };
 

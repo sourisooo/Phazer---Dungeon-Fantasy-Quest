@@ -888,7 +888,7 @@ class Battlescene extends Phaser.Scene
 
           let random = this.random(100)/100;
 
-          random<characterparams.Evasion ? (battleparams.sequence.push('player-defense') , battleparams.enemy[battleparams.enemy.length-1].BDM = 0.001, battleparams.eventslog.push(`Turn ${battleparams.turn}: You evade enemy attack!! Roll: ${random}`)) : '';
+          random<characterparams.Evasion ? (battleparams.sequence.push('player-defense') , battleparams.enemy[battleparams.enemy.length-1].BDM = battleparams.enemy[battleparams.enemy.length-1].BDM*0.001, battleparams.eventslog.push(`Turn ${battleparams.turn}: You evade enemy attack!! Roll: ${random}`)) : '';
 
           battleparams.rollitonce[2]=false;
 
@@ -1251,7 +1251,7 @@ class Battlescene extends Phaser.Scene
 
        // console.log(battleparams.battleover );
 
-        // console.log(battleparams.rollitonce);
+        console.log(battleparams.rollitonce);
 
         if(battleparams.waituntilidle == true){
       
@@ -1263,6 +1263,8 @@ class Battlescene extends Phaser.Scene
   
   
           characterparams.BDM = characterparams.DefaultBDM;
+
+          battleparams.enemy[battleparams.enemy.length-1].BDM = battleparams.enemy[battleparams.enemy.length-1].defaultBDM;
   
           this.events.emit('CritChecker');
   
@@ -1290,15 +1292,15 @@ class Battlescene extends Phaser.Scene
             if(characterparams.Attacktwice == false){
   
               this.handlesequenceanimation();
+
+              characterparams.BDM = characterparams.DefaultBDM;
+  
+              battleparams.enemy[battleparams.enemy.length-1].BDM = battleparams.enemy[battleparams.enemy.length-1].defaultBDM;
            
             }; 
   
-          characterparams.BDM = characterparams.DefaultBDM;
   
-          battleparams.enemy[battleparams.enemy.length-1].BDM = battleparams.enemy[battleparams.enemy.length-1].defaultBDM;
   
-
-       
           if((characterparams.Attacktwice == true)||(battleparams.styles[battleparams.choosedstyle].nesteddouble == true)){
 
               this.events.emit('oneturn');
@@ -1347,6 +1349,8 @@ class Battlescene extends Phaser.Scene
           this.handlesequenceanimation();
 
             battleparams.sequence = [];
+
+            characterparams.BDM = characterparams.DefaultBDM;
 
             battleparams.enemy[battleparams.enemy.length-1].BDM = battleparams.enemy[battleparams.enemy.length-1].defaultBDM;
 

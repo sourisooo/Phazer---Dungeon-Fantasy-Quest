@@ -888,7 +888,7 @@ class Battlescene extends Phaser.Scene
 
           let random = this.random(100)/100;
 
-          random<characterparams.Evasion ? (battleparams.sequence.push('player-defense') , battleparams.enemy[battleparams.enemy.length-1].BDM = 0.001, battleparams.eventslog.push(`Turn ${battleparams.turn}: You evade enemy attack!! Roll: ${random}`)) : battleparams.enemy[battleparams.enemy.length-1].BDM = battleparams.enemy[battleparams.enemy.length-1].BDM;
+          random<characterparams.Evasion ? (battleparams.sequence.push('player-defense') , battleparams.enemy[battleparams.enemy.length-1].BDM = 0.001, battleparams.eventslog.push(`Turn ${battleparams.turn}: You evade enemy attack!! Roll: ${random}`)) : '';
 
           battleparams.rollitonce[2]=false;
 
@@ -901,11 +901,7 @@ class Battlescene extends Phaser.Scene
 
           if (battleparams.rollitonce[7] ==true) {
 
-          let El = battleparams.enemy[battleparams.enemy.length-1].element;
-
-          // console.log(battleparams.enemy[battleparams.enemy.length-1].BDM, characterparams[El]);
-
-          battleparams.enemy[battleparams.enemy.length-1].BDM = battleparams.enemy[battleparams.enemy.length-1].BDM*characterparams[El]*(1-characterparams.Defense);
+          battleparams.enemy[battleparams.enemy.length-1].BDM = battleparams.enemy[battleparams.enemy.length-1].BDM*(1-characterparams.Defense);
 
           // console.log(battleparams.enemy[battleparams.enemy.length-1].BDM);
 
@@ -1098,6 +1094,8 @@ class Battlescene extends Phaser.Scene
 
           battleparams.damageturnlog.push(Math.round(characterparams.BDM*inventoryparams.weaponset[0].attack));
 
+          console.log(battleparams.enemy[battleparams.enemy.length-1].BDM);
+
           // console.log(battleparams.eventslog);
 
         } else if ((battleparams.styles[battleparams.choosedstyle].stackdamage== 0)&&(inventoryparams.equippedweapon[0] != undefined)){
@@ -1109,6 +1107,8 @@ class Battlescene extends Phaser.Scene
         battleparams.eventslog.push(`Turn ${battleparams.turn}: You deal ${Math.round(characterparams.BDM*weapondamage)} damages. You received ${Math.round(battleparams.enemy[battleparams.enemy.length-1].BDM*battleparams.enemy[battleparams.enemy.length-1].attack)} damages.`)
 
         battleparams.damageturnlog.push(Math.round(characterparams.BDM*weapondamage));
+
+        console.log(battleparams.enemy[battleparams.enemy.length-1].BDM);
 
         // console.log(battleparams.eventslog);
 
@@ -1126,7 +1126,9 @@ class Battlescene extends Phaser.Scene
     
       characterparams.HP = characterparams.HP - enemydamage;
 
-      battleparams.eventslog.push(`Turn ${battleparams.turn}: You receivedstk1 ${enemydamage} damages.`)
+      battleparams.eventslog.push(`Turn ${battleparams.turn}: You received ${enemydamage} damages.`)
+
+      console.log(battleparams.enemy[battleparams.enemy.length-1].BDM);
 
           this.events.emit('BleedStacker');
 
@@ -1918,7 +1920,7 @@ const TILES = {
      getrewardonce = true;
      floor = 1;
      leveluponce = true;
-     floorsize = 25;
+     floorsize = 10;
      winflag = false;
 
 
@@ -2124,7 +2126,7 @@ const TILES = {
 
           this.setRoomAlpha(room, 0.5);
 
-          console.log(room);
+          // console.log(room);
 
         })
 

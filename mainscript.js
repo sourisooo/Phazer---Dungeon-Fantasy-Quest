@@ -1290,13 +1290,13 @@ class Battlescene extends Phaser.Scene
   
 
             if(characterparams.Attacktwice == false){
-  
-              this.handlesequenceanimation();
-
+              
               characterparams.BDM = characterparams.DefaultBDM;
   
               battleparams.enemy[battleparams.enemy.length-1].BDM = battleparams.enemy[battleparams.enemy.length-1].defaultBDM;
-           
+
+              this.handlesequenceanimation();
+
             }; 
   
   
@@ -1345,16 +1345,14 @@ class Battlescene extends Phaser.Scene
 
           // console.log(battleparams.sequence);
   
+          characterparams.BDM = characterparams.DefaultBDM;
+
+          battleparams.enemy[battleparams.enemy.length-1].BDM = battleparams.enemy[battleparams.enemy.length-1].defaultBDM;
   
           this.handlesequenceanimation();
 
             battleparams.sequence = [];
 
-            characterparams.BDM = characterparams.DefaultBDM;
-
-            battleparams.enemy[battleparams.enemy.length-1].BDM = battleparams.enemy[battleparams.enemy.length-1].defaultBDM;
-
-  
           }
   
           battleparams.turn = battleparams.turn+1;

@@ -1922,7 +1922,7 @@ const TILES = {
      getrewardonce = true;
      floor = 1;
      leveluponce = true;
-     floorsize = 2;
+     floorsize = 10;
      winflag = false;
 
   

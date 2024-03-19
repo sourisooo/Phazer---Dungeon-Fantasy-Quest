@@ -2320,7 +2320,7 @@ const TILES = {
 
       // console.log(random);
     
-      random<0.0005? (trainingmapparams.saveplayercoordinate=[],trainingmapparams.saveplayercoordinate.push({x:trainingmapparams.player.x, y:trainingmapparams.player.y}),this.scene.stop().start('Battle')) : '';
+      random<0.005? (trainingmapparams.saveplayercoordinate=[],trainingmapparams.saveplayercoordinate.push({x:trainingmapparams.player.x, y:trainingmapparams.player.y}),this.scene.stop().start('Battle')) : '';
 
 
     }

@@ -64,7 +64,7 @@ Adding new game styles:
 Allow 2 extras opportunies to act (total of 4 attack round against 1/2 for others, allowing up to 8 attacks including critical, normal, extra and perfect strike, so in the best case, heroe can execute 4 criticals strikes and 4 perfects strikes)
 Give a garantees extra turn attack round (Minimun 2 attack rounds per turn).
 Increase the speed level by 35 meaning +35% to have an extra atack (Putting the maximun cap speed level 155 providing 75% of chance to prock extra attack).
-More tanky than other style with more chance to prock extra attack (extra-attack provide 70% of reduction damage (can stacked with another extra-attack  damage reduction up to 4 times)for one round.
+More tanky than other style with more chance to prock extra attack (extra-attack provide 70% of reduction damage (can stacked with another extra-attack  damage reduction up to 3 times)for one round.
 Good damage scaling with the enemy power having the best perfect strike occurence (4 perfects strike at maximum occurence vs 2 for others and have 15% more chance to prock it(23% vs 8% for the others styles up to 40% vs 25%). Perfect strike 
 does damage based an enemy HP, and an chance to prock perfect strike is given each time you attack your enemy as main attack or extra attack).
 Dont take benefit of weapon crit chance and crit damage, low crit chance style (10%) as the bleeding style (0%).

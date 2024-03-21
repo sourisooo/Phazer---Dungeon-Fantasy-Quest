@@ -1912,7 +1912,7 @@ class Battlescene extends Phaser.Scene
 
 
   //  Toggle this to disable the room hiding / layer scale, so you can see the extent of the map easily!
-const debug = true;
+const debug = false;
 
 // Tile index mapping to make the code more readable
 const TILES = {

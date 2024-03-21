@@ -3,7 +3,7 @@ class CharacterMenu extends Phaser.Scene
 {
     BDM=1;
     CritD=1.7;
-    LStrike=0.20;
+    LStrike=0.10;
     Defense=0.2;
     Evasion=0.08;
     PhysicalP=1;
@@ -17,7 +17,7 @@ class CharacterMenu extends Phaser.Scene
     thunderResistance = 1;
     earthResistance = 1;
     Speed = 100;
-    Luck = 0.06;
+    Luck = 0.08;
     outputdamage = [];
     HP = 500;
     DefaultHP = 500;
@@ -25,6 +25,8 @@ class CharacterMenu extends Phaser.Scene
     potentie = ['physical', 'magical'];
     element = ['fire', 'ice', 'thunder', 'earth'];
     Attacktwice = false;
+    stats = [];
+ 
 
   constructor() {
     super('Main'); // Scene key
@@ -51,6 +53,20 @@ class CharacterMenu extends Phaser.Scene
 
 
 
+    givevisualeffect(size, provider){
+
+
+      eval(provider).stats.forEach(stat => {
+
+        stat.on('pointerover', () => {stat.style.setFontSize(size*1.25), stat.setShadow(4, 4, 'green', 4), stat.x = stat.x+10});
+        stat.on('pointerout', () => {stat.style.setFontSize(size), stat.setShadow(0, 0, '#333333', 0), stat.x = stat.x-10});
+
+
+      });
+
+    }
+
+
     create ()
     {
 
@@ -71,6 +87,7 @@ class CharacterMenu extends Phaser.Scene
       let stat2 = this.add.text(100, 140, `CritDamage: ${characterparams.CritD} (10% fixed rate occurence)`, { font: '16px Arial', fill: '#ffffff' });
       let stat3 = this.add.text(100, 180, `Luckystrike: ${characterparams.LStrike} (50% extra damage fixed %damage, Max value: 100%)`, { font: '16px Arial', fill: '#ffffff' });
       let stat4 = this.add.text(100, 220, `Defense: ${characterparams.Defense} (damage reduction, Max value: 80%)`, { font: '16px Arial', fill: '#ffffff' });
+     
       let stat6 = this.add.text(100, 260, `Evade: ${characterparams.Evasion} (Full damage reduction, , Max value: 33%)`, { font: '16px Arial', fill: '#ffffff' });
       let stat7 = this.add.text(100, 340, `Physical potencie: ${characterparams.PhysicalP} (Provide damage and defense against Physical type foes)`, { font: '16px Arial', fill: '#ffffff' });
       let stat8 = this.add.text(100, 380, `Magical potencie: ${characterparams.MagicalP} (Provide damage and defense against Magical type foes)`, { font: '16px Arial', fill: '#ffffff' });
@@ -79,7 +96,7 @@ class CharacterMenu extends Phaser.Scene
       let stat11 = this.add.text(100, 500, `Thunder potencie: ${characterparams.thunder} ( deal extra-damage against a vulnerablity. reduce your elemental defense)`, { font: '16px Arial', fill: '#ffffff' });
       let stat12 = this.add.text(100, 540, `Earth potencie: ${characterparams.earth} ( deal extra-damage against a vulnerablity. reduce your elemental defense)`, { font: '16px Arial', fill: '#ffffff' });
       let stat13 = this.add.text(100, 580, `Speed: ${characterparams.Speed} (Opportunity to strike again: , Max value: 125)`, { font: '16px Arial', fill: '#ffffff' });
-      let stat14 = this.add.text(100, 620, `Luck: ${characterparams.Luck} (Remove 10% of the current enemy HP, Max value: 25%)`, { font: '16px Arial', fill: '#ffffff' });
+      let stat5 = this.add.text(100, 620, `Luck: ${characterparams.Luck} (Remove 10% of the current enemy HP, Max value: 25%)`, { font: '16px Arial', fill: '#ffffff' });
       
 
       // console.log(trainingmapparams.dungeoncopie);
@@ -124,6 +141,9 @@ class CharacterMenu extends Phaser.Scene
 
       bleedingstyle.on('pointerdown', () => (this.handlestyle(3)));
 
+      characterparams.stats.push(inventory, battlestart, standardstyle, barehandstyle, doublestyle, bleedingstyle);
+
+      this.givevisualeffect(26, 'characterparams');
 
     }
 
@@ -239,6 +259,7 @@ class Battlescene extends Phaser.Scene
   damageturnlog = [];
   Critflag = false;
   dungeoncompletionbonus = 0;
+  stats = [];
 
   styles = [
   {name:'standard style', speedbonus: 0, equiped1weapon:true, equiped2weapon:false, nesteddouble: false, stackdamage:0, critbonus:0, luckbonus:0, elementalanimation: true},
@@ -313,7 +334,7 @@ class Battlescene extends Phaser.Scene
 
       battleparams.ratioTxt = this.add.text(1400, 60, `Wins ${battleparams.nbwin}, Loses ${battleparams.nblose}`, { font: '26px Arial', fill: '#ffffff' });
 
-      let randomstacktrigger = Math.random()*4+4;
+      let randomstacktrigger = Math.random()*3+4;
 
       const enemy = new Enemy(undefined,20*battleparams.levelstacker, battleparams.element[this.random(3)], battleparams.element[this.random(3)], 500*battleparams.powerstacker, 1*(battleparams.powerstacker),[],battleparams.levelstacker,90, battleparams.potentie[this.random(1)],1*(battleparams.powerstacker),randomstacktrigger,randomstacktrigger);
 
@@ -350,6 +371,10 @@ class Battlescene extends Phaser.Scene
       battleparams.HHPTxt = this.add.text(100, 300, `You HP : ${characterparams.HP}`, { font: '32px Arial', fill: '#ffffff' });
       
       battleparams.HPTxt = this.add.text(100, 340, `Ennemy HP : ${battleparams.enemy[battleparams.enemy.length-1].HP}`, { font: '32px Arial', fill: '#ffffff' });
+
+      characterparams.stats.push(battleparams.attackbutton, Activatestandard, Activatebarehands, Activatesdouble, Activatesstack);
+
+      characterparams.givevisualeffect(24, 'characterparams');
       
 
     }
@@ -1406,9 +1431,17 @@ class Battlescene extends Phaser.Scene
 
     this.events.on('GameOver', () => {
 
-      this.add.text(700, 50, `Battle over, please wait few sec`, { font: '30px Arial', fill: '#ffffff', marginLeft: '40 vw' });
-            
+      let message = new Message(`Battle over`, this.scene, 700, 400, `Battle over, please wait few sec` );
 
+      message.messagegen(30).setScrollFactor(0);
+
+      setTimeout(() => {
+
+        message.name.destroy();
+
+      },13000)
+
+    
     })
 
 
@@ -1501,7 +1534,10 @@ class Battlescene extends Phaser.Scene
 
             newmessage.messagegen(16);
 
-            
+            battleparams.stats.push(newmessage.name);
+
+            characterparams.givevisualeffect(16, 'battleparams');
+
             setTimeout(() => {
 
               newmessage.name.destroy(); 
@@ -1593,10 +1629,13 @@ class Battlescene extends Phaser.Scene
 
         let weapon = this.add.text(100, 180+(40*(ind+2)), `${selection.name}, power: ${Math.round(selection.attack)}, potencie: ${selection.potentie}, element: ${selection.element}, %crit: ${Math.round(selection.crit)}, critDamage: ${selection.critDamage}`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
 
+        characterparams.stats.push(weapon);
+
         weapon.on('pointerdown', (element) => {
 
           // console.log(element.button);
 
+    
           if(element.button == 0) {
 
                 // console.log(inventoryparams.equippedweapon);
@@ -1635,9 +1674,13 @@ class Battlescene extends Phaser.Scene
 
       back.on('pointerdown', () => (this.scene.stop().start('Main')));
 
-      let back2 = this.add.text(1400, 60, `Resume/start dungeon`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
+      let back2 = this.add.text(1400, 60, `Resume dungeon`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
 
       back2.on('pointerdown', () => (this.scene.stop().start('Trainingmap')));
+
+      characterparams.stats.push(back, back2);
+
+      characterparams.givevisualeffect(16, 'characterparams');
 
 
 
@@ -1718,9 +1761,9 @@ class Battlescene extends Phaser.Scene
 
       reward2.on('pointerdown', () => {characterparams.CritD = (characterparams.CritD*1.4); this.scene.stop().start('Trainingmap')});
 
-      let reward3 = this.add.text(100, 180, `Click me to Buff your Luckystrike chance by 40%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
+      let reward3 = this.add.text(100, 180, `Click me to Buff your Luckystrike chance by 15%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
 
-      reward3.on('pointerdown', () => {characterparams.LStrike = Math.min((characterparams.LStrike+0.4),1); this.scene.stop().start('Trainingmap')});
+      reward3.on('pointerdown', () => {characterparams.LStrike = Math.min((characterparams.LStrike+0.15),0.7); this.scene.stop().start('Trainingmap')});
 
 
       let reward4 = this.add.text(100, 220, `Click me to Buff your Defense by 20%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
@@ -1755,6 +1798,13 @@ class Battlescene extends Phaser.Scene
 
       reward11.on('pointerdown', () => {characterparams.Speed = Math.min((characterparams.Speed+5),125);  this.scene.stop().start('Trainingmap') });
 
+      battleparams.stats = [];
+
+      characterparams.stats = [];
+
+      characterparams.stats.push(reward1, reward2, reward3, reward4, reward5, reward6, reward7, reward8, reward9, reward10, reward11);
+
+      characterparams.givevisualeffect(16, 'characterparams');
 
 
     }
@@ -1847,7 +1897,7 @@ class Battlescene extends Phaser.Scene
 
     messagegen = (size) => {
 
-      this.name = this.scene.scene.add.text(this.x, this.y, this.content, { font: `${size}px Arial`, fill: '#ffffff' });
+      this.name = this.scene.scene.add.text(this.x, this.y, this.content, { font: `${size}px Arial`, fill: '#ffffff' }).setInteractive();
 
       return this.name;
 
@@ -1860,7 +1910,7 @@ class Battlescene extends Phaser.Scene
 
 
   //  Toggle this to disable the room hiding / layer scale, so you can see the extent of the map easily!
-const debug = false;
+const debug = true;
 
 // Tile index mapping to make the code more readable
 const TILES = {

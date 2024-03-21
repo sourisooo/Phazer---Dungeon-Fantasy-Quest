@@ -26,7 +26,9 @@ class CharacterMenu extends Phaser.Scene
     element = ['fire', 'ice', 'thunder', 'earth'];
     Attacktwice = false;
     stats = [];
- 
+    timeboudaries;
+    shakeitonce = [true, false];
+  
 
   constructor() {
     super('Main'); // Scene key
@@ -53,13 +55,13 @@ class CharacterMenu extends Phaser.Scene
 
 
 
-    givevisualeffect(size, provider){
+    givevisualeffect(size, provider, scene, index){
 
 
       eval(provider).stats.forEach(stat => {
 
-        stat.on('pointerover', () => {stat.style.setFontSize(size*1.25), stat.setShadow(4, 4, 'green', 4), stat.x = stat.x+10});
-        stat.on('pointerout', () => {stat.style.setFontSize(size), stat.setShadow(0, 0, '#333333', 0), stat.x = stat.x-10});
+        stat.on('pointerover', () => {console.log(scene.manager.scenes), scene.manager.scenes[0].events.emit('shake', stat),stat.style.setFontSize(size*1.25), stat.setShadow(4, 4, 'green', 4), stat.x = stat.x+10});
+        stat.on('pointerout', () => {console.log(scene.manager.scenes),scene.manager.scenes[0].events.emit('stopshaking', stat),stat.style.setFontSize(size), stat.setShadow(0, 0, '#333333', 0), stat.x = stat.x-10});
 
 
       });
@@ -143,7 +145,7 @@ class CharacterMenu extends Phaser.Scene
 
       characterparams.stats.push(inventory, battlestart, standardstyle, barehandstyle, doublestyle, bleedingstyle);
 
-      this.givevisualeffect(26, 'characterparams');
+      this.givevisualeffect(26, 'characterparams', this.scene, 1);
 
     }
 
@@ -374,7 +376,7 @@ class Battlescene extends Phaser.Scene
 
       characterparams.stats.push(battleparams.attackbutton, Activatestandard, Activatebarehands, Activatesdouble, Activatesstack);
 
-      characterparams.givevisualeffect(24, 'characterparams');
+      characterparams.givevisualeffect(24, 'characterparams', this.scene, 2);
       
 
     }
@@ -1536,7 +1538,7 @@ class Battlescene extends Phaser.Scene
 
             battleparams.stats.push(newmessage.name);
 
-            characterparams.givevisualeffect(16, 'battleparams');
+            characterparams.givevisualeffect(16, 'battleparams', this.scene, 2);
 
             setTimeout(() => {
 
@@ -1680,7 +1682,7 @@ class Battlescene extends Phaser.Scene
 
       characterparams.stats.push(back, back2);
 
-      characterparams.givevisualeffect(16, 'characterparams');
+      characterparams.givevisualeffect(16, 'characterparams', this.scene, 3);
 
 
 
@@ -1804,7 +1806,7 @@ class Battlescene extends Phaser.Scene
 
       characterparams.stats.push(reward1, reward2, reward3, reward4, reward5, reward6, reward7, reward8, reward9, reward10, reward11);
 
-      characterparams.givevisualeffect(16, 'characterparams');
+      characterparams.givevisualeffect(16, 'characterparams', this.scene, 4);
 
 
     }
@@ -1910,7 +1912,7 @@ class Battlescene extends Phaser.Scene
 
 
   //  Toggle this to disable the room hiding / layer scale, so you can see the extent of the map easily!
-const debug = false;
+const debug = true;
 
 // Tile index mapping to make the code more readable
 const TILES = {
@@ -2012,6 +2014,47 @@ const TILES = {
 
     create ()
     {
+      this.events.on('shake', (stat) => {
+
+        if(characterparams.shakeitonce[0] ==true){
+
+          characterparams.shakeitonce[0] = false;
+
+          characterparams.shakeitonce[1] = true;
+
+        let movefoward = () => { stat.y = stat.y+1};
+
+        let moveback = () => { stat.y = stat.y-1};
+
+        characterparams.timeboudaries = setInterval(() => {
+
+          setTimeout(movefoward,100);
+   
+          setTimeout(moveback,200);
+
+        },201)
+
+      };
+
+      });
+
+
+      this.events.on('stopshaking', ()=>{
+
+        if(characterparams.shakeitonce[1] ==true){
+
+          characterparams.shakeitonce[1] = false;
+
+          characterparams.shakeitonce[0] = true;
+
+        console.log(characterparams.timeboudaries);
+
+        clearTimeout(characterparams.timeboudaries);
+
+        };
+
+      });
+
       let floordisplay = this.add.text(1500, 30, `Actual floor: ${trainingmapparams.floor}`, { font: '40px Arial', fill: '#ffffff' });
 
       floordisplay.setScrollFactor(0);

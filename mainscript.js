@@ -1316,7 +1316,7 @@ class Battlescene extends Phaser.Scene
           this.events.emit('Handleequippedweapon');
   
 
-            if(characterparams.Attacktwice == false){
+            if((characterparams.Attacktwice == false)&&(battleparams.styles[battleparams.choosedstyle].nesteddouble == false)){
               
               characterparams.BDM = characterparams.DefaultBDM;
   

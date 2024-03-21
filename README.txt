@@ -46,7 +46,7 @@ Walking inside the dungeon can trigger a battle.
 
 Updated at 17/03/2024
 Adding the new style: bleeding style. Your attack no longer make damage.
-Instead you accumulate on enemy bleeding wound  until you reach a certain amounts of bleeding woud(4-8) depending on your enemy and deal damage based on your elemental damage.
+Instead you accumulate on enemy bleeding wound  until you reach a certain amounts of bleeding woud(4-7) depending on your enemy and deal damage based on your elemental damage.
 Your attack no longer make critical strick and perfectstrike.
 Elemental weakness cannot be exploited as the same for type multiplier damage.
 
@@ -62,25 +62,24 @@ Updated at 14/03/2024
 Adding new game styles:
 - Bared Hands: 
 Allow 2 extras opportunies to act (total of 4 attack round against 1/2 for others, allowing up to 8 attacks including critical, normal, extra and perfect strike, so in the best case, heroe can execute 4 criticals strikes and 4 perfects strikes)
-Give a garantees extra turn attack round (Minimun 2 attack rounds per turn)
-Increase the speed level by 30 meaning +30% to have an extra atack (Putting the maximun cap speed level 150 providing 70% of chance to prock extra attack)
-More tanky than other style with more chance to prock perfect strike (4 perfects strike at maximum occurence vs 2 for others)
-Good damage scaling with the enemy power having the best perfect strike occurence (perfect strike provide 70% of reduction damage (can stacked with another perfect strike damage reduction up to 4 times)for one round while doing damage based an enemy HP, and an chance to prock perfect strike is given each time you attack your enemy as main attack or extra attack).
-Has 10% more chance to prock the perfect strike than others styles.
-Dont take benefit of weapon crit chance and crit damage, low crit chance style (10%) as the bleeding style (0%)
-Dont take any benefit from element damage and type
+Give a garantees extra turn attack round (Minimun 2 attack rounds per turn).
+Increase the speed level by 35 meaning +35% to have an extra atack (Putting the maximun cap speed level 155 providing 75% of chance to prock extra attack).
+More tanky than other style with more chance to prock extra attack (extra-attack provide 70% of reduction damage (can stacked with another extra-attack  damage reduction up to 4 times)for one round.
+Good damage scaling with the enemy power having the best perfect strike occurence (4 perfects strike at maximum occurence vs 2 for others and have 15% more chance to prock it(23% vs 8% for the others styles up to 40% vs 25%). Perfect strike 
+does damage based an enemy HP, and an chance to prock perfect strike is given each time you attack your enemy as main attack or extra attack).
+Dont take benefit of weapon crit chance and crit damage, low crit chance style (10%) as the bleeding style (0%).
+Dont take benefit from dungeonbonus attack.
+Dont take any benefit from element damage and type.
 
 -Two swords:
-Double your chance to exploit enemy elemental weakness (2 elementals on 4 elementals available)
-Elemental boost as reward are the biggest buff available as regard of your output dps
-Can exploit mastery from both physical and magical type providing extra damage and tankiness (50% damage and tankiness from any type of enemy)
-Extra attack are disabled but the main attack can still prock perfect strike one time per turn
-Perfect strike occurence are the lowest of all style (only one attack per round)
+Double your chance to exploit enemy elemental weakness (2 elementals on 4 elementals available).
+Can exploit mastery from both physical and magical type providing extra damage and tankiness (50% damage and tankiness from any type of enemy).
+Extra attack are disabled but the main attack can still prock perfect strike one time per turn.
+Perfect strike occurence are the lowest of all style (only one attack per round).
 
 -Standard:
-Best style for crit build type by taking advantage of critdamage and critchange while having 2 attacks at maximun occurence per round
-Dont rely and your enemy elemental weakness
+Best style for crit build type by taking advantage of critdamage and critchance while having 2 attacks at maximun occurence per round.
+Dont rely and your enemy elemental weakness.
 Biggest output damage in lategame (Weapon provide +30% crit chance at maximun level, soaring your crit chance to 40% (idem for two swords) vs 10% for barehands at maximun level, and critdamage provided by weapon are uncapped)
 
-Dungeon wet cave in preparation.
-Wander in the deep of a dungeon and get new rewards: new styles or special weapons.
+

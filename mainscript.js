@@ -1047,7 +1047,7 @@ class Battlescene extends Phaser.Scene
 
           let stackBDM = (characterparams.fire+characterparams.ice+characterparams.thunder+characterparams.earth)*4+4;
 
-          let stackblast = weapondamage*stackBDM*characterparams.DefaultBDM*inventoryparams.equippedweapon[0].critDamage;
+          let stackblast = weapondamage*stackBDM*characterparams.DefaultBDM*inventoryparams.equippedweapon[0].critDamage/2;
     
           battleparams.enemy[battleparams.enemy.length-1].stacktrigger>0? (battleparams.enemy[battleparams.enemy.length-1].stacktrigger -= 1,
             
@@ -1780,21 +1780,21 @@ class Battlescene extends Phaser.Scene
 
       reward6.on('pointerdown', () => {characterparams.Luck = Math.min((characterparams.Luck+0.1),0.25); this.scene.stop().start('Trainingmap') });
 
-      let reward7 = this.add.text(100, 340, `Click me to Buff your fire potencie by 50%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
+      let reward7 = this.add.text(100, 340, `Click me to Buff your fire potencie by 40%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
 
-      reward7.on('pointerdown', () => {characterparams.fire = (characterparams.fire*1.5); characterparams.iceResistance = (characterparams.iceResistance+0.1); this.scene.stop().start('Trainingmap') });
+      reward7.on('pointerdown', () => {characterparams.fire = (characterparams.fire*1.4); characterparams.iceResistance = (characterparams.iceResistance+0.1); this.scene.stop().start('Trainingmap') });
 
-      let reward8 = this.add.text(100, 380, `Click me to Buff your ice potencie by 50%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
+      let reward8 = this.add.text(100, 380, `Click me to Buff your ice potencie by 40%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
 
-      reward8.on('pointerdown', () => {characterparams.ice = (characterparams.ice*1.5);characterparams.fireResistance = (characterparams.fireResistance+0.1); this.scene.stop().start('Trainingmap') });
+      reward8.on('pointerdown', () => {characterparams.ice = (characterparams.ice*1.4);characterparams.fireResistance = (characterparams.fireResistance+0.1); this.scene.stop().start('Trainingmap') });
 
-      let reward9 = this.add.text(100, 420, `Click me to Buff your thunder potencie by 50%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
+      let reward9 = this.add.text(100, 420, `Click me to Buff your thunder potencie by 40%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
 
-      reward9.on('pointerdown', () => {characterparams.thunder = (characterparams.thunder*1.5);characterparams.earthResistance = (characterparams.earthResistance+0.1); this.scene.stop().start('Trainingmap') });
+      reward9.on('pointerdown', () => {characterparams.thunder = (characterparams.thunder*1.4);characterparams.earthResistance = (characterparams.earthResistance+0.1); this.scene.stop().start('Trainingmap') });
 
-      let reward10 = this.add.text(100, 460, `Click me to Buff your earth potencie by 50%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
+      let reward10 = this.add.text(100, 460, `Click me to Buff your earth potencie by 40%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
 
-      reward10.on('pointerdown', () => {characterparams.earth = (characterparams.earth*1.5); characterparams.thunderResistance = (characterparams.thunderResistance +0.1);  this.scene.stop().start('Trainingmap') });
+      reward10.on('pointerdown', () => {characterparams.earth = (characterparams.earth*1.4); characterparams.thunderResistance = (characterparams.thunderResistance +0.1);  this.scene.stop().start('Trainingmap') });
 
       let reward11 = this.add.text(100, 500, `Click me to Buff your speed by 5!`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
 

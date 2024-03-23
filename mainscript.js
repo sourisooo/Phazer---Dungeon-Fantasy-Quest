@@ -8,10 +8,10 @@ class CharacterMenu extends Phaser.Scene
     Evasion=0.08;
     PhysicalP=1;
     MagicalP=1;
-    fire = 1;
-    ice = 1;
-    thunder = 1;
-    earth = 1;
+    fire = 1.7;
+    ice = 1.7;
+    thunder = 1.7;
+    earth = 1.7;
     fireResistance = 1;
     iceResistance = 1;
     thunderResistance = 1;
@@ -87,7 +87,7 @@ class CharacterMenu extends Phaser.Scene
   
       let stat1 = this.add.text(100, 100, `BaseDamageMultiplier: ${characterparams.DefaultBDM}`, { font: '16px Arial', fill: '#ffffff' });
       let stat2 = this.add.text(100, 140, `CritDamage: ${characterparams.CritD} (10% fixed rate occurence)`, { font: '16px Arial', fill: '#ffffff' });
-      let stat3 = this.add.text(100, 180, `Luckystrike: ${characterparams.LStrike} (50% extra damage fixed %damage, Max value: 100%)`, { font: '16px Arial', fill: '#ffffff' });
+      let stat3 = this.add.text(100, 180, `Luckystrike: ${characterparams.LStrike} (50% fix rate extra damage, Max value: 70%)`, { font: '16px Arial', fill: '#ffffff' });
       let stat4 = this.add.text(100, 220, `Defense: ${characterparams.Defense} (damage reduction, Max value: 80%)`, { font: '16px Arial', fill: '#ffffff' });
      
       let stat6 = this.add.text(100, 260, `Evade: ${characterparams.Evasion} (Full damage reduction, , Max value: 33%)`, { font: '16px Arial', fill: '#ffffff' });
@@ -265,7 +265,7 @@ class Battlescene extends Phaser.Scene
 
   styles = [
   {name:'standard style', speedbonus: 0, equiped1weapon:true, equiped2weapon:false, nesteddouble: false, stackdamage:0, critbonus:0, luckbonus:0, elementalanimation: true},
-   {name:'barehands style', speedbonus: 35, equiped1weapon:false, equiped2weapon:false, nesteddouble: true, stackdamage:0, critbonus:0, luckbonus: 0.1, elementalanimation: true},
+   {name:'barehands style', speedbonus: 35, equiped1weapon:false, equiped2weapon:false, nesteddouble: true, stackdamage:0, critbonus:0, luckbonus: 0.15, elementalanimation: true},
     {name:'doublesword style', speedbonus: -100, equiped1weapon:true, equiped2weapon:true, nesteddouble: false, stackdamage:0, critbonus:0, luckbonus:0, elementalanimation: true},
     {name:'bleeding style', speedbonus: 0, equiped1weapon:true, equiped2weapon:false, nesteddouble: false, stackdamage:1, critbonus:-50, luckbonus:-0.5, elementalanimation: false},
 
@@ -1019,7 +1019,7 @@ class Battlescene extends Phaser.Scene
 
             console.log(random, delta/100);
   
-            if (random<delta/100)  {battleparams.enemy[battleparams.enemy.length-1].BDM = battleparams.enemy[battleparams.enemy.length-1].BDM*0.2;
+            if (random<delta/100)  {battleparams.enemy[battleparams.enemy.length-1].BDM = battleparams.enemy[battleparams.enemy.length-1].BDM*0.3;
             
               battleparams.eventslog.push(`Turn ${battleparams.turn}: You get an extra-attack !! Roll: ${random}`)
 
@@ -1759,9 +1759,9 @@ class Battlescene extends Phaser.Scene
 
       reward1.on('pointerdown', () => {characterparams.DefaultBDM = characterparams.DefaultBDM*1.15; this.scene.stop().start('Trainingmap')});
 
-      let reward2 = this.add.text(100, 140, `Click me to Buff your CritDamage by 40%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
+      let reward2 = this.add.text(100, 140, `Click me to Buff your CritDamage by 25%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
 
-      reward2.on('pointerdown', () => {characterparams.CritD = (characterparams.CritD*1.4); this.scene.stop().start('Trainingmap')});
+      reward2.on('pointerdown', () => {characterparams.CritD = (characterparams.CritD*1.25); this.scene.stop().start('Trainingmap')});
 
       let reward3 = this.add.text(100, 180, `Click me to Buff your Luckystrike chance by 15%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
 
@@ -1780,21 +1780,21 @@ class Battlescene extends Phaser.Scene
 
       reward6.on('pointerdown', () => {characterparams.Luck = Math.min((characterparams.Luck+0.1),0.25); this.scene.stop().start('Trainingmap') });
 
-      let reward7 = this.add.text(100, 340, `Click me to Buff your fire potencie by 300%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
+      let reward7 = this.add.text(100, 340, `Click me to Buff your fire potencie by 25%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
 
-      reward7.on('pointerdown', () => {characterparams.fire = (characterparams.fire+3); characterparams.iceResistance = (characterparams.iceResistance+0.1); this.scene.stop().start('Trainingmap') });
+      reward7.on('pointerdown', () => {characterparams.fire = (characterparams.fire*1.25); characterparams.iceResistance = (characterparams.iceResistance+0.1); this.scene.stop().start('Trainingmap') });
 
-      let reward8 = this.add.text(100, 380, `Click me to Buff your ice potencie by 300%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
+      let reward8 = this.add.text(100, 380, `Click me to Buff your ice potencie by 25%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
 
-      reward8.on('pointerdown', () => {characterparams.ice = (characterparams.ice+3);characterparams.fireResistance = (characterparams.fireResistance+0.1); this.scene.stop().start('Trainingmap') });
+      reward8.on('pointerdown', () => {characterparams.ice = (characterparams.ice*1.25);characterparams.fireResistance = (characterparams.fireResistance+0.1); this.scene.stop().start('Trainingmap') });
 
-      let reward9 = this.add.text(100, 420, `Click me to Buff your thunder potencie by 300%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
+      let reward9 = this.add.text(100, 420, `Click me to Buff your thunder potencie by 25%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
 
-      reward9.on('pointerdown', () => {characterparams.thunder = (characterparams.thunder+3);characterparams.earthResistance = (characterparams.earthResistance+0.1); this.scene.stop().start('Trainingmap') });
+      reward9.on('pointerdown', () => {characterparams.thunder = (characterparams.thunder*1.25);characterparams.earthResistance = (characterparams.earthResistance+0.1); this.scene.stop().start('Trainingmap') });
 
-      let reward10 = this.add.text(100, 460, `Click me to Buff your earth potencie by 300%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
+      let reward10 = this.add.text(100, 460, `Click me to Buff your earth potencie by 25%! `, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
 
-      reward10.on('pointerdown', () => {characterparams.earth = (characterparams.earth+3); characterparams.thunderResistance = (characterparams.thunderResistance +0.1);  this.scene.stop().start('Trainingmap') });
+      reward10.on('pointerdown', () => {characterparams.earth = (characterparams.earth*1.25); characterparams.thunderResistance = (characterparams.thunderResistance +0.1);  this.scene.stop().start('Trainingmap') });
 
       let reward11 = this.add.text(100, 500, `Click me to Buff your speed by 5!`, { font: '16px Arial', fill: '#ffffff' }).setInteractive();
 
